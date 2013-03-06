@@ -77,7 +77,7 @@
         }
         NSInteger zero = [[[NSNumber alloc]initWithInt:0] integerValue];
         // 排除未读表的情况
-        if ([[aqiArray objectAtIndex:zero ] isEqualToString:@"-1"]) {
+        while ([aqiArray objectAtIndex:zero ] && [[aqiArray objectAtIndex:zero ] isEqualToString:@"-1"]) {
             [pmArray removeObjectAtIndex: zero];
             [descArray removeObjectAtIndex: zero];
             [udpateArray removeObjectAtIndex: zero];

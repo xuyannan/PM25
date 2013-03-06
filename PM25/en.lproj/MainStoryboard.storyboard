@@ -90,6 +90,7 @@
                         <outlet property="aqiValue" destination="bLE-lE-aqq" id="EcJ-IW-5V5"/>
                         <outlet property="currentCity" destination="6aq-jq-lqb" id="XIt-p4-rcp"/>
                         <outlet property="pmValue" destination="TPy-HW-UBD" id="niG-WC-TTW"/>
+                        <outlet property="refreshButton" destination="MIX-8n-PE8" id="1fG-db-s5O"/>
                         <outlet property="result" destination="YVJ-6x-dj0" id="dOE-fn-TEc"/>
                         <outlet property="updateTime" destination="T4d-PH-Fg6" id="8Vu-JN-XcH"/>
                     </connections>
@@ -270,6 +271,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                 <relationship kind="outlet" name="aqiValue" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="currentCity" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="pmValue" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="refreshButton" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="result" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="updateTime" candidateClass="UILabel"/>
             </relationships>

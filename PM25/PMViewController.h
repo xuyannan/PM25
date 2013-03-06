@@ -15,6 +15,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *updateTime;
 @property (weak, nonatomic) IBOutlet UILabel *aqiValue;
 @property (weak, nonatomic) IBOutlet UILabel *currentCity;
+@property (weak, nonatomic) IBOutlet UIButton *refreshButton;
 
 - (IBAction)refresh:(UIButton *)sender;
 @end

@@ -38,58 +38,65 @@
     currentCity = self.city ? self.city : @"北京市";
     
     url = [citiesInPinyin objectForKey: currentCity];
-
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-    [request setValue:@"text/xml" forHTTPHeaderField:@"Content-Type"];
-    NSHTTPURLResponse *response;
-    NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:nil];
-    /*
-    NSString *strRet = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    [[NSXMLParser alloc]initWithData:data];
-     */
-    NSError *error = nil;
-    DDXMLDocument *xmlDoc = [[DDXMLDocument alloc] initWithData:data options:0 error: &error];
-    if (error) {
-        NSLog(@"%@", [error localizedDescription]);
-    }
     
-    NSArray *resultNodes = [xmlDoc nodesForXPath:@"//Conc | //AQI | //Desc | //ReadingDateTime" error:&error];
-    
-    NSMutableArray *pmArray = [[NSMutableArray alloc] init];
-    NSMutableArray *aqiArray = [[NSMutableArray alloc] init];
-    NSMutableArray *descArray = [[NSMutableArray alloc] init];
-    NSMutableArray *udpateArray = [[NSMutableArray alloc] init];
-    //DDXMLElement *latestNode = resultNodes[0];
-    
-    for (DDXMLElement *resultElement in resultNodes) {
-        NSString *name = [resultElement name];
-        NSString *value = [resultElement stringValue];
-
-        if ([name isEqualToString:@"Conc"]) {
-            [pmArray addObject: value];
-        } else if ([name isEqualToString:@"AQI"]) {
-            [aqiArray addObject: value];
-        } else if ([name isEqualToString:@"Desc"]) {
-            NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\(.*\\)" options:NSRegularExpressionCaseInsensitive error:nil];
-            NSString *modifiedValue = [regex stringByReplacingMatchesInString:value options:0 range:NSMakeRange(0, [value length]) withTemplate:@""];
-            [descArray addObject: modifiedValue];
-        } else if ([name isEqualToString:@"ReadingDateTime"]) {
-            [udpateArray addObject: value];
+    dispatch_queue_t getPmQueue = dispatch_queue_create("get pm value", NULL);
+    dispatch_async(getPmQueue, ^{
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+        [request setValue:@"text/xml" forHTTPHeaderField:@"Content-Type"];
+        NSHTTPURLResponse *response;
+        NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:nil];
+        NSError *error = nil;
+        DDXMLDocument *xmlDoc = [[DDXMLDocument alloc] initWithData:data options:0 error: &error];
+        if (error) {
+            NSLog(@"%@", [error localizedDescription]);
         }
-    }
-    NSInteger zero = [[[NSNumber alloc]initWithInt:0] integerValue];
-    // 排除未读表的情况
-    if ([[aqiArray objectAtIndex:zero ] isEqualToString:@"-1"]) {
-        [pmArray removeObjectAtIndex: zero];
-        [descArray removeObjectAtIndex: zero];
-        [udpateArray removeObjectAtIndex: zero];
-        [aqiArray removeObjectAtIndex: zero];
-    }
-    self.pmValue.text = [pmArray objectAtIndex:zero];
-    self.result.text = [descArray objectAtIndex:zero];
-    self.updateTime.text = [udpateArray objectAtIndex:zero];
-    self.aqiValue.text = [aqiArray objectAtIndex:zero];
-    self.currentCity.text = currentCity;
+        
+        NSArray *resultNodes = [xmlDoc nodesForXPath:@"//Conc | //AQI | //Desc | //ReadingDateTime" error:&error];
+        
+        NSMutableArray *pmArray = [[NSMutableArray alloc] init];
+        NSMutableArray *aqiArray = [[NSMutableArray alloc] init];
+        NSMutableArray *descArray = [[NSMutableArray alloc] init];
+        NSMutableArray *udpateArray = [[NSMutableArray alloc] init];
+        //DDXMLElement *latestNode = resultNodes[0];
+        
+        for (DDXMLElement *resultElement in resultNodes) {
+            NSString *name = [resultElement name];
+            NSString *value = [resultElement stringValue];
+            
+            if ([name isEqualToString:@"Conc"]) {
+                [pmArray addObject: value];
+            } else if ([name isEqualToString:@"AQI"]) {
+                [aqiArray addObject: value];
+            } else if ([name isEqualToString:@"Desc"]) {
+                NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\(.*\\)" options:NSRegularExpressionCaseInsensitive error:nil];
+                NSString *modifiedValue = [regex stringByReplacingMatchesInString:value options:0 range:NSMakeRange(0, [value length]) withTemplate:@""];
+                [descArray addObject: modifiedValue];
+            } else if ([name isEqualToString:@"ReadingDateTime"]) {
+                [udpateArray addObject: value];
+            }
+        }
+        NSInteger zero = [[[NSNumber alloc]initWithInt:0] integerValue];
+        // 排除未读表的情况
+        if ([[aqiArray objectAtIndex:zero ] isEqualToString:@"-1"]) {
+            [pmArray removeObjectAtIndex: zero];
+            [descArray removeObjectAtIndex: zero];
+            [udpateArray removeObjectAtIndex: zero];
+            [aqiArray removeObjectAtIndex: zero];
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.pmValue.text = [pmArray objectAtIndex:zero];
+            self.result.text = [descArray objectAtIndex:zero];
+            self.updateTime.text = [udpateArray objectAtIndex:zero];
+            self.aqiValue.text = [aqiArray objectAtIndex:zero];
+            self.currentCity.text = currentCity;
+            self.refreshButton.titleLabel.text = @"刷新"; // = [UIBUtton alloc] initWi
+            self.refreshButton.enabled = YES;
+        });
+        
+    });
+    //dispatch_release(getPmQueue);
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -112,10 +119,7 @@
     self.locationManager.distanceFilter = kCLDistanceFilterNone;
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     self.locationManager.distanceFilter = 10;
-    // NSLog(@"%@", @"hello world");
     [self.locationManager startUpdatingLocation];
-    
-    //[self getCurretnPmValue];
 }
 
 - (void) viewDidDisappear:(BOOL)animated {
@@ -130,8 +134,8 @@
 }
 
 - (IBAction)refresh:(UIButton *)sender {
-    
-    //[self.locationManager startUpdatingLocation];
+    self.refreshButton.titleLabel.text = @"读取中...";
+    self.refreshButton.enabled = NO;
     [self getCurretnPmValue];
 }
 
@@ -141,7 +145,7 @@
 -(void) locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
     
     CLLocation *location = [locations objectAtIndex:0];
-    NSLog(@"lat%f - lon%f", location.coordinate.latitude, location.coordinate.longitude);
+    NSLog(@"lat:%f - lon:%f", location.coordinate.latitude, location.coordinate.longitude);
     CLGeocoder *geoCoder = [[CLGeocoder alloc] init];
     [geoCoder reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
         if (error) {
@@ -156,7 +160,6 @@
         [self getCurretnPmValue];
         
     }];
-    //[self.locationManager stopUpdatingLocation];
 }
 
 

@@ -1,5 +1,6 @@
 # Xcode
 .DS_Store
+PM25.xcworkspace/xcuserdata/
 Podfile.lock
 Pods/
 build/

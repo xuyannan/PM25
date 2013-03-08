@@ -95,12 +95,22 @@
         });
         
     });
-    //dispatch_release(getPmQueue);
-
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:YES];
+    // background
+    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"background.jpg"]];
+    
+    // refresh button
+    /*
+    UIImageView *refreshButton = [[UIImageView alloc] initWithFrame:CGRectMake(10.f, 10.f, 24, 24)];
+    [refreshButton setImage:[UIImage imageNamed:@"refresh.png"]];
+    [self.view addSubview:refreshButton];
+     */
+
     NSURL *beijingUrl = [NSURL URLWithString:@"http://www.beijingaqifeed.com/BeijingAQI/BeijingAir.xml"];
     NSURL *guangzhouUrl = [NSURL URLWithString:@"http://www.beijingaqifeed.com/gzaqi/guangzhouairrss.xml"];
     NSURL *shanghaiUrl = [NSURL URLWithString:@"http://www.beijingaqifeed.com/shanghaiaqi/shanghaiairrss.xml"];
@@ -120,6 +130,25 @@
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     self.locationManager.distanceFilter = 10;
     [self.locationManager startUpdatingLocation];
+    
+    
+    // 半透明层
+    CGRect bounds = self.view.superview.frame;
+    UIView *floatView = [[UIView alloc] initWithFrame:bounds];
+    floatView.backgroundColor = [UIColor colorWithRed:(0/255.f) green:(0/255.f) blue:(0/255.f) alpha:0.2];
+    floatView.tag = 1;
+    [self.view addSubview:floatView];
+    
+    for(UIView *view in self.view.subviews ) {
+        if ([view isKindOfClass:[UILabel class]]) {
+            UILabel *label = (UILabel *)view;
+            label.textColor = [UIColor colorWithRed:(255/255.f) green:(255/255.f) blue:(255/255.f) alpha:1];
+        }
+        if (view.tag != 1) {
+            [view removeFromSuperview];
+            [floatView.superview addSubview:view];
+        }
+    }
 }
 
 - (void) viewDidDisappear:(BOOL)animated {
@@ -145,7 +174,7 @@
 -(void) locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
     
     CLLocation *location = [locations objectAtIndex:0];
-    NSLog(@"lat:%f - lon:%f", location.coordinate.latitude, location.coordinate.longitude);
+    //NSLog(@"lat:%f - lon:%f", location.coordinate.latitude, location.coordinate.longitude);
     CLGeocoder *geoCoder = [[CLGeocoder alloc] init];
     [geoCoder reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
         if (error) {
@@ -154,7 +183,7 @@
             [alert show];
         } else {
             CLPlacemark *placemark = [placemarks objectAtIndex:0];
-            NSLog(@"city: %@, code: %@", placemark.administrativeArea, placemark.locality);
+            //NSLog(@"city: %@, code: %@", placemark.administrativeArea, placemark.locality);
             self.city = placemark.administrativeArea;
         }
         [self getCurretnPmValue];

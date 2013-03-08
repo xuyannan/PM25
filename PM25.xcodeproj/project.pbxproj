@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		45F614D28CBF4CB5BCD8A734 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 580C39FE6277449DA3ED5EDB /* libPods.a */; };
+		FD28259B16E9C42100FC66BB /* refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = FD28259916E9C42100FC66BB /* refresh.png */; };
+		FD28259C16E9C42100FC66BB /* refresh@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FD28259A16E9C42100FC66BB /* refresh@2x.png */; };
 		FD3D3EA816DCBA7D002FA65F /* loading.gif in Resources */ = {isa = PBXBuildFile; fileRef = FD3D3EA716DCBA7D002FA65F /* loading.gif */; };
 		FD3D3EAA16DDE6AD002FA65F /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD3D3EA916DDE6AD002FA65F /* CoreLocation.framework */; };
 		FD3D3EAD16DED7B4002FA65F /* PMConfigItem.m in Sources */ = {isa = PBXBuildFile; fileRef = FD3D3EAC16DED7B4002FA65F /* PMConfigItem.m */; };
@@ -27,11 +29,15 @@
 		FD420B4516D778F000300B26 /* PMFrequencyConfigViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD420B4416D778F000300B26 /* PMFrequencyConfigViewController.m */; };
 		FDE6FB7F16E5EBF20070107E /* air_57.png in Resources */ = {isa = PBXBuildFile; fileRef = FDE6FB7E16E5EBF20070107E /* air_57.png */; };
 		FDE6FB8116E5EBF70070107E /* air_114.png in Resources */ = {isa = PBXBuildFile; fileRef = FDE6FB8016E5EBF70070107E /* air_114.png */; };
+		FDEBF60216E98FA100D29534 /* background.jpg in Resources */ = {isa = PBXBuildFile; fileRef = FDEBF60016E98FA100D29534 /* background.jpg */; };
+		FDEBF60516E98FD500D29534 /* background@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = FDEBF60416E98FD500D29534 /* background@2x.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		580C39FE6277449DA3ED5EDB /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		E64C57EB79B243238277D272 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
+		FD28259916E9C42100FC66BB /* refresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = refresh.png; sourceTree = "<group>"; };
+		FD28259A16E9C42100FC66BB /* refresh@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "refresh@2x.png"; sourceTree = "<group>"; };
 		FD3D3EA716DCBA7D002FA65F /* loading.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = loading.gif; sourceTree = "<group>"; };
 		FD3D3EA916DDE6AD002FA65F /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		FD3D3EAB16DED7B4002FA65F /* PMConfigItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PMConfigItem.h; sourceTree = "<group>"; };
@@ -61,6 +67,8 @@
 		FDB5A50716DB4BE7004BC936 /* PMDbTool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PMDbTool.h; sourceTree = "<group>"; };
 		FDE6FB7E16E5EBF20070107E /* air_57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = air_57.png; sourceTree = "<group>"; };
 		FDE6FB8016E5EBF70070107E /* air_114.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = air_114.png; sourceTree = "<group>"; };
+		FDEBF60016E98FA100D29534 /* background.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = background.jpg; sourceTree = "<group>"; };
+		FDEBF60416E98FD500D29534 /* background@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "background@2x.jpg"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,6 +144,10 @@
 		FD420B2016D66E3800300B26 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				FD28259916E9C42100FC66BB /* refresh.png */,
+				FD28259A16E9C42100FC66BB /* refresh@2x.png */,
+				FDEBF60416E98FD500D29534 /* background@2x.jpg */,
+				FDEBF60016E98FA100D29534 /* background.jpg */,
 				FD3D3EA716DCBA7D002FA65F /* loading.gif */,
 				FD420B2116D66E3800300B26 /* PM25-Info.plist */,
 				FD420B2216D66E3800300B26 /* InfoPlist.strings */,
@@ -209,6 +221,10 @@
 				FD3D3EA816DCBA7D002FA65F /* loading.gif in Resources */,
 				FDE6FB7F16E5EBF20070107E /* air_57.png in Resources */,
 				FDE6FB8116E5EBF70070107E /* air_114.png in Resources */,
+				FDEBF60216E98FA100D29534 /* background.jpg in Resources */,
+				FDEBF60516E98FD500D29534 /* background@2x.jpg in Resources */,
+				FD28259B16E9C42100FC66BB /* refresh.png in Resources */,
+				FD28259C16E9C42100FC66BB /* refresh@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

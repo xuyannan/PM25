@@ -34,6 +34,10 @@
 		FDC4996816ED5F3F00F4CE84 /* background2@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = FDC4996616ED5F3F00F4CE84 /* background2@2x.jpg */; };
 		FDC4996B16ED60F300F4CE84 /* background3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = FDC4996916ED60F300F4CE84 /* background3.jpg */; };
 		FDC4996C16ED60F300F4CE84 /* background3@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = FDC4996A16ED60F300F4CE84 /* background3@2x.jpg */; };
+		FDC4997316EDD01700F4CE84 /* checkmark.png in Resources */ = {isa = PBXBuildFile; fileRef = FDC4997116EDD01700F4CE84 /* checkmark.png */; };
+		FDC4997416EDD01700F4CE84 /* checkmark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FDC4997216EDD01700F4CE84 /* checkmark@2x.png */; };
+		FDC4997716EDD2FC00F4CE84 /* sunset.jpg in Resources */ = {isa = PBXBuildFile; fileRef = FDC4997516EDD2FC00F4CE84 /* sunset.jpg */; };
+		FDC4997816EDD2FC00F4CE84 /* sunset@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = FDC4997616EDD2FC00F4CE84 /* sunset@2x.jpg */; };
 		FDE6FB7F16E5EBF20070107E /* air_57.png in Resources */ = {isa = PBXBuildFile; fileRef = FDE6FB7E16E5EBF20070107E /* air_57.png */; };
 		FDE6FB8116E5EBF70070107E /* air_114.png in Resources */ = {isa = PBXBuildFile; fileRef = FDE6FB8016E5EBF70070107E /* air_114.png */; };
 		FDEBF60216E98FA100D29534 /* background.jpg in Resources */ = {isa = PBXBuildFile; fileRef = FDEBF60016E98FA100D29534 /* background.jpg */; };
@@ -80,6 +84,10 @@
 		FDC4996616ED5F3F00F4CE84 /* background2@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "background2@2x.jpg"; sourceTree = "<group>"; };
 		FDC4996916ED60F300F4CE84 /* background3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = background3.jpg; sourceTree = "<group>"; };
 		FDC4996A16ED60F300F4CE84 /* background3@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "background3@2x.jpg"; sourceTree = "<group>"; };
+		FDC4997116EDD01700F4CE84 /* checkmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkmark.png; sourceTree = "<group>"; };
+		FDC4997216EDD01700F4CE84 /* checkmark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkmark@2x.png"; sourceTree = "<group>"; };
+		FDC4997516EDD2FC00F4CE84 /* sunset.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = sunset.jpg; sourceTree = "<group>"; };
+		FDC4997616EDD2FC00F4CE84 /* sunset@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "sunset@2x.jpg"; sourceTree = "<group>"; };
 		FDE6FB7E16E5EBF20070107E /* air_57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = air_57.png; path = ../air_57.png; sourceTree = "<group>"; };
 		FDE6FB8016E5EBF70070107E /* air_114.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = air_114.png; path = ../air_114.png; sourceTree = "<group>"; };
 		FDEBF60016E98FA100D29534 /* background.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = background.jpg; sourceTree = "<group>"; };
@@ -161,6 +169,10 @@
 		FD420B2016D66E3800300B26 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				FDC4997516EDD2FC00F4CE84 /* sunset.jpg */,
+				FDC4997616EDD2FC00F4CE84 /* sunset@2x.jpg */,
+				FDC4997116EDD01700F4CE84 /* checkmark.png */,
+				FDC4997216EDD01700F4CE84 /* checkmark@2x.png */,
 				FDE6FB8016E5EBF70070107E /* air_114.png */,
 				FDE6FB7E16E5EBF20070107E /* air_57.png */,
 				FDC4996916ED60F300F4CE84 /* background3.jpg */,
@@ -254,6 +266,10 @@
 				FDC4996816ED5F3F00F4CE84 /* background2@2x.jpg in Resources */,
 				FDC4996B16ED60F300F4CE84 /* background3.jpg in Resources */,
 				FDC4996C16ED60F300F4CE84 /* background3@2x.jpg in Resources */,
+				FDC4997316EDD01700F4CE84 /* checkmark.png in Resources */,
+				FDC4997416EDD01700F4CE84 /* checkmark@2x.png in Resources */,
+				FDC4997716EDD2FC00F4CE84 /* sunset.jpg in Resources */,
+				FDC4997816EDD2FC00F4CE84 /* sunset@2x.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

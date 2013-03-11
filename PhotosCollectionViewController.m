@@ -14,6 +14,8 @@
 //@property (nonatomic, strong) int selected;
 @end
 
+#define CELL_W 150
+#define CELL_H 150
 
 
 @implementation PhotosCollectionViewController
@@ -30,13 +32,18 @@
 
 - (UIImageView *)loadImage:(NSString *) name width:(float) width height:(float) height {
     UIImageView *image = [[UIImageView alloc] initWithImage:[UIImage imageNamed:name]];
-    [image setFrame:CGRectMake(image.frame.origin.x, image.frame.origin.y, width,  height)];
+    //double scale =  CELL_W / image.image.size.width;
+    //image.bounds = CGRectMake(0,0,100, 100);
+    //NSLog(@"%f", scale);
+    image.contentMode = UIViewContentModeTopLeft;
+    
+    [image setFrame:CGRectMake(image.frame.origin.x, image.frame.origin.y, width, width)];
     return image;
 }
 
 - (void) viewWillAppear:(BOOL)animated {
     self.collectionView.delegate = self;
-    self.photosArray = [[NSArray alloc]initWithObjects:@"background.jpg", @"background2.jpg", @"background3.jpg", nil];
+    self.photosArray = [[NSArray alloc]initWithObjects:@"background.jpg", @"background2.jpg", @"background3.jpg", @"sunset.jpg", nil];
     [super viewWillAppear:animated];
     
 }
@@ -57,10 +64,9 @@
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     
     self.photos = [[NSMutableArray alloc]init];
-    int w = 150;
-    int h = 150;
+
     for (NSString *imageName in self.photosArray) {
-        UIImageView *bg = [self loadImage:imageName width: w height:h];
+        UIImageView *bg = [self loadImage:imageName width: CELL_W height:CELL_H];
         [self.photos addObject:bg];
     }
     return [self.photos count];
@@ -78,6 +84,15 @@
     UIImageView *img = [self.photos objectAtIndex:indexPath.row];
     [cell addSubview:img];
     
+    NSString *imageName = [[NSUserDefaults standardUserDefaults] objectForKey:@"background"];
+    double checkmark_size = 24;
+    double checkmark_adjuest = 4;
+    if (imageName && [imageName isEqualToString: [self.photosArray objectAtIndex: indexPath.row ]]) {
+        UIImageView *checkmark = [[UIImageView alloc] initWithImage:[UIImage imageNamed: @"checkmark.png"]];
+        checkmark.frame = CGRectMake( CELL_W-checkmark_size-checkmark_adjuest, CELL_H-checkmark_size-checkmark_adjuest, checkmark_size , checkmark_size );
+        //checkmark.bounds.origin.x = 100;
+        [cell addSubview:checkmark];
+    }
     return cell;
 }
 

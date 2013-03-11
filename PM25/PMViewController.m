@@ -10,14 +10,21 @@
 #import "DDXMLDocument.h"
 #import <CoreLocation/CoreLocation.h>
 #import <CoreLocation/CLLocationManager.h>
+#import "PhotosCollectionViewController.h"
 
-@interface PMViewController () <CLLocationManagerDelegate> {
+@interface PMViewController () <CLLocationManagerDelegate, PhotosCollectionViewControllerDelegate> {
     NSDictionary *citiesInPinyin;
+    UIImageView *backgroundView;
+    NSString *currentImageName;
 }
+
+
 @property (nonatomic, strong) CLLocationManager *locationManager;
 @property (nonatomic)  int pm;
 @property (nonatomic, strong) NSMutableArray *pms;
 @property (nonatomic, strong) NSString *city;
+@property (nonatomic, weak) PhotosCollectionViewController *photosCollectionViewController;
+//@property (nonatomic, strong) UIImageView *backgroundView;
 
 @end
 
@@ -44,55 +51,61 @@
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
         [request setValue:@"text/xml" forHTTPHeaderField:@"Content-Type"];
         NSHTTPURLResponse *response;
-        NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:nil];
         NSError *error = nil;
-        DDXMLDocument *xmlDoc = [[DDXMLDocument alloc] initWithData:data options:0 error: &error];
-        if (error) {
-            NSLog(@"%@", [error localizedDescription]);
-        }
-        
-        NSArray *resultNodes = [xmlDoc nodesForXPath:@"//Conc | //AQI | //Desc | //ReadingDateTime" error:&error];
-        
-        NSMutableArray *pmArray = [[NSMutableArray alloc] init];
-        NSMutableArray *aqiArray = [[NSMutableArray alloc] init];
-        NSMutableArray *descArray = [[NSMutableArray alloc] init];
-        NSMutableArray *udpateArray = [[NSMutableArray alloc] init];
-        //DDXMLElement *latestNode = resultNodes[0];
-        
-        for (DDXMLElement *resultElement in resultNodes) {
-            NSString *name = [resultElement name];
-            NSString *value = [resultElement stringValue];
-            
-            if ([name isEqualToString:@"Conc"]) {
-                [pmArray addObject: value];
-            } else if ([name isEqualToString:@"AQI"]) {
-                [aqiArray addObject: value];
-            } else if ([name isEqualToString:@"Desc"]) {
-                NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\(.*\\)" options:NSRegularExpressionCaseInsensitive error:nil];
-                NSString *modifiedValue = [regex stringByReplacingMatchesInString:value options:0 range:NSMakeRange(0, [value length]) withTemplate:@""];
-                [descArray addObject: modifiedValue];
-            } else if ([name isEqualToString:@"ReadingDateTime"]) {
-                [udpateArray addObject: value];
+        NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+        if(error != nil) {
+            NSLog(@"errrrrrrr: %@", error);
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"网络错误 " message:@"网络看上去不给力啊..." delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            //[alert show];
+        } else {
+            DDXMLDocument *xmlDoc = [[DDXMLDocument alloc] initWithData:data options:0 error: &error];
+            if (error) {
+                NSLog(@"%@", [error localizedDescription]);
             }
+            
+            NSArray *resultNodes = [xmlDoc nodesForXPath:@"//Conc | //AQI | //Desc | //ReadingDateTime" error:&error];
+            
+            NSMutableArray *pmArray = [[NSMutableArray alloc] init];
+            NSMutableArray *aqiArray = [[NSMutableArray alloc] init];
+            NSMutableArray *descArray = [[NSMutableArray alloc] init];
+            NSMutableArray *udpateArray = [[NSMutableArray alloc] init];
+            //DDXMLElement *latestNode = resultNodes[0];
+            
+            for (DDXMLElement *resultElement in resultNodes) {
+                NSString *name = [resultElement name];
+                NSString *value = [resultElement stringValue];
+                
+                if ([name isEqualToString:@"Conc"]) {
+                    [pmArray addObject: value];
+                } else if ([name isEqualToString:@"AQI"]) {
+                    [aqiArray addObject: value];
+                } else if ([name isEqualToString:@"Desc"]) {
+                    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\(.*\\)" options:NSRegularExpressionCaseInsensitive error:nil];
+                    NSString *modifiedValue = [regex stringByReplacingMatchesInString:value options:0 range:NSMakeRange(0, [value length]) withTemplate:@""];
+                    [descArray addObject: modifiedValue];
+                } else if ([name isEqualToString:@"ReadingDateTime"]) {
+                    [udpateArray addObject: value];
+                }
+            }
+            NSInteger zero = [[[NSNumber alloc]initWithInt:0] integerValue];
+            // 排除未读表的情况
+            while ([aqiArray objectAtIndex:zero ] && [[aqiArray objectAtIndex:zero ] isEqualToString:@"-1"]) {
+                [pmArray removeObjectAtIndex: zero];
+                [descArray removeObjectAtIndex: zero];
+                [udpateArray removeObjectAtIndex: zero];
+                [aqiArray removeObjectAtIndex: zero];
+            }
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.pmValue.text = [pmArray objectAtIndex:zero];
+                self.result.text = [descArray objectAtIndex:zero];
+                self.updateTime.text = [udpateArray objectAtIndex:zero];
+                self.aqiValue.text = [aqiArray objectAtIndex:zero];
+                self.currentCity.text = currentCity;
+                self.refreshButton.titleLabel.text = @"刷新"; // = [UIBUtton alloc] initWi
+                self.refreshButton.enabled = YES;
+            });
         }
-        NSInteger zero = [[[NSNumber alloc]initWithInt:0] integerValue];
-        // 排除未读表的情况
-        while ([aqiArray objectAtIndex:zero ] && [[aqiArray objectAtIndex:zero ] isEqualToString:@"-1"]) {
-            [pmArray removeObjectAtIndex: zero];
-            [descArray removeObjectAtIndex: zero];
-            [udpateArray removeObjectAtIndex: zero];
-            [aqiArray removeObjectAtIndex: zero];
-        }
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self.pmValue.text = [pmArray objectAtIndex:zero];
-            self.result.text = [descArray objectAtIndex:zero];
-            self.updateTime.text = [udpateArray objectAtIndex:zero];
-            self.aqiValue.text = [aqiArray objectAtIndex:zero];
-            self.currentCity.text = currentCity;
-            self.refreshButton.titleLabel.text = @"刷新"; // = [UIBUtton alloc] initWi
-            self.refreshButton.enabled = YES;
-        });
         
     });
     
@@ -101,22 +114,31 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES];
-    // background
-    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"background.jpg"]];
     
-    // refresh button
-    /*
-    UIImageView *refreshButton = [[UIImageView alloc] initWithFrame:CGRectMake(10.f, 10.f, 24, 24)];
-    [refreshButton setImage:[UIImage imageNamed:@"refresh.png"]];
-    [self.view addSubview:refreshButton];
-     */
+    currentImageName = [[NSUserDefaults standardUserDefaults]objectForKey:@"background"];
+    
+    currentImageName = currentImageName ? currentImageName : @"background.jpg";
+    if(backgroundView) {
+        [backgroundView removeFromSuperview];
+    }
+    backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed: currentImageName]];
+    [self.view addSubview: backgroundView];
+    [self.view sendSubviewToBack:backgroundView];
+    self.view.contentMode = UIViewContentModeScaleAspectFit;
 
-    NSURL *beijingUrl = [NSURL URLWithString:@"http://www.beijingaqifeed.com/BeijingAQI/BeijingAir.xml"];
-    NSURL *guangzhouUrl = [NSURL URLWithString:@"http://www.beijingaqifeed.com/gzaqi/guangzhouairrss.xml"];
-    NSURL *shanghaiUrl = [NSURL URLWithString:@"http://www.beijingaqifeed.com/shanghaiaqi/shanghaiairrss.xml"];
-    NSURL *chengduUrl = [NSURL URLWithString:@"http://www.beijingaqifeed.com/chengduaqi/chengduairrss.xml"];
+    NSURL *beijingUrl = [NSURL URLWithString:@"http://aqi.cutefool.net/beijing"];
+    NSURL *guangzhouUrl = [NSURL URLWithString:@"http://aqi.cutefool.net/guangzhou"];
+    NSURL *shanghaiUrl = [NSURL URLWithString:@"http://aqi.cutefool.net/shanghai"];
+    NSURL *chengduUrl = [NSURL URLWithString:@"http://aqi.cutefool.net/chengdu"];
     
     citiesInPinyin = [[NSDictionary alloc]initWithObjectsAndKeys:beijingUrl, @"北京市",guangzhouUrl, @"广州市", shanghaiUrl, @"上海市", chengduUrl, @"成都市", nil];
+}
+
+- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    NSLog(@"segue: %@", segue.identifier);
+    if ([segue.identifier isEqualToString:@"Photos"]) {
+        [segue.destinationViewController setDelegate:self];
+    }
 }
 
 - (void)viewDidLoad
@@ -180,16 +202,23 @@
         if (error) {
             NSLog(@"Geocode failed with error: %@", error);
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"无法获取当前城市，请手动设置" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-            [alert show];
+            //[alert show];
         } else {
             CLPlacemark *placemark = [placemarks objectAtIndex:0];
             //NSLog(@"city: %@, code: %@", placemark.administrativeArea, placemark.locality);
             self.city = placemark.administrativeArea;
         }
+        NSLog(@"%@", self.city);
         [self getCurretnPmValue];
         
     }];
 }
-
+#pragma mark - PhotosCollectionViewControllerDelegate method
+- (void) photosCollectionViewController:(PhotosCollectionViewController *)sender background:(NSString *) background {
+    NSLog(@"%@", background);
+    currentImageName  = background;
+    [[NSUserDefaults standardUserDefaults]setObject:currentImageName forKey:@"background"];
+    [self dismissViewControllerAnimated:true completion:nil];
+}
 
 @end

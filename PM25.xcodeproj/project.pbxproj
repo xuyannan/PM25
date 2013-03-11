@@ -10,6 +10,9 @@
 		45F614D28CBF4CB5BCD8A734 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 580C39FE6277449DA3ED5EDB /* libPods.a */; };
 		FD28259B16E9C42100FC66BB /* refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = FD28259916E9C42100FC66BB /* refresh.png */; };
 		FD28259C16E9C42100FC66BB /* refresh@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FD28259A16E9C42100FC66BB /* refresh@2x.png */; };
+		FD28259F16E9D38B00FC66BB /* gear.png in Resources */ = {isa = PBXBuildFile; fileRef = FD28259D16E9D38B00FC66BB /* gear.png */; };
+		FD2825A016E9D38B00FC66BB /* gear@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FD28259E16E9D38B00FC66BB /* gear@2x.png */; };
+		FD2825A316E9DD5100FC66BB /* PhotosCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD2825A216E9DD5100FC66BB /* PhotosCollectionViewController.m */; };
 		FD3D3EA816DCBA7D002FA65F /* loading.gif in Resources */ = {isa = PBXBuildFile; fileRef = FD3D3EA716DCBA7D002FA65F /* loading.gif */; };
 		FD3D3EAA16DDE6AD002FA65F /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD3D3EA916DDE6AD002FA65F /* CoreLocation.framework */; };
 		FD3D3EAD16DED7B4002FA65F /* PMConfigItem.m in Sources */ = {isa = PBXBuildFile; fileRef = FD3D3EAC16DED7B4002FA65F /* PMConfigItem.m */; };
@@ -27,6 +30,10 @@
 		FD420B3F16D7136800300B26 /* ConfigViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD420B3E16D7136800300B26 /* ConfigViewController.m */; };
 		FD420B4216D7205C00300B26 /* PMTimeConfigViewContoller.m in Sources */ = {isa = PBXBuildFile; fileRef = FD420B4116D7205C00300B26 /* PMTimeConfigViewContoller.m */; };
 		FD420B4516D778F000300B26 /* PMFrequencyConfigViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD420B4416D778F000300B26 /* PMFrequencyConfigViewController.m */; };
+		FDC4996716ED5F3F00F4CE84 /* background2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = FDC4996516ED5F3F00F4CE84 /* background2.jpg */; };
+		FDC4996816ED5F3F00F4CE84 /* background2@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = FDC4996616ED5F3F00F4CE84 /* background2@2x.jpg */; };
+		FDC4996B16ED60F300F4CE84 /* background3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = FDC4996916ED60F300F4CE84 /* background3.jpg */; };
+		FDC4996C16ED60F300F4CE84 /* background3@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = FDC4996A16ED60F300F4CE84 /* background3@2x.jpg */; };
 		FDE6FB7F16E5EBF20070107E /* air_57.png in Resources */ = {isa = PBXBuildFile; fileRef = FDE6FB7E16E5EBF20070107E /* air_57.png */; };
 		FDE6FB8116E5EBF70070107E /* air_114.png in Resources */ = {isa = PBXBuildFile; fileRef = FDE6FB8016E5EBF70070107E /* air_114.png */; };
 		FDEBF60216E98FA100D29534 /* background.jpg in Resources */ = {isa = PBXBuildFile; fileRef = FDEBF60016E98FA100D29534 /* background.jpg */; };
@@ -38,6 +45,10 @@
 		E64C57EB79B243238277D272 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
 		FD28259916E9C42100FC66BB /* refresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = refresh.png; sourceTree = "<group>"; };
 		FD28259A16E9C42100FC66BB /* refresh@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "refresh@2x.png"; sourceTree = "<group>"; };
+		FD28259D16E9D38B00FC66BB /* gear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gear.png; sourceTree = "<group>"; };
+		FD28259E16E9D38B00FC66BB /* gear@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gear@2x.png"; sourceTree = "<group>"; };
+		FD2825A116E9DD5100FC66BB /* PhotosCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PhotosCollectionViewController.h; path = ../PhotosCollectionViewController.h; sourceTree = "<group>"; };
+		FD2825A216E9DD5100FC66BB /* PhotosCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PhotosCollectionViewController.m; path = ../PhotosCollectionViewController.m; sourceTree = "<group>"; };
 		FD3D3EA716DCBA7D002FA65F /* loading.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = loading.gif; sourceTree = "<group>"; };
 		FD3D3EA916DDE6AD002FA65F /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		FD3D3EAB16DED7B4002FA65F /* PMConfigItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PMConfigItem.h; sourceTree = "<group>"; };
@@ -65,8 +76,12 @@
 		FD420B4316D778F000300B26 /* PMFrequencyConfigViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PMFrequencyConfigViewController.h; sourceTree = "<group>"; };
 		FD420B4416D778F000300B26 /* PMFrequencyConfigViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PMFrequencyConfigViewController.m; sourceTree = "<group>"; };
 		FDB5A50716DB4BE7004BC936 /* PMDbTool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PMDbTool.h; sourceTree = "<group>"; };
-		FDE6FB7E16E5EBF20070107E /* air_57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = air_57.png; sourceTree = "<group>"; };
-		FDE6FB8016E5EBF70070107E /* air_114.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = air_114.png; sourceTree = "<group>"; };
+		FDC4996516ED5F3F00F4CE84 /* background2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = background2.jpg; sourceTree = "<group>"; };
+		FDC4996616ED5F3F00F4CE84 /* background2@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "background2@2x.jpg"; sourceTree = "<group>"; };
+		FDC4996916ED60F300F4CE84 /* background3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = background3.jpg; sourceTree = "<group>"; };
+		FDC4996A16ED60F300F4CE84 /* background3@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "background3@2x.jpg"; sourceTree = "<group>"; };
+		FDE6FB7E16E5EBF20070107E /* air_57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = air_57.png; path = ../air_57.png; sourceTree = "<group>"; };
+		FDE6FB8016E5EBF70070107E /* air_114.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = air_114.png; path = ../air_114.png; sourceTree = "<group>"; };
 		FDEBF60016E98FA100D29534 /* background.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = background.jpg; sourceTree = "<group>"; };
 		FDEBF60416E98FD500D29534 /* background@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "background@2x.jpg"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -90,8 +105,6 @@
 		FD420B0D16D66E3800300B26 = {
 			isa = PBXGroup;
 			children = (
-				FDE6FB8016E5EBF70070107E /* air_114.png */,
-				FDE6FB7E16E5EBF20070107E /* air_57.png */,
 				FD3D3EA916DDE6AD002FA65F /* CoreLocation.framework */,
 				FD420B1F16D66E3800300B26 /* PM25 */,
 				FD420B1816D66E3800300B26 /* Frameworks */,
@@ -122,6 +135,8 @@
 		FD420B1F16D66E3800300B26 /* PM25 */ = {
 			isa = PBXGroup;
 			children = (
+				FD2825A116E9DD5100FC66BB /* PhotosCollectionViewController.h */,
+				FD2825A216E9DD5100FC66BB /* PhotosCollectionViewController.m */,
 				FD420B3D16D7136800300B26 /* ConfigViewController.h */,
 				FD420B3E16D7136800300B26 /* ConfigViewController.m */,
 				FD420B2816D66E3800300B26 /* PMAppDelegate.h */,
@@ -129,6 +144,8 @@
 				FD420B3116D66E3900300B26 /* MainStoryboard.storyboard */,
 				FD420B3416D66E3900300B26 /* PMViewController.h */,
 				FD420B3516D66E3900300B26 /* PMViewController.m */,
+				FD28259D16E9D38B00FC66BB /* gear.png */,
+				FD28259E16E9D38B00FC66BB /* gear@2x.png */,
 				FD420B2016D66E3800300B26 /* Supporting Files */,
 				FD420B4016D7205C00300B26 /* PMTimeConfigViewContoller.h */,
 				FD420B4116D7205C00300B26 /* PMTimeConfigViewContoller.m */,
@@ -144,6 +161,12 @@
 		FD420B2016D66E3800300B26 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				FDE6FB8016E5EBF70070107E /* air_114.png */,
+				FDE6FB7E16E5EBF20070107E /* air_57.png */,
+				FDC4996916ED60F300F4CE84 /* background3.jpg */,
+				FDC4996A16ED60F300F4CE84 /* background3@2x.jpg */,
+				FDC4996516ED5F3F00F4CE84 /* background2.jpg */,
+				FDC4996616ED5F3F00F4CE84 /* background2@2x.jpg */,
 				FD28259916E9C42100FC66BB /* refresh.png */,
 				FD28259A16E9C42100FC66BB /* refresh@2x.png */,
 				FDEBF60416E98FD500D29534 /* background@2x.jpg */,
@@ -225,6 +248,12 @@
 				FDEBF60516E98FD500D29534 /* background@2x.jpg in Resources */,
 				FD28259B16E9C42100FC66BB /* refresh.png in Resources */,
 				FD28259C16E9C42100FC66BB /* refresh@2x.png in Resources */,
+				FD28259F16E9D38B00FC66BB /* gear.png in Resources */,
+				FD2825A016E9D38B00FC66BB /* gear@2x.png in Resources */,
+				FDC4996716ED5F3F00F4CE84 /* background2.jpg in Resources */,
+				FDC4996816ED5F3F00F4CE84 /* background2@2x.jpg in Resources */,
+				FDC4996B16ED60F300F4CE84 /* background3.jpg in Resources */,
+				FDC4996C16ED60F300F4CE84 /* background3@2x.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -259,6 +288,7 @@
 				FD420B4216D7205C00300B26 /* PMTimeConfigViewContoller.m in Sources */,
 				FD420B4516D778F000300B26 /* PMFrequencyConfigViewController.m in Sources */,
 				FD3D3EAD16DED7B4002FA65F /* PMConfigItem.m in Sources */,
+				FD2825A316E9DD5100FC66BB /* PhotosCollectionViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

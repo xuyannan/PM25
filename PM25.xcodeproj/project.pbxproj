@@ -38,6 +38,8 @@
 		FDC4997416EDD01700F4CE84 /* checkmark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FDC4997216EDD01700F4CE84 /* checkmark@2x.png */; };
 		FDC4997716EDD2FC00F4CE84 /* sunset.jpg in Resources */ = {isa = PBXBuildFile; fileRef = FDC4997516EDD2FC00F4CE84 /* sunset.jpg */; };
 		FDC4997816EDD2FC00F4CE84 /* sunset@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = FDC4997616EDD2FC00F4CE84 /* sunset@2x.jpg */; };
+		FDC4997A16EDDE3500F4CE84 /* AQI.xib in Resources */ = {isa = PBXBuildFile; fileRef = FDC4997916EDDE3500F4CE84 /* AQI.xib */; };
+		FDC4997D16EDDEFF00F4CE84 /* AQIView.m in Sources */ = {isa = PBXBuildFile; fileRef = FDC4997C16EDDEFF00F4CE84 /* AQIView.m */; };
 		FDE6FB7F16E5EBF20070107E /* air_57.png in Resources */ = {isa = PBXBuildFile; fileRef = FDE6FB7E16E5EBF20070107E /* air_57.png */; };
 		FDE6FB8116E5EBF70070107E /* air_114.png in Resources */ = {isa = PBXBuildFile; fileRef = FDE6FB8016E5EBF70070107E /* air_114.png */; };
 		FDEBF60216E98FA100D29534 /* background.jpg in Resources */ = {isa = PBXBuildFile; fileRef = FDEBF60016E98FA100D29534 /* background.jpg */; };
@@ -88,6 +90,9 @@
 		FDC4997216EDD01700F4CE84 /* checkmark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkmark@2x.png"; sourceTree = "<group>"; };
 		FDC4997516EDD2FC00F4CE84 /* sunset.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = sunset.jpg; sourceTree = "<group>"; };
 		FDC4997616EDD2FC00F4CE84 /* sunset@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "sunset@2x.jpg"; sourceTree = "<group>"; };
+		FDC4997916EDDE3500F4CE84 /* AQI.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AQI.xib; sourceTree = "<group>"; };
+		FDC4997B16EDDEFF00F4CE84 /* AQIView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AQIView.h; sourceTree = "<group>"; };
+		FDC4997C16EDDEFF00F4CE84 /* AQIView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AQIView.m; sourceTree = "<group>"; };
 		FDE6FB7E16E5EBF20070107E /* air_57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = air_57.png; path = ../air_57.png; sourceTree = "<group>"; };
 		FDE6FB8016E5EBF70070107E /* air_114.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = air_114.png; path = ../air_114.png; sourceTree = "<group>"; };
 		FDEBF60016E98FA100D29534 /* background.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = background.jpg; sourceTree = "<group>"; };
@@ -150,6 +155,9 @@
 				FD420B2816D66E3800300B26 /* PMAppDelegate.h */,
 				FD420B2916D66E3800300B26 /* PMAppDelegate.m */,
 				FD420B3116D66E3900300B26 /* MainStoryboard.storyboard */,
+				FDC4997916EDDE3500F4CE84 /* AQI.xib */,
+				FDC4997B16EDDEFF00F4CE84 /* AQIView.h */,
+				FDC4997C16EDDEFF00F4CE84 /* AQIView.m */,
 				FD420B3416D66E3900300B26 /* PMViewController.h */,
 				FD420B3516D66E3900300B26 /* PMViewController.m */,
 				FD28259D16E9D38B00FC66BB /* gear.png */,
@@ -270,6 +278,7 @@
 				FDC4997416EDD01700F4CE84 /* checkmark@2x.png in Resources */,
 				FDC4997716EDD2FC00F4CE84 /* sunset.jpg in Resources */,
 				FDC4997816EDD2FC00F4CE84 /* sunset@2x.jpg in Resources */,
+				FDC4997A16EDDE3500F4CE84 /* AQI.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -305,6 +314,7 @@
 				FD420B4516D778F000300B26 /* PMFrequencyConfigViewController.m in Sources */,
 				FD3D3EAD16DED7B4002FA65F /* PMConfigItem.m in Sources */,
 				FD2825A316E9DD5100FC66BB /* PhotosCollectionViewController.m in Sources */,
+				FDC4997D16EDDEFF00F4CE84 /* AQIView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

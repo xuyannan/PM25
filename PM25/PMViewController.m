@@ -41,6 +41,8 @@
         cityArray = [[NSMutableArray alloc]init];
         [cityArray addObject:@"北京市"];
         [cityArray addObject:@"广州市"];
+        [cityArray addObject:@"上海市"];
+        [cityArray addObject:@"成都市"];
     }
     if (!cityDictionary) {
         cityDictionary = [[NSMutableDictionary alloc]init];

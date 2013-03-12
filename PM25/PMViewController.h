@@ -7,15 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AQIViewController.h"
 
 @interface PMViewController : UIViewController
 
-@property (weak, nonatomic) IBOutlet UILabel *result;
-@property (weak, nonatomic) IBOutlet UILabel *pmValue;
-@property (weak, nonatomic) IBOutlet UILabel *updateTime;
-@property (weak, nonatomic) IBOutlet UILabel *aqiValue;
-@property (weak, nonatomic) IBOutlet UILabel *currentCity;
-@property (weak, nonatomic) IBOutlet UIButton *refreshButton;
+@property (nonatomic, strong) AQIViewController *aqiViewController;
 
-- (IBAction)refresh:(UIButton *)sender;
 @end

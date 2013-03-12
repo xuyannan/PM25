@@ -83,7 +83,7 @@
     self.locationManager.delegate = self;
     self.locationManager.distanceFilter = kCLDistanceFilterNone;
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-    self.locationManager.distanceFilter = 10;
+    self.locationManager.distanceFilter = 100;
     [self.locationManager startUpdatingLocation];
 }
 
@@ -102,10 +102,21 @@
     CGRect bounds = [[UIScreen mainScreen] bounds];
     NSLog(@"%f" , bounds.size.height);
     int index = 0;
+    //当前城市放在首屏
+    if (currentCity) {
+        AQIViewController *avc = [cityDictionary objectForKey:currentCity];
+        [avc updateAqiData];
+        [avc.view setFrame:CGRectMake(0, index * bounds.size.height, bounds.size.width, bounds.size.height)];
+        [self.scrollView addSubview:avc.view];
+        index ++;
+        
+    }
     for (NSString *citykey in cityDictionary) {
+        if ([citykey isEqualToString:currentCity]) {
+            continue;
+        }
         AQIViewController *avc = [cityDictionary objectForKey:citykey];
         [avc updateAqiData];
-        NSLog(@"%@", [avc description]);
         [avc.view setFrame:CGRectMake(0, index * bounds.size.height, bounds.size.width, bounds.size.height)];
         [self.scrollView addSubview:avc.view];
         index ++;

@@ -47,10 +47,11 @@
             self.desc.text = data.desc;
             self.update.text = data.update;
             // 去掉"市"
+            NSString *fixedCityName;
             NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"市$" options:NSRegularExpressionCaseInsensitive error:nil];
-            self.city = [regex stringByReplacingMatchesInString:self.city options:0 range:NSMakeRange(0, [self.city length]) withTemplate:@""];
+            fixedCityName = [regex stringByReplacingMatchesInString:self.city options:0 range:NSMakeRange(0, [self.city length]) withTemplate:@""];
             
-            self.currentCity.text = self.city;
+            self.currentCity.text = fixedCityName;
         });
     });
     

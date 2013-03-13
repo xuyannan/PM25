@@ -23,6 +23,7 @@
     NSMutableArray *cityArray;
     UIImageView *backgroundView;
     NSString *currentImageName;
+    bool located; // 开关，控制只定位一次
 }
 
 @property(nonatomic, strong) CLLocationManager *locationManager;
@@ -36,6 +37,7 @@
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    located = NO;
     cityArray = [[NSUserDefaults standardUserDefaults] objectForKey:CITY_LIST_KEY];
     if (!cityArray) {
         cityArray = [[NSMutableArray alloc]init];
@@ -96,29 +98,28 @@
      [self.locationManager stopUpdatingLocation];
 }
 
+-(void) updateAqiForCity: (NSString *) city atIndex: (int) index {
+    CGRect bounds = [[UIScreen mainScreen] bounds];
+    AQIViewController *avc = [cityDictionary objectForKey:city];
+        [avc.view setFrame:CGRectMake(0, index * bounds.size.height, bounds.size.width, bounds.size.height)];
+    [self.scrollView addSubview:avc.view];
+    [avc updateAqiData];
+}
+
 
 //更新所有AQIViewController
 -(void) updateAqiViews {
-    CGRect bounds = [[UIScreen mainScreen] bounds];
-    NSLog(@"%f" , bounds.size.height);
     int index = 0;
     //当前城市放在首屏
     if (currentCity) {
-        AQIViewController *avc = [cityDictionary objectForKey:currentCity];
-        [avc updateAqiData];
-        [avc.view setFrame:CGRectMake(0, index * bounds.size.height, bounds.size.width, bounds.size.height)];
-        [self.scrollView addSubview:avc.view];
+        [self updateAqiForCity:currentCity atIndex:index];
         index ++;
-        
     }
     for (NSString *citykey in cityDictionary) {
         if ([citykey isEqualToString:currentCity]) {
             continue;
         }
-        AQIViewController *avc = [cityDictionary objectForKey:citykey];
-        [avc updateAqiData];
-        [avc.view setFrame:CGRectMake(0, index * bounds.size.height, bounds.size.width, bounds.size.height)];
-        [self.scrollView addSubview:avc.view];
+        [self updateAqiForCity:citykey atIndex:index];
         index ++;
     }
 }
@@ -141,11 +142,12 @@
 
 
 -(void) locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
-    
     CLLocation *location = [locations objectAtIndex:0];
     NSLog(@"lat:%f - lon:%f", location.coordinate.latitude, location.coordinate.longitude);
     CLGeocoder *geoCoder = [[CLGeocoder alloc] init];
     [geoCoder reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
+        // 一次定位后，立即停止，防止多次定位
+        [self.locationManager stopUpdatingLocation];
         if (error) {
             NSLog(@"Geocode failed with error: %@", error);
             //UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"无法获取当前城市，请手动设置" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
@@ -161,8 +163,11 @@
             AQIViewController *aqiVC = [[AQIViewController alloc]initWithCity:currentCity];
             [cityDictionary setObject:aqiVC forKey:currentCity];
         }
+        if (!located) {
+            [self updateAqiViews];
+            located = YES;
+        }
         
-        [self updateAqiViews];
     }];
 }
 #pragma mark - PhotosCollectionViewControllerDelegate method

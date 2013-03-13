@@ -30,29 +30,31 @@
 
 - (AQIViewController *) initWithCity:(NSString *)city {
     if (self = [super init]) {
-        self.city = city;
+        _city = city;
     }
     return self;
 }
 
 - (void) updateAqiData {
+    NSLog(@"update aqi data for %@", self.city);
     aqiAPI = [[AqiAPI alloc]initWithCity:self.city];
-    AqiData *data = [aqiAPI getAqiData];
-    self.aqi.text = data.aqi;
-    self.pm.text = data.pm;
-    self.desc.text = data.desc;
-    self.update.text = data.update;
-    self.currentCity.text = self.city;
+    dispatch_queue_t getAqiDataQueue = dispatch_queue_create("get AQI data", NULL);
+    dispatch_async(getAqiDataQueue, ^{
+        AqiData *data = [aqiAPI getAqiData];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.aqi.text = data.aqi;
+            self.pm.text = data.pm;
+            self.desc.text = data.desc;
+            self.update.text = data.update;
+            // 去掉"市"
+            NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"市$" options:NSRegularExpressionCaseInsensitive error:nil];
+            self.city = [regex stringByReplacingMatchesInString:self.city options:0 range:NSMakeRange(0, [self.city length]) withTemplate:@""];
+            
+            self.currentCity.text = self.city;
+        });
+    });
+    
 }
-
-
-- (void) setCity:(NSString *) city {
-    _city = city;
-    _city = _city ? _city : @"北京市";
-    // update pm value of this city
-    [self updateAqiData];
-}
-
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {

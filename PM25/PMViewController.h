@@ -12,5 +12,6 @@
 @interface PMViewController : UIViewController
 
 @property (nonatomic, strong) AQIViewController *aqiViewController;
-
+@property NSInteger currentPageIndex;
+@property(strong,nonatomic) UIPageViewController *pageViewController;
 @end

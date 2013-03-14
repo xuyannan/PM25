@@ -18,13 +18,14 @@
 #define CITY_LIST_KEY @"citylist"
 
 @interface PMViewController () <CLLocationManagerDelegate, PhotosCollectionViewControllerDelegate, UIScrollViewDelegate, ButtonsViewControllerDelegate,
-UIGestureRecognizerDelegate> {
+UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerDataSource> {
     NSString *currentCity;
     NSMutableDictionary *cityDictionary;
     NSMutableArray *cityArray;
     UIImageView *backgroundView;
     NSString *currentImageName;
     bool located; // 开关，控制只定位一次
+    NSMutableArray *arrayOfAqiViewController;
 }
 
 @property(nonatomic, strong) CLLocationManager *locationManager;
@@ -62,12 +63,11 @@ UIGestureRecognizerDelegate> {
     if(backgroundView) {
         [backgroundView removeFromSuperview];
     }
-
     backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed: currentImageName]];
     [self.view insertSubview:backgroundView atIndex:0];
     
     // scroll view
-    [self getReadyForScrollView];
+    //[self getReadyForScrollView];
     
     // buttons
     CGRect bounds = [[UIScreen mainScreen] bounds];
@@ -76,19 +76,36 @@ UIGestureRecognizerDelegate> {
     [self.view addSubview: self.buttonsVC.view];
     self.buttonsVC.delegate = self;
     
+    //pageview
 }
-/*
+
+-(void) getReadyForPageView {
+    if (!self.pageViewController) {
+        CGRect bounds = [[UIScreen mainScreen]bounds];
+        self.pageViewController = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll
+                                                                  navigationOrientation:UIPageViewControllerNavigationOrientationVertical
+                                                                                options:[NSDictionary dictionaryWithObject:[NSNumber numberWithFloat:50.0f] forKey:UIPageViewControllerOptionInterPageSpacingKey]];
+        self.pageViewController.delegate = self;
+        self.pageViewController.dataSource = self;
+        [self.pageViewController.view setFrame: bounds];
+        //self.view.gestureRecognizers = self.pageViewController.gestureRecognizers;
+        //关键一步
+        AQIViewController *avc = [arrayOfAqiViewController objectAtIndex: self.currentPageIndex];
+        [self.pageViewController setViewControllers:@[avc] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
+        //preload next view
+        if (self.currentPageIndex + 1 < [arrayOfAqiViewController count]) {
+            AQIViewController *preloadAvc = [arrayOfAqiViewController objectAtIndex: (self.currentPageIndex + 1)];
+            NSLog(@"preload data for city: %@", preloadAvc.city);
+            [preloadAvc updateAqiData];
+        }
+    }
+    [self.view insertSubview:self.pageViewController.view atIndex:1];
+}
+
 -(void) swipeLeft {
     NSLog(@"swipe left");
 }
 
--(void) swipeDown:(UISwipeGestureRecognizer *)recognizer {
-    NSLog(@"swipe down");
-}
--(void) swipeUp:(UISwipeGestureRecognizer *)recognizer {
-    NSLog(@"swipe up");
-}
-*/
 
 -(void)viewDidLoad {
     [super viewDidLoad];
@@ -104,18 +121,8 @@ UIGestureRecognizerDelegate> {
     
     // guesture
     UISwipeGestureRecognizer *swipeLeftRecognizer = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeLeft)];
-    //oneFingerSwipeDown.delegate = self;
     [swipeLeftRecognizer setDirection:UISwipeGestureRecognizerDirectionLeft ];
     [self.view addGestureRecognizer:swipeLeftRecognizer];
-    /*
-    UISwipeGestureRecognizer *oneFingerSwipeDown = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeDown:)];
-    [oneFingerSwipeDown setDirection:UISwipeGestureRecognizerDirectionDown];
-    [self.view addGestureRecognizer:oneFingerSwipeDown];
-    
-    UISwipeGestureRecognizer *oneFingerSwipeUp = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeUp:)];
-    [oneFingerSwipeUp setDirection:UISwipeGestureRecognizerDirectionUp];
-    [self.view addGestureRecognizer:oneFingerSwipeUp];
-    */
 }
 
 -(void) viewDidAppear:(BOOL)animated {
@@ -153,6 +160,22 @@ UIGestureRecognizerDelegate> {
     }
 }
 
+-(void) getReadyForAqiViewControllers {
+    //当前城市放在第一个
+    if (!arrayOfAqiViewController) {
+        arrayOfAqiViewController = [[NSMutableArray alloc] init];
+    }
+    if (currentCity) {
+        [arrayOfAqiViewController addObject: [cityDictionary objectForKey: currentCity]];
+    }
+    for (NSString *citykey in cityDictionary) {
+        if ([citykey isEqualToString:currentCity]) {
+            continue;
+        }
+        [arrayOfAqiViewController addObject: [cityDictionary objectForKey: citykey]];
+    }
+}
+
 #pragma mark - getReadyForScrollView
 
 -(void)getReadyForScrollView {
@@ -183,13 +206,14 @@ UIGestureRecognizerDelegate> {
             
         }
         currentCity = currentCity ? currentCity : @"北京市";
-        
         if (![cityDictionary objectForKey:currentCity]) {
             AQIViewController *aqiVC = [[AQIViewController alloc]initWithCity:currentCity];
             [cityDictionary setObject:aqiVC forKey:currentCity];
         }
         if (!located) {
-            [self updateAqiViews];
+            //[self updateAqiViews];
+            [self getReadyForAqiViewControllers];
+            [self getReadyForPageView];
             located = YES;
         }
         
@@ -198,7 +222,6 @@ UIGestureRecognizerDelegate> {
 #pragma mark - PhotosCollectionViewControllerDelegate method
 
 - (void) photosCollectionViewController:(PhotosCollectionViewController *)sender background:(NSString *) background {
-    NSLog(@"%@", background);
     currentImageName  = background;
     [[NSUserDefaults standardUserDefaults]setObject:currentImageName forKey:@"background"];
     [self dismissViewControllerAnimated:true completion:nil];
@@ -221,6 +244,50 @@ UIGestureRecognizerDelegate> {
     [self presentViewController:self.photosCollectionVC animated:true completion:^{}];
 }
 
+#pragma mark - UIPageViewController method
+-(UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController {
+    AQIViewController *currentAvc = (AQIViewController *) viewController;
+    NSInteger currentIndex = [arrayOfAqiViewController indexOfObject:currentAvc];
+    self.currentPageIndex = currentIndex;
+    if (currentIndex == 0) {
+        return nil;
+    }
+    AQIViewController *avc = [arrayOfAqiViewController objectAtIndex:currentIndex - 1];
+    self.currentPageIndex -= 1;
+    return avc;
+}
 
+-(UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController {
+    AQIViewController *currentAvc = (AQIViewController *) viewController;
+    
+    //NSLog(@"curreont aqi view controller: %@" , [currentAvc description]);
+    
+    NSInteger currentIndex = [arrayOfAqiViewController indexOfObject:currentAvc];
+    
+    if (currentIndex == [arrayOfAqiViewController count] - 1) {
+        return nil;
+    }
+    currentIndex ++;
+    AQIViewController *avc = [arrayOfAqiViewController objectAtIndex:currentIndex];
+    /*
+    NSLog(@"--current page: %d, city is %@", currentIndex, avc.city);
+    if (currentIndex + 1 < [arrayOfAqiViewController count] ) {
+        AQIViewController *preloadAvc = [arrayOfAqiViewController objectAtIndex:(currentIndex + 1)];
+        NSLog(@"preload data for city: %@", preloadAvc.city);
+        [preloadAvc updateAqiData];
+    }
+     */
+    self.currentPageIndex = currentIndex;
+    return avc;
 
+}
+
+#pragma mark - UIPageViewDatasource method
+-(NSInteger)presentationCountForPageViewController:(UIPageViewController *)pageViewController {
+    return [arrayOfAqiViewController count];
+}
+/*
+-(BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
+    return NO;
+}*/
 @end

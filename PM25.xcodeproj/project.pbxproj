@@ -41,8 +41,6 @@
 		FDC4998116EDE21900F4CE84 /* AQIViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FDC4997F16EDE21800F4CE84 /* AQIViewController.m */; };
 		FDC4998216EDE21900F4CE84 /* AQIViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FDC4998016EDE21800F4CE84 /* AQIViewController.xib */; };
 		FDC4998516EE24E600F4CE84 /* AqiAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = FDC4998416EE24E600F4CE84 /* AqiAPI.m */; };
-		FDE6FB7F16E5EBF20070107E /* air_57.png in Resources */ = {isa = PBXBuildFile; fileRef = FDE6FB7E16E5EBF20070107E /* air_57.png */; };
-		FDE6FB8116E5EBF70070107E /* air_114.png in Resources */ = {isa = PBXBuildFile; fileRef = FDE6FB8016E5EBF70070107E /* air_114.png */; };
 		FDEBF60216E98FA100D29534 /* background.jpg in Resources */ = {isa = PBXBuildFile; fileRef = FDEBF60016E98FA100D29534 /* background.jpg */; };
 		FDEBF60516E98FD500D29534 /* background@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = FDEBF60416E98FD500D29534 /* background@2x.jpg */; };
 /* End PBXBuildFile section */
@@ -92,8 +90,6 @@
 		FDC4998016EDE21800F4CE84 /* AQIViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AQIViewController.xib; sourceTree = "<group>"; };
 		FDC4998316EE24E600F4CE84 /* AqiAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AqiAPI.h; sourceTree = "<group>"; };
 		FDC4998416EE24E600F4CE84 /* AqiAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AqiAPI.m; sourceTree = "<group>"; };
-		FDE6FB7E16E5EBF20070107E /* air_57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = air_57.png; path = ../air_57.png; sourceTree = "<group>"; };
-		FDE6FB8016E5EBF70070107E /* air_114.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = air_114.png; path = ../air_114.png; sourceTree = "<group>"; };
 		FDEBF60016E98FA100D29534 /* background.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = background.jpg; sourceTree = "<group>"; };
 		FDEBF60416E98FD500D29534 /* background@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "background@2x.jpg"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -178,8 +174,6 @@
 				FDC4997616EDD2FC00F4CE84 /* sunset@2x.jpg */,
 				FDC4997116EDD01700F4CE84 /* checkmark.png */,
 				FDC4997216EDD01700F4CE84 /* checkmark@2x.png */,
-				FDE6FB8016E5EBF70070107E /* air_114.png */,
-				FDE6FB7E16E5EBF20070107E /* air_57.png */,
 				FDC4996916ED60F300F4CE84 /* background3.jpg */,
 				FDC4996A16ED60F300F4CE84 /* background3@2x.jpg */,
 				FDC4996516ED5F3F00F4CE84 /* background2.jpg */,
@@ -259,8 +253,6 @@
 				FD420B3016D66E3900300B26 /* Default-568h@2x.png in Resources */,
 				FD420B3316D66E3900300B26 /* MainStoryboard.storyboard in Resources */,
 				FD3D3EA816DCBA7D002FA65F /* loading.gif in Resources */,
-				FDE6FB7F16E5EBF20070107E /* air_57.png in Resources */,
-				FDE6FB8116E5EBF70070107E /* air_114.png in Resources */,
 				FDEBF60216E98FA100D29534 /* background.jpg in Resources */,
 				FDEBF60516E98FD500D29534 /* background@2x.jpg in Resources */,
 				FD28259B16E9C42100FC66BB /* refresh.png in Resources */,

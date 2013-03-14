@@ -17,7 +17,8 @@
 
 #define CITY_LIST_KEY @"citylist"
 
-@interface PMViewController () <CLLocationManagerDelegate, PhotosCollectionViewControllerDelegate, UIScrollViewAccessibilityDelegate, ButtonsViewControllerDelegate> {
+@interface PMViewController () <CLLocationManagerDelegate, PhotosCollectionViewControllerDelegate, UIScrollViewDelegate, ButtonsViewControllerDelegate,
+UIGestureRecognizerDelegate> {
     NSString *currentCity;
     NSMutableDictionary *cityDictionary;
     NSMutableArray *cityArray;
@@ -74,19 +75,47 @@
     [self.buttonsVC.view setFrame:CGRectMake(bounds.size.width - 120, bounds.size.height - 60, 90, 30)];
     [self.view addSubview: self.buttonsVC.view];
     self.buttonsVC.delegate = self;
+    
+}
+/*
+-(void) swipeLeft {
+    NSLog(@"swipe left");
 }
 
+-(void) swipeDown:(UISwipeGestureRecognizer *)recognizer {
+    NSLog(@"swipe down");
+}
+-(void) swipeUp:(UISwipeGestureRecognizer *)recognizer {
+    NSLog(@"swipe up");
+}
+*/
+
 -(void)viewDidLoad {
+    [super viewDidLoad];
     self.aqiViewController = [[AQIViewController alloc]initWithNibName:@"AQIViewController" bundle:nil];
     [self.scrollView addSubview:self.aqiViewController.view];
     
-    [super viewDidLoad];
     self.locationManager = [[CLLocationManager alloc] init];
     self.locationManager.delegate = self;
     self.locationManager.distanceFilter = kCLDistanceFilterNone;
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     self.locationManager.distanceFilter = 100;
     [self.locationManager startUpdatingLocation];
+    
+    // guesture
+    UISwipeGestureRecognizer *swipeLeftRecognizer = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeLeft)];
+    //oneFingerSwipeDown.delegate = self;
+    [swipeLeftRecognizer setDirection:UISwipeGestureRecognizerDirectionLeft ];
+    [self.view addGestureRecognizer:swipeLeftRecognizer];
+    /*
+    UISwipeGestureRecognizer *oneFingerSwipeDown = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeDown:)];
+    [oneFingerSwipeDown setDirection:UISwipeGestureRecognizerDirectionDown];
+    [self.view addGestureRecognizer:oneFingerSwipeDown];
+    
+    UISwipeGestureRecognizer *oneFingerSwipeUp = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeUp:)];
+    [oneFingerSwipeUp setDirection:UISwipeGestureRecognizerDirectionUp];
+    [self.view addGestureRecognizer:oneFingerSwipeUp];
+    */
 }
 
 -(void) viewDidAppear:(BOOL)animated {
@@ -128,10 +157,8 @@
 
 -(void)getReadyForScrollView {
     if (!self.scrollView) {
-        //CGRect bounds = self.view.superview.frame;
         CGRect bounds = [[UIScreen mainScreen]bounds];
         self.scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, bounds.size.width, bounds.size.height)];
-        //self.scrollView.backgroundColor = [[UIColor alloc]initWithWhite:1 alpha:0.1];
         self.scrollView.delegate = self;
         self.scrollView.contentSize = CGSizeMake(bounds.size.width, bounds.size.height * [cityArray count]);
     }
@@ -150,8 +177,6 @@
         [self.locationManager stopUpdatingLocation];
         if (error) {
             NSLog(@"Geocode failed with error: %@", error);
-            //UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"无法获取当前城市，请手动设置" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-            //[alert show];
         } else {
             CLPlacemark *placemark = [placemarks objectAtIndex:0];
             currentCity = placemark.administrativeArea;
@@ -195,5 +220,7 @@
     //self.navigationtroller mod
     [self presentViewController:self.photosCollectionVC animated:true completion:^{}];
 }
+
+
 
 @end

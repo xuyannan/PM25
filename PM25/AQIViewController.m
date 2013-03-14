@@ -28,6 +28,8 @@
     return [[NSString alloc]initWithFormat:@"An AQIViewController of city: %@", self.city ];
 }
 
+
+
 - (AQIViewController *) initWithCity:(NSString *)city {
     if (self = [super init]) {
         _city = city;
@@ -101,6 +103,17 @@
             label.textColor = [UIColor colorWithRed:(255/255.f) green:(255/255.f) blue:(255/255.f) alpha:1];
         }
     }
+    
+    
+    // guesture
+    /*
+    UISwipeGestureRecognizer *oneFingerSwipeDown = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(oneFingerSwipeDown)];
+    [oneFingerSwipeDown setDirection:UISwipeGestureRecognizerDirectionDown];
+    [self.view addGestureRecognizer:oneFingerSwipeDown];
+     */
+}
+-(IBAction) oneFingerSwipeDown:(UISwipeGestureRecognizer *) recognizer {
+    NSLog(@"swipe down");
 }
 
 - (void) viewDidDisappear:(BOOL)animated {

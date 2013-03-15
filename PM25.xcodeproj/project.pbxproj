@@ -13,6 +13,8 @@
 		FD28259F16E9D38B00FC66BB /* gear.png in Resources */ = {isa = PBXBuildFile; fileRef = FD28259D16E9D38B00FC66BB /* gear.png */; };
 		FD2825A016E9D38B00FC66BB /* gear@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FD28259E16E9D38B00FC66BB /* gear@2x.png */; };
 		FD2825A316E9DD5100FC66BB /* PhotosCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD2825A216E9DD5100FC66BB /* PhotosCollectionViewController.m */; };
+		FD288E6816F307E10068A2F5 /* CityListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD288E6616F307E10068A2F5 /* CityListViewController.m */; };
+		FD288E6916F307E10068A2F5 /* CityListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FD288E6716F307E10068A2F5 /* CityListViewController.xib */; };
 		FD3D3EA816DCBA7D002FA65F /* loading.gif in Resources */ = {isa = PBXBuildFile; fileRef = FD3D3EA716DCBA7D002FA65F /* loading.gif */; };
 		FD3D3EAA16DDE6AD002FA65F /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD3D3EA916DDE6AD002FA65F /* CoreLocation.framework */; };
 		FD420B1A16D66E3800300B26 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD420B1916D66E3800300B26 /* UIKit.framework */; };
@@ -54,6 +56,9 @@
 		FD28259E16E9D38B00FC66BB /* gear@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gear@2x.png"; sourceTree = "<group>"; };
 		FD2825A116E9DD5100FC66BB /* PhotosCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PhotosCollectionViewController.h; path = ../PhotosCollectionViewController.h; sourceTree = "<group>"; };
 		FD2825A216E9DD5100FC66BB /* PhotosCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PhotosCollectionViewController.m; path = ../PhotosCollectionViewController.m; sourceTree = "<group>"; };
+		FD288E6516F307E10068A2F5 /* CityListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CityListViewController.h; path = ../CityListViewController.h; sourceTree = "<group>"; };
+		FD288E6616F307E10068A2F5 /* CityListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CityListViewController.m; path = ../CityListViewController.m; sourceTree = "<group>"; };
+		FD288E6716F307E10068A2F5 /* CityListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CityListViewController.xib; path = ../CityListViewController.xib; sourceTree = "<group>"; };
 		FD3D3EA716DCBA7D002FA65F /* loading.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = loading.gif; sourceTree = "<group>"; };
 		FD3D3EA916DDE6AD002FA65F /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		FD420B1616D66E3800300B26 /* PM25.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PM25.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -158,6 +163,9 @@
 				FDC4998016EDE21800F4CE84 /* AQIViewController.xib */,
 				FD420B3416D66E3900300B26 /* PMViewController.h */,
 				FD420B3516D66E3900300B26 /* PMViewController.m */,
+				FD288E6516F307E10068A2F5 /* CityListViewController.h */,
+				FD288E6616F307E10068A2F5 /* CityListViewController.m */,
+				FD288E6716F307E10068A2F5 /* CityListViewController.xib */,
 				FD420B2016D66E3800300B26 /* Supporting Files */,
 			);
 			path = PM25;
@@ -271,6 +279,7 @@
 				FD46BD6E16EF1862000A256B /* ButtonsViewController.xib in Resources */,
 				FD46BD7416F03751000A256B /* icon.png in Resources */,
 				FD46BD7616F03760000A256B /* icon@2x.png in Resources */,
+				FD288E6916F307E10068A2F5 /* CityListViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -305,6 +314,7 @@
 				FDC4998116EDE21900F4CE84 /* AQIViewController.m in Sources */,
 				FDC4998516EE24E600F4CE84 /* AqiAPI.m in Sources */,
 				FD46BD6D16EF1862000A256B /* ButtonsViewController.m in Sources */,
+				FD288E6816F307E10068A2F5 /* CityListViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

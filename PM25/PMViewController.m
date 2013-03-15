@@ -14,6 +14,7 @@
 
 #import "AQIViewController.h"
 #import "ButtonsViewController.h"
+#import "CityListViewController.h"
 
 #define CITY_LIST_KEY @"citylist"
 
@@ -26,12 +27,14 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
     NSString *currentImageName;
     bool located; // 开关，控制只定位一次
     NSMutableArray *arrayOfAqiViewController;
+    int cityListVCOffset;
 }
 
 @property(nonatomic, strong) CLLocationManager *locationManager;
 @property(nonatomic, strong) UIScrollView *scrollView;
 @property(nonatomic, strong) ButtonsViewController *buttonsVC;
 @property(weak,nonatomic) PhotosCollectionViewController *photosCollectionVC;
+@property(strong,nonatomic) CityListViewController *cityListVC;
 
 @end
 
@@ -39,6 +42,7 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     located = NO;
+    cityListVCOffset = 150;
     cityArray = [[NSUserDefaults standardUserDefaults] objectForKey:CITY_LIST_KEY];
     if (!cityArray) {
         cityArray = [[NSMutableArray alloc]init];
@@ -99,12 +103,19 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
             [preloadAvc updateAqiData];
         }
     }
-    [self.view insertSubview:self.pageViewController.view atIndex:1];
+    [self.view insertSubview:self.pageViewController.view atIndex:2];
 }
 
 -(void) swipeLeft {
     NSLog(@"swipe left");
+    [self showCityList];
 }
+
+-(void) swipeRight {
+    NSLog(@"swipe right");
+    [self hideCityList];
+}
+
 
 
 -(void)viewDidLoad {
@@ -123,6 +134,10 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
     UISwipeGestureRecognizer *swipeLeftRecognizer = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeLeft)];
     [swipeLeftRecognizer setDirection:UISwipeGestureRecognizerDirectionLeft ];
     [self.view addGestureRecognizer:swipeLeftRecognizer];
+    
+    UISwipeGestureRecognizer *swipeRightRecognizer = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeRight)];
+    [swipeRightRecognizer setDirection:UISwipeGestureRecognizerDirectionRight ];
+    [self.view addGestureRecognizer:swipeRightRecognizer];
 }
 
 -(void) viewDidAppear:(BOOL)animated {
@@ -190,7 +205,7 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
 }
 
 #pragma mark - getReadyForScrollView
-
+/*
 -(void)getReadyForScrollView {
     if (!self.scrollView) {
         CGRect bounds = [[UIScreen mainScreen]bounds];
@@ -200,6 +215,7 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
     }
     [self.view insertSubview:self.scrollView atIndex:1];
 }
+ */
 
 #pragma mark - CLLocationManagerDelegate method
 
@@ -296,8 +312,32 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
 -(NSInteger)presentationCountForPageViewController:(UIPageViewController *)pageViewController {
     return [arrayOfAqiViewController count];
 }
-/*
--(BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
-    return NO;
-}*/
+
+#pragma  mark - control CityListViewController
+-(void) showCityList {
+    CGRect bounds = [[UIScreen mainScreen] bounds];
+    [self.view setFrame:CGRectMake(0- cityListVCOffset, bounds.origin.y, bounds.size.width, bounds.size.height)];
+    if (!self.cityListVC) {
+        self.cityListVC = [[CityListViewController alloc]initWithNibName:@"CityListViewController" bundle:nil];
+        //[self.cityListVC.view setFrame:bounds];
+        CGRect cityListVCBounds = self.cityListVC.view.frame;
+        
+        [self.cityListVC.view setFrame:CGRectMake(bounds.size.width, 0, cityListVCOffset, cityListVCBounds.size.height)];
+        //[self.cityListVC.view setBounds:CGRectMake(320, 0, 100, 10000) ];
+        [self.view addSubview:self.cityListVC.tableView];
+        self.cityListVC.tableView.scrollEnabled = YES;
+        NSLog(@"%f", cityListVCBounds.size.height);
+        
+    }
+    
+}
+
+-(void) hideCityList {
+    CGRect bounds = [[UIScreen mainScreen] bounds];
+    if (!self.cityListVC) {
+        return;
+    }
+    [self.view setFrame:CGRectMake(0, 0, bounds.size.width, bounds.size.height)];
+}
+
 @end

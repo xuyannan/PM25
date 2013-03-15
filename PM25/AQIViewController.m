@@ -51,7 +51,6 @@
             self.pm.text = data.pm;
             self.desc.text = data.desc;
             self.update.text = data.update;
-            
         });
     });
     

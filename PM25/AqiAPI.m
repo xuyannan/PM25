@@ -36,7 +36,7 @@
     
     NSURL *url = [citiesInPinyin objectForKey:self.city];
     
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:10];
     [request setValue:@"text/xml" forHTTPHeaderField:@"Content-Type"];
     NSHTTPURLResponse *response;
     NSError *error = nil;

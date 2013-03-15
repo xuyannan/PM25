@@ -36,7 +36,6 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
 @end
 
 @implementation PMViewController
-
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     located = NO;
@@ -75,8 +74,9 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
     [self.buttonsVC.view setFrame:CGRectMake(bounds.size.width - 120, bounds.size.height - 60, 90, 30)];
     [self.view addSubview: self.buttonsVC.view];
     self.buttonsVC.delegate = self;
-    
-    //pageview
+
+    // 监听程序由background切换到foreground
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillEnterForegroundNotification) name:UIApplicationWillEnterForegroundNotification object:nil];
 }
 
 -(void) getReadyForPageView {
@@ -129,9 +129,15 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
     [super viewDidAppear:animated];
 }
 
+-(void)appWillEnterForegroundNotification {
+    [self refreshAll];
+}
+
 -(void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-     [self.locationManager stopUpdatingLocation];
+    [self.locationManager stopUpdatingLocation];
+    //移除boserver
+    [[NSNotificationCenter defaultCenter] removeObserver:self]; 
 }
 
 -(void) updateAqiForCity: (NSString *) city atIndex: (int) index {
@@ -141,7 +147,6 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
     [self.scrollView addSubview:avc.view];
     [avc updateAqiData];
 }
-
 
 //更新所有AQIViewController
 -(void) updateAqiViews {
@@ -173,6 +178,14 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
             continue;
         }
         [arrayOfAqiViewController addObject: [cityDictionary objectForKey: citykey]];
+    }
+}
+
+//更新所有城市数据
+-(void) refreshAll {
+    for (NSString *citykey in cityDictionary) {
+        AQIViewController *avc = [cityDictionary objectForKey:citykey];
+        [avc updateAqiData];
     }
 }
 
@@ -230,10 +243,7 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
 #pragma mark - ButtonsViewControllerDelegate method
 -(void)refreshAqiViews:(ButtonsViewController *)sender {
     NSLog(@"%@", @"refresh button pressed");
-    for (NSString *citykey in cityDictionary) {
-        AQIViewController *avc = [cityDictionary objectForKey:citykey];
-        [avc updateAqiData];
-    }
+    [self refreshAll];
 }
 
 -(void)configButtonPressed:(ButtonsViewController *)sender {

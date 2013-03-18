@@ -18,7 +18,7 @@
 
 #define CITY_LIST_KEY @"citylist"
 
-@interface PMViewController () <CLLocationManagerDelegate, PhotosCollectionViewControllerDelegate, UIScrollViewDelegate, ButtonsViewControllerDelegate,
+@interface PMViewController () <CLLocationManagerDelegate, PhotosCollectionViewControllerDelegate, ButtonsViewControllerDelegate,
 UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerDataSource> {
     NSString *currentCity;
     NSMutableDictionary *cityDictionary;
@@ -28,10 +28,11 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
     bool located; // 开关，控制只定位一次
     NSMutableArray *arrayOfAqiViewController;
     int cityListVCOffset;
+    NSMutableArray *oldCityArray;
 }
 
 @property(nonatomic, strong) CLLocationManager *locationManager;
-@property(nonatomic, strong) UIScrollView *scrollView;
+//@property(nonatomic, strong) UIScrollView *scrollView;
 @property(nonatomic, strong) ButtonsViewController *buttonsVC;
 @property(weak,nonatomic) PhotosCollectionViewController *photosCollectionVC;
 @property(strong,nonatomic) CityListViewController *cityListVC;
@@ -43,14 +44,19 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
     [super viewWillAppear:animated];
     located = NO;
     cityListVCOffset = 150;
+    CGRect bounds = [[UIScreen mainScreen] bounds];
+    
     cityArray = [[NSUserDefaults standardUserDefaults] objectForKey:CITY_LIST_KEY];
     if (!cityArray) {
         cityArray = [[NSMutableArray alloc]init];
-        [cityArray addObject:@"北京市"];
-        [cityArray addObject:@"广州市"];
-        [cityArray addObject:@"上海市"];
-        [cityArray addObject:@"成都市"];
+        [cityArray addObject:@"北京"];
+        [cityArray addObject:@"广州"];
+        [cityArray addObject:@"上海"];
+        [cityArray addObject:@"成都"];
+        [cityArray addObject:@"兰州"];
+        [[NSUserDefaults standardUserDefaults] setObject:cityArray forKey:CITY_LIST_KEY];
     }
+    oldCityArray = [cityArray mutableCopy];
     if (!cityDictionary) {
         cityDictionary = [[NSMutableDictionary alloc]init];
     }
@@ -58,6 +64,15 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
         AQIViewController *aqiVC = [[AQIViewController alloc]initWithCity: city];
         [cityDictionary setObject:aqiVC forKey:city];
     }
+    
+    // citylist view
+    /*
+    if (!self.cityListVC) {
+        self.cityListVC = [[CityListViewController alloc]initWithNibName:@"CityListViewController" bundle:nil];
+        [self.cityListVC.view setFrame:CGRectMake(320-150, 0, bounds.size.width, bounds.size.height)];
+        [self.view addSubview:self.cityListVC.tableView];
+    }*/
+    
     
     // background
     currentImageName = [[NSUserDefaults standardUserDefaults]objectForKey:@"background"];
@@ -68,17 +83,15 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
     }
     backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed: currentImageName]];
     [self.view insertSubview:backgroundView atIndex:0];
-    
-    // scroll view
-    //[self getReadyForScrollView];
-    
+
     // buttons
-    CGRect bounds = [[UIScreen mainScreen] bounds];
+    
     self.buttonsVC = [[ButtonsViewController alloc]initWithNibName:@"ButtonsViewController" bundle:nil];
     [self.buttonsVC.view setFrame:CGRectMake(bounds.size.width - 120, bounds.size.height - 60, 90, 30)];
     [self.view addSubview: self.buttonsVC.view];
     self.buttonsVC.delegate = self;
-
+    
+    
     // 监听程序由background切换到foreground
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillEnterForegroundNotification) name:UIApplicationWillEnterForegroundNotification object:nil];
 }
@@ -96,24 +109,51 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
         //关键一步
         AQIViewController *avc = [arrayOfAqiViewController objectAtIndex: self.currentPageIndex];
         [self.pageViewController setViewControllers:@[avc] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
-        //preload next view
-        if (self.currentPageIndex + 1 < [arrayOfAqiViewController count]) {
-            AQIViewController *preloadAvc = [arrayOfAqiViewController objectAtIndex: (self.currentPageIndex + 1)];
-            NSLog(@"preload data for city: %@", preloadAvc.city);
-            [preloadAvc updateAqiData];
-        }
     }
     [self.view insertSubview:self.pageViewController.view atIndex:2];
 }
 
+
 -(void) swipeLeft {
     NSLog(@"swipe left");
     [self showCityList];
+
 }
 
 -(void) swipeRight {
     NSLog(@"swipe right");
     [self hideCityList];
+    NSMutableArray *newCityArray = [[NSUserDefaults standardUserDefaults] objectForKey:CITY_LIST_KEY];
+    NSLog(@"%@", [newCityArray componentsJoinedByString:@","]);
+    NSLog(@"%@", [oldCityArray componentsJoinedByString:@","]);
+    for (NSString *city in newCityArray) {
+        // 加入了新的城市
+        if (![oldCityArray containsObject:city]) {
+            AQIViewController *aqiVC = [cityDictionary objectForKey:city];
+            if (!aqiVC) {
+                aqiVC = [[AQIViewController alloc]initWithCity: city];
+            }
+            
+            [cityDictionary setObject:aqiVC forKey:city];
+            [arrayOfAqiViewController addObject:aqiVC];
+            //count ++;
+        }
+    }
+    for (NSString *city in oldCityArray) {
+        // 删除的城市
+        if (![newCityArray containsObject:city]) {
+            AQIViewController *aqiVC = [cityDictionary objectForKey:city];
+            //[cityDictionary setObject:aqiVC forKey:city];
+            [arrayOfAqiViewController removeObject:aqiVC];
+            //count --;
+        }
+    }
+    //[self getReadyForPageView];
+    
+    self.currentPageIndex = 0;
+    AQIViewController *avc = [arrayOfAqiViewController objectAtIndex: self.currentPageIndex];
+    [self.pageViewController setViewControllers:@[avc] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
+    oldCityArray = [cityArray mutableCopy];
 }
 
 
@@ -121,7 +161,6 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
 -(void)viewDidLoad {
     [super viewDidLoad];
     self.aqiViewController = [[AQIViewController alloc]initWithNibName:@"AQIViewController" bundle:nil];
-    [self.scrollView addSubview:self.aqiViewController.view];
     
     self.locationManager = [[CLLocationManager alloc] init];
     self.locationManager.delegate = self;
@@ -159,7 +198,7 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
     CGRect bounds = [[UIScreen mainScreen] bounds];
     AQIViewController *avc = [cityDictionary objectForKey:city];
         [avc.view setFrame:CGRectMake(0, index * bounds.size.height, bounds.size.width, bounds.size.height)];
-    [self.scrollView addSubview:avc.view];
+    //[self.scrollView addSubview:avc.view];
     [avc updateAqiData];
 }
 
@@ -222,31 +261,44 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
 
 -(void) locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
     CLLocation *location = [locations objectAtIndex:0];
+    
     NSLog(@"lat:%f - lon:%f", location.coordinate.latitude, location.coordinate.longitude);
-    CLGeocoder *geoCoder = [[CLGeocoder alloc] init];
-    [geoCoder reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
-        // 一次定位后，立即停止，防止多次定位
-        [self.locationManager stopUpdatingLocation];
-        if (error) {
-            NSLog(@"Geocode failed with error: %@", error);
-        } else {
-            CLPlacemark *placemark = [placemarks objectAtIndex:0];
-            currentCity = placemark.administrativeArea;
+        CLGeocoder *geoCoder = [[CLGeocoder alloc] init];
+        [geoCoder reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
+            if (!located) {
+                // 一次定位后，立即停止，防止多次定位
+                [self.locationManager stopUpdatingLocation];
+                if (error) {
+                    NSLog(@"Geocode failed with error: %@", error);
+                } else {
+                    CLPlacemark *placemark = [placemarks objectAtIndex:0];
+                    currentCity = placemark.administrativeArea;
+                    
+                }
+                currentCity = currentCity ? currentCity : @"北京";
+                // 去掉"市"
+                NSString *fixedCityName;
+                NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"市$" options:NSRegularExpressionCaseInsensitive error:nil];
+                fixedCityName = [regex stringByReplacingMatchesInString:currentCity options:0 range:NSMakeRange(0, [currentCity length]) withTemplate:@""];
+                currentCity = fixedCityName;
+                
+                if (![cityArray containsObject:currentCity]) {
+                    [cityArray addObject:currentCity];
+                    [[NSUserDefaults standardUserDefaults]setObject:cityArray forKey:CITY_LIST_KEY];
+                }
+                
+                if (![cityDictionary objectForKey:currentCity]) {
+                    AQIViewController *aqiVC = [[AQIViewController alloc]initWithCity:currentCity];
+                    [cityDictionary setObject:aqiVC forKey:currentCity];
+                }
+                
+                //[self updateAqiViews];
+                [self getReadyForAqiViewControllers];
+                [self getReadyForPageView];
+                located = YES;
+            }
             
-        }
-        currentCity = currentCity ? currentCity : @"北京市";
-        if (![cityDictionary objectForKey:currentCity]) {
-            AQIViewController *aqiVC = [[AQIViewController alloc]initWithCity:currentCity];
-            [cityDictionary setObject:aqiVC forKey:currentCity];
-        }
-        if (!located) {
-            //[self updateAqiViews];
-            [self getReadyForAqiViewControllers];
-            [self getReadyForPageView];
-            located = YES;
-        }
-        
-    }];
+        }];
 }
 #pragma mark - PhotosCollectionViewControllerDelegate method
 
@@ -316,18 +368,23 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
 #pragma  mark - control CityListViewController
 -(void) showCityList {
     CGRect bounds = [[UIScreen mainScreen] bounds];
-    [self.view setFrame:CGRectMake(0- cityListVCOffset, bounds.origin.y, bounds.size.width, bounds.size.height)];
+    //挪mainView
+    [UIView beginAnimations:@"MoveViews" context:nil];
+    [UIView setAnimationDuration:0.3];
+    [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+    [self.view setFrame:CGRectMake(0- cityListVCOffset, bounds.origin.y, bounds.size.width+cityListVCOffset, bounds.size.height)];
+    
+    
+    //挪buttonView
+    CGRect buttonViewBounds = [self.buttonsVC.view frame];
+    [self.buttonsVC.view setFrame:CGRectMake(buttonViewBounds.origin.x- cityListVCOffset, buttonViewBounds.origin.y, buttonViewBounds.size.width+cityListVCOffset, buttonViewBounds.size.height)];
+    [UIView commitAnimations];
     if (!self.cityListVC) {
         self.cityListVC = [[CityListViewController alloc]initWithNibName:@"CityListViewController" bundle:nil];
-        //[self.cityListVC.view setFrame:bounds];
-        CGRect cityListVCBounds = self.cityListVC.view.frame;
-        
-        [self.cityListVC.view setFrame:CGRectMake(bounds.size.width, 0, cityListVCOffset, cityListVCBounds.size.height)];
-        //[self.cityListVC.view setBounds:CGRectMake(320, 0, 100, 10000) ];
+        [self.cityListVC.view setFrame:bounds];
         [self.view addSubview:self.cityListVC.tableView];
         self.cityListVC.tableView.scrollEnabled = YES;
-        NSLog(@"%f", cityListVCBounds.size.height);
-        
+        NSLog(@"%f", bounds.origin.y);
     }
     
 }
@@ -337,7 +394,15 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
     if (!self.cityListVC) {
         return;
     }
+    [UIView beginAnimations:@"MoveViews" context:nil];
+    [UIView setAnimationDuration:0.3];
+    [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
     [self.view setFrame:CGRectMake(0, 0, bounds.size.width, bounds.size.height)];
+    
+    //挪buttonView
+    CGRect buttonViewBounds = [self.buttonsVC.view frame];
+    [self.buttonsVC.view setFrame:CGRectMake(buttonViewBounds.origin.x + cityListVCOffset, buttonViewBounds.origin.y, buttonViewBounds.size.width-cityListVCOffset, buttonViewBounds.size.height)];
+    [UIView commitAnimations];
 }
 
 @end

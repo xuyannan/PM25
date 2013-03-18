@@ -15,7 +15,17 @@
 @property (weak, nonatomic) IBOutlet UILabel *pm;
 @property (weak, nonatomic) IBOutlet UILabel *desc;
 @property (weak, nonatomic) IBOutlet UILabel *update;
-@property (weak, nonatomic) IBOutlet UIButton *refreshButton;
+
+
+//@property (weak, nonatomic) IBOutlet UILabel *usemAqiLabel;
+//@property (weak, nonatomic) IBOutlet UILabel *usemPmLabel;
+@property (weak, nonatomic) IBOutlet UILabel *usemAqi;
+@property (weak, nonatomic) IBOutlet UILabel *usemPm;
+
+
+@property (weak, nonatomic) IBOutlet UILabel *usemDesc;
+
+@property (weak, nonatomic) IBOutlet UILabel *usemUpdate;
 
 -(void) updateAqiData;
 -(AQIViewController *) initWithCity:(NSString *) city;

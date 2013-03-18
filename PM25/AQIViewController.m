@@ -42,18 +42,39 @@
     if (!self.city) {
         return;
     }
-    aqiAPI = [[AqiAPI alloc]initWithCity:self.city];
+    aqiAPI = [[AqiAPI alloc]init ];
+    aqiAPI.city = self.city;
+    
     dispatch_queue_t getAqiDataQueue = dispatch_queue_create("get AQI data", NULL);
     dispatch_async(getAqiDataQueue, ^{
-        AqiData *data = [aqiAPI getAqiData];
+        AqiData *dataOfChinese = [aqiAPI getChineseAqiDataForCity:self.city];
+        AqiData *dataOfUsem = [aqiAPI getUsemAqiDataForCity:self.city];
         dispatch_async(dispatch_get_main_queue(), ^{
-            self.aqi.text = data.aqi;
-            self.pm.text = data.pm;
-            self.desc.text = data.desc;
-            self.update.text = data.update;
+            self.aqi.text = dataOfChinese.aqi;
+            self.pm.text = dataOfChinese.pm;
+            self.desc.text = dataOfChinese.desc;
+            self.update.text = dataOfChinese.update;
+            
+            if (dataOfUsem) {
+                self.usemAqi.text = dataOfUsem.aqi;
+                self.usemPm.text = dataOfUsem.pm;
+                self.usemDesc.text = dataOfUsem.desc;
+                self.usemUpdate.text = dataOfUsem.update;
+            } else if ([aqiAPI isUsemDataSupportedForCity:self.city]) {
+                self.usemAqi.text = @"--";
+                self.usemPm.text = @"--";
+                self.usemDesc.text = @"--";
+                self.usemUpdate.text = @"--";
+            } else {
+                [self.usemAqi removeFromSuperview];
+                [self.usemPm removeFromSuperview];
+                [self.usemDesc removeFromSuperview];
+                [self.usemUpdate removeFromSuperview];
+            }
+            
         });
     });
-    
+
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -72,16 +93,12 @@
     UIColor *transColor = [[UIColor alloc]initWithRed:0 green:0 blue:0 alpha:0.1];
     //self.view.superview.backgroundColor = transColor;
     self.view.backgroundColor = transColor;
-    // 去掉"市"
-    NSString *fixedCityName;
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"市$" options:NSRegularExpressionCaseInsensitive error:nil];
-    fixedCityName = [regex stringByReplacingMatchesInString:self.city options:0 range:NSMakeRange(0, [self.city length]) withTemplate:@""];
-    self.currentCity.text = fixedCityName;
+    
+    self.currentCity.text = self.city;
 }
 
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    //[self updateAqiData];
 }
 
 - (void)viewDidLoad
@@ -110,13 +127,6 @@
         }
     }
     [self updateAqiData];
-    
-    // guesture
-    /*
-    UISwipeGestureRecognizer *oneFingerSwipeDown = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(oneFingerSwipeDown)];
-    [oneFingerSwipeDown setDirection:UISwipeGestureRecognizerDirectionDown];
-    [self.view addGestureRecognizer:oneFingerSwipeDown];
-     */
 }
 -(IBAction) oneFingerSwipeDown:(UISwipeGestureRecognizer *) recognizer {
     NSLog(@"swipe down");
@@ -133,7 +143,7 @@
     NSLog(@"%@", @"refresh...");
     
     NSString *currentCity;
-    currentCity = self.city ? self.city : @"北京市";
+    currentCity = self.city ? self.city : @"北京";
     
     url = [citiesInPinyin objectForKey: currentCity];
     

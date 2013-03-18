@@ -7,11 +7,17 @@
 //
 
 #import "CityListViewController.h"
+#import "AqiAPI.h"
 
-@interface CityListViewController ()
+@interface CityListViewController () {
+    NSArray *cities;
+    NSMutableArray *selectedCities;
+    NSArray *usemDataSupportedCities;
+}
 
 @end
 
+#define CITY_LIST_KEY @"citylist"
 @implementation CityListViewController
 
 - (id)initWithStyle:(UITableViewStyle)style
@@ -20,15 +26,28 @@
     if (self) {
         // Custom initialization
     }
-    self.tableView.scrollEnabled = YES;
-    self.tableView.dataSource = self;
-    self.tableView.delegate = self;
+    
     return self;
+}
+
+-(void) viewWillAppear:(BOOL)animated {
+    CGRect bounds = [[UIScreen mainScreen] bounds];
+    [super viewWillAppear:animated];
+    [self.view setFrame:CGRectMake(bounds.size.width, 0, 150, self.tableView.frame.size.height)];
+    
+    AqiAPI *aqiApi = [[AqiAPI alloc]init];
+    cities = [aqiApi supportedCities];
+    selectedCities = [[NSUserDefaults standardUserDefaults] objectForKey:CITY_LIST_KEY];
+    
+    usemDataSupportedCities = [aqiApi usemDataSupportedCities];
+    [self.tableView reloadData];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.tableView.dataSource = self;
+    self.tableView.delegate = self;
 
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -47,19 +66,30 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return 100;
+    return [cities count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell ForCity";
+    static NSString *CellIdentifier = @"Cell For City";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
     
     // Configure the cell...
-    cell.textLabel.text = [[NSString alloc]initWithFormat:@"%d", indexPath.row];
+    NSString *city = [cities objectAtIndex: indexPath.row ];
+    cell.textLabel.text = [[NSString alloc]initWithFormat:@"%@", city];
+    if ([selectedCities containsObject:city]) {
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+    } else {
+        cell.accessoryType = UITableViewCellAccessoryNone;
+    }
+    if ([usemDataSupportedCities containsObject:city]) {
+        cell.detailTextLabel.text = @"支持美使馆数据";
+    } else {
+        cell.detailTextLabel.text = @"";
+    }
     return cell;
 }
 
@@ -106,13 +136,25 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Navigation logic may go here. Create and push another view controller.
-    /*
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     */
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    if (cell) {
+        NSString *city = [cities objectAtIndex:indexPath.row];
+        if ([selectedCities containsObject:city]) {
+            if ([selectedCities count] == 1) {
+                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"至少选一个城市" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                [alert show];
+                return;
+            } else {
+                cell.accessoryType = UITableViewCellAccessoryNone;
+                [selectedCities removeObject:city];
+            }
+        } else {
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            [selectedCities addObject:city];
+        }
+        NSLog(@"%@", [selectedCities componentsJoinedByString:@","]);
+        [[NSUserDefaults standardUserDefaults] setObject:selectedCities forKey:CITY_LIST_KEY];
+    }
 }
 
 @end

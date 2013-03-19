@@ -101,7 +101,6 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
         self.pageViewController.delegate = self;
         self.pageViewController.dataSource = self;
         [self.pageViewController.view setFrame: bounds];
-        
         AQIViewController *avc = [arrayOfAqiViewController objectAtIndex: self.currentPageIndex];
         // pageview的关键一步，设置要显示的页
         [self.pageViewController setViewControllers:@[avc] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];

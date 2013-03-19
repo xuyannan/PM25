@@ -39,8 +39,9 @@
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">1290</int>
 						<object class="NSPSMatrix" key="NSFrameMatrix"/>
-						<string key="NSFrame">{{15, 4}, {25, 24}}</string>
+						<string key="NSFrame">{{9, 4}, {25, 24}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
+						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="1045920243"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -76,8 +77,9 @@
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">1290</int>
 						<object class="NSPSMatrix" key="NSFrameMatrix"/>
-						<string key="NSFrame">{{65, 4}, {25, 24}}</string>
+						<string key="NSFrame">{{54, 3}, {25, 24}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
+						<reference key="NSWindow"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<int key="IBUIContentHorizontalAlignment">0</int>
@@ -90,14 +92,15 @@
 						<reference key="IBUINormalTitleShadowColor" ref="676277201"/>
 						<object class="NSCustomResource" key="IBUINormalImage">
 							<string key="NSClassName">NSImage</string>
-							<string key="NSResourceName">gear.png</string>
+							<string key="NSResourceName">image.png</string>
 						</object>
 						<reference key="IBUIFontDescription" ref="516906147"/>
 						<reference key="IBUIFont" ref="864239569"/>
 					</object>
 				</array>
-				<string key="NSFrameSize">{90, 30}</string>
+				<string key="NSFrameSize">{90, 28}</string>
 				<reference key="NSSuperview"/>
+				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="409649213"/>
 				<object class="IBUISimulatedSizeMetrics" key="IBUISimulatedDestinationMetrics">
 					<string key="IBUISimulatedSizeMetricsClass">IBUISimulatedFreeformSizeMetricsSentinel</string>
@@ -194,13 +197,38 @@
 			<nil key="sourceID"/>
 			<int key="maxID">24</int>
 		</object>
-		<object class="IBClassDescriber" key="IBDocument.Classes"/>
+		<object class="IBClassDescriber" key="IBDocument.Classes">
+			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
+				<object class="IBPartialClassDescription">
+					<string key="className">ButtonsViewController</string>
+					<string key="superclassName">UIViewController</string>
+					<dictionary class="NSMutableDictionary" key="actions">
+						<string key="refresh:">id</string>
+						<string key="showConfigView:">id</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="actionInfosByName">
+						<object class="IBActionInfo" key="refresh:">
+							<string key="name">refresh:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="showConfigView:">
+							<string key="name">showConfigView:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+					</dictionary>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/ButtonsViewController.h</string>
+					</object>
+				</object>
+			</array>
+		</object>
 		<int key="IBDocument.localizationMode">0</int>
 		<string key="IBDocument.TargetRuntimeIdentifier">IBCocoaTouchFramework</string>
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
 		<dictionary class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">
-			<string key="gear.png">{24, 24}</string>
+			<string key="image.png">{57, 57}</string>
 			<string key="refresh.png">{24, 24}</string>
 		</dictionary>
 		<string key="IBCocoaTouchPluginVersion">2083</string>

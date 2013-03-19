@@ -42,8 +42,6 @@
 
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    //CGRect bounds = [[UIScreen mainScreen] bounds];
-    //[self.tableView setFrame:CGRectMake(bounds.size.width, bounds.origin.y, 150, self.tableView.frame.size.height)];
     [self.tableView reloadData];
 }
 
@@ -52,12 +50,6 @@
     [super viewDidLoad];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
-
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
 - (void)didReceiveMemoryWarning
@@ -81,9 +73,21 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
     
+    //cell.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"table_bg.png"]];
+    UIView* bgview = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 1, 1)];
+    bgview.opaque = YES;
+    bgview.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"table_bg.png"]];
+    [cell setBackgroundView:bgview];
+    
     // Configure the cell...
     NSString *city = [cities objectAtIndex: indexPath.row ];
     cell.textLabel.text = [[NSString alloc]initWithFormat:@"%@", city];
+    cell.textLabel.textColor = [UIColor colorWithWhite:1 alpha:1 ];
+
+    
+    //cell.detailTextLabel.textColor = [UIColor colorWithWhite:1 alpha:1 ];
+    [cell.textLabel setBackgroundColor:[UIColor colorWithWhite:1 alpha:0 ]];
+    [cell.detailTextLabel setBackgroundColor:[UIColor colorWithWhite:1 alpha:0 ]];
     if ([selectedCities containsObject:city]) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
     } else {

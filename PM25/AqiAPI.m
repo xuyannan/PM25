@@ -164,10 +164,10 @@
         desarray = [jsonData valueForKey:@"quality"];
         updatearray = [jsonData valueForKey:@"time_point"];
     }
-    aqiData.pm = [[NSString alloc]initWithFormat:@"%@",[pmarray lastObject]];
-    aqiData.desc = [desarray lastObject];
-    aqiData.aqi = [[NSString alloc]initWithFormat:@"%@",[aqiarray lastObject]];
-    aqiData.update = [updatearray lastObject];
+    aqiData.pm = pmarray ? [[NSString alloc]initWithFormat:@"%@",[pmarray lastObject]] : @"--";
+    aqiData.desc = desarray ? [desarray lastObject] : @"--";
+    aqiData.aqi = aqiarray ? [[NSString alloc]initWithFormat:@"%@",[aqiarray lastObject]] : @"--";
+    aqiData.update = updatearray ? [updatearray lastObject] : @"--";
     aqiData.city = self.city;
     NSLog(@"%@", [aqiData description]);
     return aqiData;

@@ -17,6 +17,9 @@
 #import "CityListViewController.h"
 
 #define CITY_LIST_KEY @"citylist"
+#define BACKGROUND_LAYER_INDEX 0
+#define BUTTONS_LAYER_INDEX 2
+#define PAGEVIEW_LAYER_INDEX 1
 
 @interface PMViewController () <CLLocationManagerDelegate, PhotosCollectionViewControllerDelegate, ButtonsViewControllerDelegate,
 UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerDataSource> {
@@ -34,7 +37,7 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
 @property(nonatomic, strong) CLLocationManager *locationManager;
 //@property(nonatomic, strong) UIScrollView *scrollView;
 @property(nonatomic, strong) ButtonsViewController *buttonsVC;
-@property(weak,nonatomic) PhotosCollectionViewController *photosCollectionVC;
+@property(strong,nonatomic) PhotosCollectionViewController *photosCollectionVC;
 @property(strong,nonatomic) CityListViewController *cityListVC;
 
 @end
@@ -50,10 +53,10 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
     if (!cityArray) {
         cityArray = [[NSMutableArray alloc]init];
         [cityArray addObject:@"北京"];
-        [cityArray addObject:@"广州"];
-        [cityArray addObject:@"上海"];
-        [cityArray addObject:@"成都"];
-        [cityArray addObject:@"兰州"];
+        //[cityArray addObject:@"广州"];
+        //[cityArray addObject:@"上海"];
+        //[cityArray addObject:@"成都"];
+        //[cityArray addObject:@"兰州"];
         [[NSUserDefaults standardUserDefaults] setObject:cityArray forKey:CITY_LIST_KEY];
     }
     oldCityArray = [cityArray mutableCopy];
@@ -82,14 +85,16 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
         [backgroundView removeFromSuperview];
     }
     backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed: currentImageName]];
-    [self.view insertSubview:backgroundView atIndex:0];
+    [self.view insertSubview:backgroundView atIndex:BACKGROUND_LAYER_INDEX];
 
     // buttons
+    if (!self.buttonsVC) {
+        self.buttonsVC = [[ButtonsViewController alloc]initWithNibName:@"ButtonsViewController" bundle:nil];
+        [self.buttonsVC.view setFrame:CGRectMake(bounds.size.width - 120, bounds.size.height - 60, 90, 30)];
+        [self.view insertSubview:self.buttonsVC.view atIndex:BUTTONS_LAYER_INDEX];
+        self.buttonsVC.delegate = self;
+    }
     
-    self.buttonsVC = [[ButtonsViewController alloc]initWithNibName:@"ButtonsViewController" bundle:nil];
-    [self.buttonsVC.view setFrame:CGRectMake(bounds.size.width - 120, bounds.size.height - 60, 90, 30)];
-    [self.view addSubview: self.buttonsVC.view];
-    self.buttonsVC.delegate = self;
     
     
     // 监听程序由background切换到foreground
@@ -99,18 +104,20 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
 -(void) getReadyForPageView {
     if (!self.pageViewController) {
         CGRect bounds = [[UIScreen mainScreen]bounds];
+        bounds = self.view.bounds;
         self.pageViewController = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll
                                                                   navigationOrientation:UIPageViewControllerNavigationOrientationVertical
                                                                                 options:[NSDictionary dictionaryWithObject:[NSNumber numberWithFloat:50.0f] forKey:UIPageViewControllerOptionInterPageSpacingKey]];
         self.pageViewController.delegate = self;
         self.pageViewController.dataSource = self;
         [self.pageViewController.view setFrame: bounds];
+        //[self.pageViewController.view setFrame:CGRectMake(0, 10, bounds.size.width, bounds.size.height)];
         //self.view.gestureRecognizers = self.pageViewController.gestureRecognizers;
         //关键一步
         AQIViewController *avc = [arrayOfAqiViewController objectAtIndex: self.currentPageIndex];
         [self.pageViewController setViewControllers:@[avc] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
     }
-    [self.view insertSubview:self.pageViewController.view atIndex:2];
+    [self.view insertSubview:self.pageViewController.view atIndex:PAGEVIEW_LAYER_INDEX];
 }
 
 
@@ -316,8 +323,10 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
 
 -(void)configButtonPressed:(ButtonsViewController *)sender {
     NSLog(@"%@", @"config button pressed");
-    self.photosCollectionVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Photos"];
-    self.photosCollectionVC.delegate = self;
+    if (!self.photosCollectionVC) {
+        self.photosCollectionVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Photos"];
+        self.photosCollectionVC.delegate = self;
+    }
     //self.navigationtroller mod
     [self presentViewController:self.photosCollectionVC animated:true completion:^{}];
 }
@@ -368,6 +377,7 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
 #pragma  mark - control CityListViewController
 -(void) showCityList {
     CGRect bounds = [[UIScreen mainScreen] bounds];
+    bounds = self.view.frame;
     //挪mainView
     [UIView beginAnimations:@"MoveViews" context:nil];
     [UIView setAnimationDuration:0.3];
@@ -381,23 +391,22 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
     [UIView commitAnimations];
     if (!self.cityListVC) {
         self.cityListVC = [[CityListViewController alloc]initWithNibName:@"CityListViewController" bundle:nil];
-        [self.cityListVC.view setFrame:bounds];
+        [self.cityListVC.tableView setFrame:CGRectMake(bounds.size.width,0,150,bounds.size.height)];
         [self.view addSubview:self.cityListVC.tableView];
-        self.cityListVC.tableView.scrollEnabled = YES;
-        NSLog(@"%f", bounds.origin.y);
     }
     
 }
 
 -(void) hideCityList {
     CGRect bounds = [[UIScreen mainScreen] bounds];
+    bounds = self.view.frame;
     if (!self.cityListVC) {
         return;
     }
     [UIView beginAnimations:@"MoveViews" context:nil];
     [UIView setAnimationDuration:0.3];
     [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
-    [self.view setFrame:CGRectMake(0, 0, bounds.size.width, bounds.size.height)];
+    [self.view setFrame:CGRectMake(0, bounds.origin.y, bounds.size.width, bounds.size.height)];
     
     //挪buttonView
     CGRect buttonViewBounds = [self.buttonsVC.view frame];

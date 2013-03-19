@@ -31,15 +31,19 @@
 }
 
 -(void) viewWillAppear:(BOOL)animated {
-    CGRect bounds = [[UIScreen mainScreen] bounds];
-    [super viewWillAppear:animated];
-    [self.view setFrame:CGRectMake(bounds.size.width, 0, 150, self.tableView.frame.size.height)];
     
+    [super viewWillAppear:animated];
     AqiAPI *aqiApi = [[AqiAPI alloc]init];
     cities = [aqiApi supportedCities];
     selectedCities = [[NSUserDefaults standardUserDefaults] objectForKey:CITY_LIST_KEY];
-    
     usemDataSupportedCities = [aqiApi usemDataSupportedCities];
+    //[self.tableView reloadData];
+}
+
+-(void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    //CGRect bounds = [[UIScreen mainScreen] bounds];
+    //[self.tableView setFrame:CGRectMake(bounds.size.width, bounds.origin.y, 150, self.tableView.frame.size.height)];
     [self.tableView reloadData];
 }
 

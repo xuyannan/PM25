@@ -66,6 +66,7 @@
                 self.usemDesc.text = @"--";
                 self.usemUpdate.text = @"--";
             } else {
+                [self.usemAqiTitle removeFromSuperview];
                 [self.usemAqi removeFromSuperview];
                 [self.usemPm removeFromSuperview];
                 [self.usemDesc removeFromSuperview];

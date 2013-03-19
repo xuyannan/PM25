@@ -17,8 +17,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *update;
 
 
-//@property (weak, nonatomic) IBOutlet UILabel *usemAqiLabel;
-//@property (weak, nonatomic) IBOutlet UILabel *usemPmLabel;
+@property (weak, nonatomic) IBOutlet UILabel *usemAqiTitle;
 @property (weak, nonatomic) IBOutlet UILabel *usemAqi;
 @property (weak, nonatomic) IBOutlet UILabel *usemPm;
 

@@ -39,7 +39,7 @@
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">1316</int>
 						<object class="NSPSMatrix" key="NSFrameMatrix"/>
-						<string key="NSFrame">{{175, 113}, {164, 52}}</string>
+						<string key="NSFrame">{{175, 113}, {125, 52}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="387121113"/>
@@ -168,7 +168,7 @@
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">1316</int>
 						<object class="NSPSMatrix" key="NSFrameMatrix"/>
-						<string key="NSFrame">{{28, 113}, {101, 52}}</string>
+						<string key="NSFrame">{{28, 113}, {113, 52}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="1031290379"/>
@@ -217,7 +217,7 @@
 					<object class="IBUILabel" id="832775358">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{28, 290}, {71, 37}}</string>
+						<string key="NSFrame">{{28, 284}, {113, 50}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="1072425714"/>
@@ -279,7 +279,7 @@
 					<object class="IBUILabel" id="1072425714">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{175, 287}, {87, 44}}</string>
+						<string key="NSFrame">{{175, 287}, {125, 44}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="189098789"/>
@@ -456,7 +456,6 @@
 						<reference key="object" ref="191373211"/>
 						<array class="NSMutableArray" key="children">
 							<reference ref="325715666"/>
-							<reference ref="255416513"/>
 							<reference ref="387121113"/>
 							<reference ref="412865616"/>
 							<reference ref="1069609907"/>
@@ -464,9 +463,10 @@
 							<reference ref="1013545839"/>
 							<reference ref="47767884"/>
 							<reference ref="995296673"/>
-							<reference ref="832775358"/>
 							<reference ref="1031290379"/>
 							<reference ref="1072425714"/>
+							<reference ref="255416513"/>
+							<reference ref="832775358"/>
 						</array>
 						<reference key="parent" ref="0"/>
 					</object>

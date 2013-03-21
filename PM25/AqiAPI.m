@@ -32,82 +32,30 @@
     NSArray *suppertedCities;
 }
 
+NSInteger sort(id name1, id name2, void *context) {
+    NSString *u1, *u2;
+    
+    u1 = (NSString *)name1;
+    u2 = (NSString *)name2;
+    NSLog(@"%@,%@", u1,u2);
+    NSComparisonResult r =  [u1 compare:u2];
+    NSLog(@"%d", r);
+    //NSLog(@"%@", u2);
+    return [u1 localizedCompare:u2];
+}
+
+
 -(AqiAPI *) init {
     if (self = [super init]) {
-        suppertedCities = @[
-                           @"上海",@"东莞",@"中山",
-                           @"丽水",
-                           @"乌鲁木齐",
-                           @"佛山",
-                           @"保定",
-                           @"兰州",
-                           @"北京",
-                           @"南京",
-                           @"南宁",
-                           @"南昌",
-                           @"南通",
-                           @"厦门",
-                           @"台州",
-                           @"合肥",
-                           @"呼和浩特",
-                           @"哈尔滨",
-                           @"唐山",
-                           @"嘉兴",
-                           @"大连",
-                           @"天津",
-                           @"太原",
-                           @"宁波",
-                           @"宿迁",
-                           @"常州",
-                           @"广州",
-                           @"廊坊",
-                           @"张家口",
-                           @"徐州",
-                           @"惠州",
-                           @"成都",
-                           @"扬州",
-                           @"承德",
-                           @"拉萨",
-                           @"无锡",
-                           @"昆明",
-                           @"杭州",
-                           @"武汉",
-                           @"江门",
-                           @"沈阳",
-                           @"沧州",
-                           @"泰州",
-                           @"济南",
-                           @"海口",
-                           @"淮安",
-                           @"深圳",
-                           @"温州",
-                           @"湖州",
-                           @"珠海",
-                           @"盐城",
-                           @"石家庄",
-                           @"福州",
-                           @"秦皇岛",
-                           @"绍兴",
-                           @"肇庆",
-                           @"舟山",
-                           @"苏州",
-                           @"衡水",
-                           @"衢州",
-                           @"西宁",
-                           @"西安",
-                           @"贵阳",
-                           @"连云港",
-                           @"邢台",
-                           @"邯郸",
-                           @"郑州",
-                           @"重庆",
-                           @"金华",
-                           @"银川",
-                           @"镇江",
-                           @"长春",
-                           @"长沙",
-                           @"青岛"
-        ];
+        suppertedCities = @[@"保定",@"北京",@"沧州",@"常州",@"长春",@"长沙",@"成都",@"承德",@"大连",@"东莞",@"佛山",@"福州",@"广州",@"贵阳",@"哈尔滨",@"海口",@"邯郸",@"杭州",@"合肥",@"衡水",@"呼和浩特",@"湖州",@"淮安",@"惠州",@"济南",@"嘉兴",@"江门",@"金华",@"昆明",@"拉萨",@"兰州",@"廊坊",@"丽水",@"连云港",@"南昌",@"南京",@"南宁",@"南通",@"宁波",@"秦皇岛",@"青岛",@"衢州",@"厦门",@"上海",@"绍兴",@"沈阳",@"深圳",@"石家庄",@"苏州",@"宿迁",@"台州",@"太原",@"泰州",@"唐山",@"天津",@"温州",@"乌鲁木齐",@"无锡",@"武汉",@"西安",@"西宁",@"邢台",@"徐州",@"盐城",@"扬州",@"银川",@"张家口",@"肇庆",@"镇江",@"郑州",@"中山",@"重庆",@"舟山",@"珠海"];
+        /*
+        NSArray *a = [suppertedCities sortedArrayUsingComparator:^(id a, id b){
+            NSString *u1 = (NSString *)a;
+            NSString *u2 = (NSString *)b;
+            return [u1 localizedCompare:u2];
+        }];
+        NSLog(@"%@", [a componentsJoinedByString:@","]);
+        */
         
         apiUrls = [[NSDictionary alloc]initWithObjectsAndKeys:
             [NSURL URLWithString:@"http://pm25.in/api/querys.json"], @"supported_cities",
@@ -138,9 +86,10 @@
 
 -(AqiData *)getChineseAqiDataForCity:(NSString *)city {
     AqiData *aqiData = [[AqiData alloc]init];
-    //if (![suppertedCities containsObject:city]) {
-    //    return nil;
-    //}
+    if (![suppertedCities containsObject:city]) {
+        NSLog(@"没有%@的数据", city);
+        return nil;
+    }
     NSLog(@"%@", city);
     NSArray *pmarray;
     NSArray *aqiarray;
@@ -156,6 +105,8 @@
     NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
     if(error != nil) {
         NSLog(@"net work error: %@", error);
+        //UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"sorry...无法加载气象站数据，请过会再试" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+        //[alert show];
         return nil;
     } else {
         NSDictionary *jsonData = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
@@ -182,6 +133,7 @@
     
     if (!url) {
         NSLog(@"no USEM data for city: %@", city);
+        return nil;
     }
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:10];
@@ -191,6 +143,8 @@
     NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
     if(error != nil) {
         NSLog(@"net work error: %@", error);
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"sorry...无法加载美帝数据，请过会再试" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+        [alert show];
         return nil;
     } else {
         DDXMLDocument *xmlDoc = [[DDXMLDocument alloc] initWithData:data options:0 error: &error];

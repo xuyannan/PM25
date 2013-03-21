@@ -77,16 +77,13 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
     [self.view insertSubview:backgroundView atIndex:BACKGROUND_LAYER_INDEX];
 
     // buttons
-    if (!self.buttonsVC) {
-        self.buttonsVC = [[ButtonsViewController alloc]initWithNibName:@"ButtonsViewController" bundle:nil];
-        //[self.buttonsVC.view setFrame:CGRectMake(bounds.size.width - 120, bounds.size.height - 60, 90, 30)];
-        [self.buttonsVC.view setFrame:CGRectMake(200, 420 , 90, 30)];
-        [self.view insertSubview:self.buttonsVC.view atIndex:BUTTONS_LAYER_INDEX];
-        self.buttonsVC.delegate = self;
+    if (self.buttonsVC) {
+        [self.buttonsVC.view removeFromSuperview];
     }
-    
-    
-    
+    self.buttonsVC = [[ButtonsViewController alloc]initWithNibName:@"ButtonsViewController" bundle:nil];
+    [self.buttonsVC.view setFrame:CGRectMake(200, 420 , 90, 30)];
+    [self.view insertSubview:self.buttonsVC.view atIndex:BUTTONS_LAYER_INDEX];
+    self.buttonsVC.delegate = self;
     // 监听程序由background切换到foreground
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillEnterForegroundNotification) name:UIApplicationWillEnterForegroundNotification object:nil];
 }
@@ -145,6 +142,7 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
     self.currentPageIndex = 0;
     AQIViewController *avc = [arrayOfAqiViewController objectAtIndex: self.currentPageIndex];
     [self.pageViewController setViewControllers:@[avc] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
+    
     oldCityArray = [cityArray mutableCopy];
 }
 
@@ -249,8 +247,7 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
                 NSLog(@"Geocode failed with error: %@", error);
             } else {
                 CLPlacemark *placemark = [placemarks objectAtIndex:0];
-                currentCity = placemark.administrativeArea;
-                
+                currentCity = placemark.locality;
             }
             currentCity = currentCity ? currentCity : @"北京";
             // 去掉"市"

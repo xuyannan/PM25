@@ -25,6 +25,9 @@
 -(AqiData *) getAqiDataForCity:(NSString *)city;
 -(AqiData *) getUsemAqiDataForCity:(NSString *)city;
 -(AqiData *) getChineseAqiDataForCity:(NSString *)city;
+
+-(bool) isChineseDataSupportedForCity:(NSString *)city;
+
 -(bool) isUsemDataSupportedForCity:(NSString *)city;
 -(NSArray *) usemDataSupportedCities;
 -(NSArray *) supportedCities;

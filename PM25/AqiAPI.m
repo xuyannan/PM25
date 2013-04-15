@@ -214,6 +214,10 @@ NSInteger sort(id name1, id name2, void *context) {
     }
 }
 
+-(bool)isChineseDataSupportedForCity:(NSString *)city {
+    return [suppertedCities containsObject:city];
+}
+
 -(NSArray *)usemDataSupportedCities {
     return [usemUrls allKeys];
 }

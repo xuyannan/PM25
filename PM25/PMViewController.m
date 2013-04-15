@@ -13,6 +13,7 @@
 #import "AQIViewController.h"
 #import "ButtonsViewController.h"
 #import "CityListViewController.h"
+#import "AqiAPI.h"
 
 #define CITY_LIST_KEY @"citylist"
 #define BACKGROUND_LAYER_INDEX 0
@@ -30,6 +31,8 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
     NSMutableArray *arrayOfAqiViewController;
     int cityListVCOffset;
     NSMutableArray *oldCityArray;
+    
+    AqiAPI *aqiAPI;
 }
 
 @property(nonatomic, strong) CLLocationManager *locationManager;
@@ -45,6 +48,8 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
     [super viewWillAppear:animated];
     located = NO;
     cityListVCOffset = 150;
+    aqiAPI = [[AqiAPI alloc]init];
+    
     CGRect bounds = [[UIScreen mainScreen] bounds];
     bounds = [self.view frame];
     
@@ -237,7 +242,7 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
 -(void) locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
     CLLocation *location = [locations objectAtIndex:0];
     
-    //NSLog(@"lat:%f - lon:%f", location.coordinate.latitude, location.coordinate.longitude);
+    NSLog(@"lat:%f - lon:%f", location.coordinate.latitude, location.coordinate.longitude);
     CLGeocoder *geoCoder = [[CLGeocoder alloc] init];
     [geoCoder reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
         if (!located) {
@@ -256,19 +261,25 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
             fixedCityName = [regex stringByReplacingMatchesInString:currentCity options:0 range:NSMakeRange(0, [currentCity length]) withTemplate:@""];
             currentCity = fixedCityName;
             
-            if (![cityArray containsObject:currentCity]) {
-                [cityArray addObject:currentCity];
-                [[NSUserDefaults standardUserDefaults]setObject:cityArray forKey:CITY_LIST_KEY];
+            if ([aqiAPI isChineseDataSupportedForCity:currentCity]) {
+                if (![cityArray containsObject:currentCity]) {
+                    [cityArray addObject:currentCity];
+                    [[NSUserDefaults standardUserDefaults]setObject:cityArray forKey:CITY_LIST_KEY];
+                }
+                
+                if (![cityDictionary objectForKey:currentCity]) {
+                    AQIViewController *aqiVC = [[AQIViewController alloc]initWithCity:currentCity];
+                    [cityDictionary setObject:aqiVC forKey:currentCity];
+                }
+            } else {
+                NSString *message = [[NSString alloc]initWithFormat:@"您所处的[%@]目前还没有空气质量数据。请向左滑动屏幕添加您所关心的城市~", currentCity];
+                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:message delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                [alert show];
+                currentCity = [cityArray objectAtIndex:0];
             }
-            
-            if (![cityDictionary objectForKey:currentCity]) {
-                AQIViewController *aqiVC = [[AQIViewController alloc]initWithCity:currentCity];
-                [cityDictionary setObject:aqiVC forKey:currentCity];
-            }
-            
-            //[self updateAqiViews];
             [self getReadyForAqiViewControllers];
             [self getReadyForPageView];
+            
             located = YES;
         }
         

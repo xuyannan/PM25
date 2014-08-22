@@ -54,7 +54,10 @@
             self.aqi.text = dataOfChinese.aqi;
             self.pm.text = dataOfChinese.pm;
             self.desc.text = dataOfChinese.desc;
-            self.update.text = dataOfChinese.update;
+            // 替换日期中的T和Z
+            NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"[TZ]" options:NSRegularExpressionCaseInsensitive error:nil];
+            NSString *update = [regex stringByReplacingMatchesInString:dataOfChinese.update options:0 range:NSMakeRange(0, [dataOfChinese.update length]) withTemplate:@" "];
+            self.update.text = update;
             
             if (dataOfUsem) {
                 self.usemAqi.text = dataOfUsem.aqi;

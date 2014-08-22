@@ -35,7 +35,7 @@
     [super viewWillAppear:animated];
     AqiAPI *aqiApi = [[AqiAPI alloc]init];
     cities = [aqiApi supportedCities];
-    selectedCities = [[NSUserDefaults standardUserDefaults] objectForKey:CITY_LIST_KEY];
+    selectedCities = [[[NSUserDefaults standardUserDefaults] objectForKey:CITY_LIST_KEY] mutableCopy];
     usemDataSupportedCities = [aqiApi usemDataSupportedCities];
     //[self.tableView reloadData];
 }

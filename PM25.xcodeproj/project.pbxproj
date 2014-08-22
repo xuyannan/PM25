@@ -244,6 +244,11 @@
 				CLASSPREFIX = PM;
 				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = BlueTiger;
+				TargetAttributes = {
+					FD420B1516D66E3800300B26 = {
+						DevelopmentTeam = SN6M95RUZ9;
+					};
+				};
 			};
 			buildConfigurationList = FD420B1116D66E3800300B26 /* Build configuration list for PBXProject "PM25" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -416,8 +421,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E64C57EB79B243238277D272 /* Pods.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer: Su Jie (Q655YX2Y94)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Su Jie (Q655YX2Y94)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: xu yannan (HU5DSDR8V7)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PM25/PM25-Prefix.pch";
 				INFOPLIST_FILE = "PM25/PM25-Info.plist";
@@ -431,8 +435,7 @@
 					"-lxml2",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "D1DFD391-0B25-4F06-AFB7-2C191A63624E";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "D1DFD391-0B25-4F06-AFB7-2C191A63624E";
+				PROVISIONING_PROFILE = "48e4231e-aa0a-4d1a-8391-c52bf231c90a";
 				USER_HEADER_SEARCH_PATHS = /user/include/libxml2;
 				WRAPPER_EXTENSION = app;
 			};
@@ -442,8 +445,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E64C57EB79B243238277D272 /* Pods.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer: Su Jie (Q655YX2Y94)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Su Jie (Q655YX2Y94)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: xu yannan (HU5DSDR8V7)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PM25/PM25-Prefix.pch";
 				INFOPLIST_FILE = "PM25/PM25-Info.plist";
@@ -457,8 +459,7 @@
 					"-lxml2",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "D1DFD391-0B25-4F06-AFB7-2C191A63624E";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "D1DFD391-0B25-4F06-AFB7-2C191A63624E";
+				PROVISIONING_PROFILE = "";
 				USER_HEADER_SEARCH_PATHS = /user/include/libxml2;
 				WRAPPER_EXTENSION = app;
 			};

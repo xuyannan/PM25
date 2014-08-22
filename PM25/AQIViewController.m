@@ -48,7 +48,8 @@
     dispatch_queue_t getAqiDataQueue = dispatch_queue_create("get AQI data", NULL);
     dispatch_async(getAqiDataQueue, ^{
         AqiData *dataOfChinese = [aqiAPI getChineseAqiDataForCity:self.city];
-        AqiData *dataOfUsem = [aqiAPI getUsemAqiDataForCity:self.city];
+        //AqiData *dataOfUsem = [aqiAPI getUsemAqiDataForCity:self.city];
+        AqiData *dataOfUsem = NULL;
         dispatch_async(dispatch_get_main_queue(), ^{
             self.aqi.text = dataOfChinese.aqi;
             self.pm.text = dataOfChinese.pm;

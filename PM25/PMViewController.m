@@ -46,6 +46,7 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
 @implementation PMViewController
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [self.locationManager requestAlwaysAuthorization];
     located = NO;
     cityListVCOffset = 150;
     aqiAPI = [[AqiAPI alloc]init];
@@ -79,6 +80,7 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
         [backgroundView removeFromSuperview];
     }
     backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed: currentImageName]];
+    [backgroundView setFrame:CGRectMake(0, 0 , self.view.frame.size.width, self.view.frame.size.height)];
     [self.view insertSubview:backgroundView atIndex:BACKGROUND_LAYER_INDEX];
 
     // buttons
@@ -86,7 +88,7 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
         [self.buttonsVC.view removeFromSuperview];
     }
     self.buttonsVC = [[ButtonsViewController alloc]initWithNibName:@"ButtonsViewController" bundle:nil];
-    [self.buttonsVC.view setFrame:CGRectMake(200, 420 , 90, 30)];
+    [self.buttonsVC.view setFrame:CGRectMake(self.view.frame.size.width - 100, self.view.frame.size.height - 40 , 90, 30)];
     [self.view insertSubview:self.buttonsVC.view atIndex:BUTTONS_LAYER_INDEX];
     self.buttonsVC.delegate = self;
     // 监听程序由background切换到foreground
@@ -155,6 +157,7 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
 
 -(void)viewDidLoad {
     [super viewDidLoad];
+    [self.locationManager startUpdatingLocation];
     self.aqiViewController = [[AQIViewController alloc]initWithNibName:@"AQIViewController" bundle:nil];
     
     self.locationManager = [[CLLocationManager alloc] init];

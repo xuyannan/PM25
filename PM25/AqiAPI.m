@@ -201,8 +201,8 @@ NSInteger sort(id name1, id name2, void *context) {
 }
 
 - (AqiData *)getAqiDataForCity:(NSString *)city {
-    [self getChineseAqiDataForCity:city];
-    return [self getUsemAqiDataForCity:city];
+    return [self getChineseAqiDataForCity:city];
+    //return [self getUsemAqiDataForCity:city];
 }
 
 -(bool)isUsemDataSupportedForCity:(NSString *)city {

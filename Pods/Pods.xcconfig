@@ -1,7 +1,5 @@
-ALWAYS_SEARCH_USER_PATHS = YES
-HEADER_SEARCH_PATHS = ${PODS_HEADERS_SEARCH_PATHS} $(SDKROOT)/usr/include/libxml2
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
+HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers" "${PODS_ROOT}/Headers/FMDB" "${PODS_ROOT}/Headers/JSONKit" "${PODS_ROOT}/Headers/KissXML" "${PODS_ROOT}/Headers/NSLogger" "$(SDKROOT)/usr/include/libxml2"
+OTHER_CFLAGS = $(inherited) -isystem "${PODS_ROOT}/Headers" -isystem "${PODS_ROOT}/Headers/FMDB" -isystem "${PODS_ROOT}/Headers/JSONKit" -isystem "${PODS_ROOT}/Headers/KissXML" -isystem "${PODS_ROOT}/Headers/NSLogger"
 OTHER_LDFLAGS = -ObjC -lsqlite3 -lxml2 -framework CFNetwork -framework SystemConfiguration
-PODS_BUILD_HEADERS_SEARCH_PATHS = "${PODS_ROOT}/BuildHeaders" "${PODS_ROOT}/BuildHeaders/FMDB" "${PODS_ROOT}/BuildHeaders/JSONKit" "${PODS_ROOT}/BuildHeaders/KissXML" "${PODS_ROOT}/BuildHeaders/NSLogger"
-PODS_HEADERS_SEARCH_PATHS = ${PODS_PUBLIC_HEADERS_SEARCH_PATHS}
-PODS_PUBLIC_HEADERS_SEARCH_PATHS = "${PODS_ROOT}/Headers" "${PODS_ROOT}/Headers/FMDB" "${PODS_ROOT}/Headers/JSONKit" "${PODS_ROOT}/Headers/KissXML" "${PODS_ROOT}/Headers/NSLogger"
 PODS_ROOT = ${SRCROOT}/Pods

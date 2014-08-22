@@ -39,7 +39,6 @@ NSInteger sort(id name1, id name2, void *context) {
     u2 = (NSString *)name2;
     NSLog(@"%@,%@", u1,u2);
     NSComparisonResult r =  [u1 compare:u2];
-    NSLog(@"%d", r);
     //NSLog(@"%@", u2);
     return [u1 localizedCompare:u2];
 }

@@ -358,7 +358,7 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
         [self.view setFrame:CGRectMake(0- cityListVCOffset, bounds.origin.y, bounds.size.width+cityListVCOffset, bounds.size.height)];
     }
     //挪buttonView
-    [self.buttonsVC.view setFrame:CGRectMake(200, 420 , 90, 30)];
+    [self.buttonsVC.view setFrame:CGRectMake(200, self.view.frame.size.height - 40 , 90, 30)];
     [UIView commitAnimations];
     
     if (!self.cityListVC) {
@@ -380,7 +380,7 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
     [self.view setFrame:CGRectMake(0, bounds.origin.y, bounds.size.width, bounds.size.height)];
     
     //挪buttonView;
-    [self.buttonsVC.view setFrame:CGRectMake(200, 420, 90, 30)];
+    [self.buttonsVC.view setFrame:CGRectMake(200, self.view.frame.size.height - 40 , 90, 30)];
     [UIView commitAnimations];
 }
 

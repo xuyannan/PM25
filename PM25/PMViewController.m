@@ -77,20 +77,23 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
     
     currentImageName = currentImageName ? currentImageName : @"background.jpg";
     if(backgroundView) {
-        [backgroundView removeFromSuperview];
+        [backgroundView setImage:[UIImage imageNamed: currentImageName]];
+    } else {
+        backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed: currentImageName]];
+        [backgroundView setFrame:CGRectMake(0, 0 , self.view.frame.size.width, self.view.frame.size.height)];
+        [self.view insertSubview:backgroundView atIndex:BACKGROUND_LAYER_INDEX];
     }
-    backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed: currentImageName]];
-    [backgroundView setFrame:CGRectMake(0, 0 , self.view.frame.size.width, self.view.frame.size.height)];
-    [self.view insertSubview:backgroundView atIndex:BACKGROUND_LAYER_INDEX];
 
     // buttons
     if (self.buttonsVC) {
-        [self.buttonsVC.view removeFromSuperview];
+        //[self.buttonsVC.view removeFromSuperview];
+    } else {
+        self.buttonsVC = [[ButtonsViewController alloc]initWithNibName:@"ButtonsViewController" bundle:nil];
+        [self.view insertSubview:self.buttonsVC.view atIndex:BUTTONS_LAYER_INDEX];
+        self.buttonsVC.delegate = self;
     }
-    self.buttonsVC = [[ButtonsViewController alloc]initWithNibName:@"ButtonsViewController" bundle:nil];
-    [self.buttonsVC.view setFrame:CGRectMake(self.view.frame.size.width - 100, self.view.frame.size.height - 40 , 90, 30)];
-    [self.view insertSubview:self.buttonsVC.view atIndex:BUTTONS_LAYER_INDEX];
-    self.buttonsVC.delegate = self;
+    [self.buttonsVC.view setFrame:CGRectMake(0 , self.view.frame.size.height - 40 , 90, 30)];
+    NSLog(@"view width: %f, buttonsVC: %f, %f", self.view.frame.size.width, self.buttonsVC.view.frame.origin.x, self.buttonsVC.view.frame.origin.y);
     // 监听程序由background切换到foreground
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillEnterForegroundNotification) name:UIApplicationWillEnterForegroundNotification object:nil];
 }
@@ -358,7 +361,7 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
         [self.view setFrame:CGRectMake(0- cityListVCOffset, bounds.origin.y, bounds.size.width+cityListVCOffset, bounds.size.height)];
     }
     //挪buttonView
-    [self.buttonsVC.view setFrame:CGRectMake(200, self.view.frame.size.height - 40 , 90, 30)];
+    [self.buttonsVC.view setFrame:CGRectMake(0, self.view.frame.size.height - 40 , 90, 30)];
     [UIView commitAnimations];
     
     if (!self.cityListVC) {
@@ -380,7 +383,7 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
     [self.view setFrame:CGRectMake(0, bounds.origin.y, bounds.size.width, bounds.size.height)];
     
     //挪buttonView;
-    [self.buttonsVC.view setFrame:CGRectMake(200, self.view.frame.size.height - 40 , 90, 30)];
+    [self.buttonsVC.view setFrame:CGRectMake(0, self.view.frame.size.height - 40 , 90, 30)];
     [UIView commitAnimations];
 }
 

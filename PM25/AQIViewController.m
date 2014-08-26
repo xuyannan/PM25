@@ -12,18 +12,19 @@
 #import <CoreLocation/CoreLocation.h>
 #import <CoreLocation/CLLocationManager.h>
 
-@interface AQIViewController () {
+@interface AQIViewController ()  <UITableViewDataSource, UITableViewDelegate> {
     NSDictionary *citiesInPinyin;
     AqiAPI *aqiAPI;
+    
 }
 
 @property (nonatomic, strong) CLLocationManager *locationManager;
-@property (nonatomic, strong) NSMutableArray *pms;
+@property (nonatomic, strong) NSMutableArray *aqiData;
 @property (nonatomic)bool isLoaded;
 @end
 
 @implementation AQIViewController
-
+@synthesize stationsDataTV;
 - (NSString *)description {
     return [[NSString alloc]initWithFormat:@"An AQIViewController of city: %@", self.city ];
 }
@@ -47,37 +48,29 @@
     
     dispatch_queue_t getAqiDataQueue = dispatch_queue_create("get AQI data", NULL);
     dispatch_async(getAqiDataQueue, ^{
-        AqiData *dataOfChinese = [aqiAPI getChineseAqiDataForCity:self.city];
-        //AqiData *dataOfUsem = [aqiAPI getUsemAqiDataForCity:self.city];
-        AqiData *dataOfUsem = NULL;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self.aqi.text = dataOfChinese.aqi;
-            self.pm.text = dataOfChinese.pm;
-            self.desc.text = dataOfChinese.desc;
-            // 替换日期中的T和Z
-            NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"[TZ]" options:NSRegularExpressionCaseInsensitive error:nil];
-            NSString *update = [regex stringByReplacingMatchesInString:dataOfChinese.update options:0 range:NSMakeRange(0, [dataOfChinese.update length]) withTemplate:@" "];
-            self.update.text = update;
-            
-            if (dataOfUsem) {
-                self.usemAqi.text = dataOfUsem.aqi;
-                self.usemPm.text = dataOfUsem.pm;
-                self.usemDesc.text = dataOfUsem.desc;
-                self.usemUpdate.text = dataOfUsem.update;
-            } else if ([aqiAPI isUsemDataSupportedForCity:self.city]) {
-                self.usemAqi.text = @"--";
-                self.usemPm.text = @"--";
-                self.usemDesc.text = @"--";
-                self.usemUpdate.text = @"--";
-            } else {
-                [self.usemAqiTitle removeFromSuperview];
-                [self.usemAqi removeFromSuperview];
-                [self.usemPm removeFromSuperview];
-                [self.usemDesc removeFromSuperview];
-                [self.usemUpdate removeFromSuperview];
-            }
-            
-        });
+        NSMutableArray *dataOfChinese = [aqiAPI getChineseAqiDataForCity:self.city];
+        //dataOfChinese = nil;
+        if (dataOfChinese == nil || [dataOfChinese count] == 0) {
+            UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"提示" message:@"无法获取数据，请稍候再试" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [alertView show];
+        } else {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                AqiData *avgData = [dataOfChinese lastObject];
+                self.aqi.text = avgData.aqi;
+                self.pm.text = avgData.pm;
+                self.desc.text = avgData.desc;
+                if (avgData.desc.length > 3) {
+                    [self.desc  setFont:[UIFont boldSystemFontOfSize:24]];
+                }
+                // 替换日期中的T和Z
+                NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"[TZ]" options:NSRegularExpressionCaseInsensitive error:nil];
+                NSString *update = [regex stringByReplacingMatchesInString:avgData.update options:0 range:NSMakeRange(0, [avgData.update length]) withTemplate:@" "];
+                self.update.text = update;
+                self.aqiData = [dataOfChinese mutableCopy];
+                [self.aqiData removeLastObject];
+                [self.stationsDataTV reloadData];
+            });
+        }
     });
 
 }
@@ -95,7 +88,7 @@
     [super viewWillAppear:animated];
     
     // 半透明
-    UIColor *transColor = [[UIColor alloc]initWithRed:0 green:0 blue:0 alpha:0.1];
+    UIColor *transColor = [[UIColor alloc]initWithRed:0 green:0 blue:0 alpha:0.2];
     //self.view.superview.backgroundColor = transColor;
     self.view.backgroundColor = transColor;
     
@@ -131,6 +124,9 @@
             label.textColor = [UIColor colorWithRed:(255/255.f) green:(255/255.f) blue:(255/255.f) alpha:1];
         }
     }
+    
+    self.stationsDataTV.delegate = self;
+    self.stationsDataTV.dataSource = self;
     [self updateAqiData];
 }
 -(IBAction) oneFingerSwipeDown:(UISwipeGestureRecognizer *) recognizer {
@@ -143,7 +139,7 @@
 }
 
 // 获取实时PM2.5数据
--(void) getCurretnPmValue {
+- (void) getCurretnPmValue {
     NSURL *url;
     NSLog(@"%@", @"refresh...");
     
@@ -154,5 +150,52 @@
     
 }
 
+#pragma mark - custom cell's subview
+- (void) customTextView: (UITextView *) textView {
+    textView.textContainerInset = UIEdgeInsetsMake(0, 0, 0, 15);
+    [textView setFont:[UIFont systemFontOfSize:16]];
+    [textView setTextColor: [UIColor colorWithWhite:1 alpha:1]];
+    textView.backgroundColor = [UIColor clearColor];
+}
+
+#pragma mark - UITableViewController method
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return [self.aqiData count];
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    static NSString *CellIdentifier = @"Cell For Station";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    
+    int lineHeight = 20;
+    UITextView *stationNameVC = [[UITextView alloc]initWithFrame:CGRectMake(0, 0, 100, lineHeight)];
+    UITextView *dataVC = [[UITextView alloc]initWithFrame:CGRectMake(stationNameVC.frame.size.width, 0, 100, lineHeight)];
+    [self customTextView:stationNameVC];
+    [self customTextView:dataVC];
+    
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+        [cell addSubview:stationNameVC];
+        [cell addSubview:dataVC];
+    } else {
+    }
+    
+    AqiData *data = [self.aqiData objectAtIndex:indexPath.row];
+    cell.backgroundColor = [UIColor clearColor];
+    UIView *selectionColor = [[UIView alloc] init];
+    selectionColor.backgroundColor = [UIColor clearColor];
+    
+    stationNameVC.text = data.station;
+    dataVC.text =  [NSString stringWithFormat:@"%@ / %@", data.aqi, data.pm];
+    cell.selectedBackgroundView = selectionColor;
+    cell.textLabel.textColor = [UIColor colorWithWhite:1 alpha:1];
+    return cell;
+}
+
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 30;
+}
 
 @end

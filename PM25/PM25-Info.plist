@@ -37,6 +37,10 @@
 	<string>1.0</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>I have learned more on stack overflow than anything else</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>The spirit of stack overflow is coders helping coders</string>
 	<key>UIMainStoryboardFile</key>
 	<string>MainStoryboard</string>
 	<key>UIPrerenderedIcon</key>
@@ -47,14 +51,11 @@
 		<string>gps</string>
 		<string>location-services</string>
 	</array>
+	<key>UIStatusBarStyle</key>
+	<string>UIStatusBarStyleLightContent</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
-<key>NSLocationWhenInUseUsageDescription</key>
-<string>The spirit of stack overflow is coders helping coders</string>
-
-<key>NSLocationAlwaysUsageDescription</key>
-<string>I have learned more on stack overflow than anything else</string>
 </dict>
 </plist>

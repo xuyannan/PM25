@@ -14,6 +14,7 @@
 @property (copy, nonatomic) NSString *update;
 @property (copy, nonatomic) NSString *desc;
 @property (copy, nonatomic) NSString *city;
+@property (copy, nonatomic) NSString *station;
 -(NSString *) description;
 -(AqiData *) init;
 @end
@@ -24,7 +25,7 @@
 -(AqiAPI *) initWithCity:(NSString *)city;
 -(AqiData *) getAqiDataForCity:(NSString *)city;
 -(AqiData *) getUsemAqiDataForCity:(NSString *)city;
--(AqiData *) getChineseAqiDataForCity:(NSString *)city;
+-(NSMutableArray *) getChineseAqiDataForCity:(NSString *)city;
 
 -(bool) isChineseDataSupportedForCity:(NSString *)city;
 

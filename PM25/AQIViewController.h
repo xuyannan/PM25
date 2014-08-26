@@ -15,16 +15,17 @@
 @property (weak, nonatomic) IBOutlet UILabel *pm;
 @property (weak, nonatomic) IBOutlet UILabel *desc;
 @property (weak, nonatomic) IBOutlet UILabel *update;
+@property (strong, nonatomic) IBOutlet UITableView *stationsDataTV;
 
 
-@property (weak, nonatomic) IBOutlet UILabel *usemAqiTitle;
-@property (weak, nonatomic) IBOutlet UILabel *usemAqi;
-@property (weak, nonatomic) IBOutlet UILabel *usemPm;
+//@property (weak, nonatomic) IBOutlet UILabel *usemAqiTitle;
+//@property (weak, nonatomic) IBOutlet UILabel *usemAqi;
+//@property (weak, nonatomic) IBOutlet UILabel *usemPm;
 
 
-@property (weak, nonatomic) IBOutlet UILabel *usemDesc;
+//@property (weak, nonatomic) IBOutlet UILabel *usemDesc;
 
-@property (weak, nonatomic) IBOutlet UILabel *usemUpdate;
+//@property (weak, nonatomic) IBOutlet UILabel *usemUpdate;
 
 -(void) updateAqiData;
 -(AQIViewController *) initWithCity:(NSString *) city;

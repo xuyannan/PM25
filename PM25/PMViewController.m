@@ -71,29 +71,7 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
         AQIViewController *aqiVC = [[AQIViewController alloc]initWithCity: city];
         [cityDictionary setObject:aqiVC forKey:city];
     }
-    
-    // background
-    currentImageName = [[NSUserDefaults standardUserDefaults]objectForKey:@"background"];
-    
-    currentImageName = currentImageName ? currentImageName : @"background.jpg";
-    if(backgroundView) {
-        [backgroundView setImage:[UIImage imageNamed: currentImageName]];
-    } else {
-        backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed: currentImageName]];
-        [backgroundView setFrame:CGRectMake(0, 0 , self.view.frame.size.width, self.view.frame.size.height)];
-        [self.view insertSubview:backgroundView atIndex:BACKGROUND_LAYER_INDEX];
-    }
 
-    // buttons
-    if (self.buttonsVC) {
-        //[self.buttonsVC.view removeFromSuperview];
-    } else {
-        self.buttonsVC = [[ButtonsViewController alloc]initWithNibName:@"ButtonsViewController" bundle:nil];
-        [self.view insertSubview:self.buttonsVC.view atIndex:BUTTONS_LAYER_INDEX];
-        self.buttonsVC.delegate = self;
-    }
-    [self.buttonsVC.view setFrame:CGRectMake(0 , self.view.frame.size.height - 40 , 90, 30)];
-    NSLog(@"view width: %f, buttonsVC: %f, %f", self.view.frame.size.width, self.buttonsVC.view.frame.origin.x, self.buttonsVC.view.frame.origin.y);
     // 监听程序由background切换到foreground
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillEnterForegroundNotification) name:UIApplicationWillEnterForegroundNotification object:nil];
 }
@@ -178,6 +156,13 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
     UISwipeGestureRecognizer *swipeRightRecognizer = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeRight)];
     [swipeRightRecognizer setDirection:UISwipeGestureRecognizerDirectionRight ];
     [self.view addGestureRecognizer:swipeRightRecognizer];
+    [self setBackground];
+    
+    self.buttonsVC = [[ButtonsViewController alloc]initWithNibName:@"ButtonsViewController" bundle:nil];
+    [self.view insertSubview:self.buttonsVC.view atIndex: BUTTONS_LAYER_INDEX];
+    self.buttonsVC.delegate = self;
+    [self setButtonsView];
+
 }
 
 -(void) viewDidAppear:(BOOL)animated {
@@ -291,12 +276,52 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
         
     }];
 }
+
+#pragma mark - blur image tool function
+- (UIImage *)blurryImage:(UIImage *)image withBlurLevel:(CGFloat)blur {
+    CIImage *inputImage = [CIImage imageWithCGImage:image.CGImage];
+    CIFilter *filter = [CIFilter filterWithName:@"CIGaussianBlur"
+                                  keysAndValues:kCIInputImageKey, inputImage,
+                        @"inputRadius", @(blur), nil];
+    
+    CIImage *outputImage = filter.outputImage;
+    CIContext *context = [CIContext contextWithOptions:nil]; // save it to self.context
+    CGImageRef outImage = [context createCGImage:outputImage fromRect:[outputImage extent]];
+    return [UIImage imageWithCGImage:outImage];
+}
+
+#pragma mark - set background image
+- (void) setBackground {
+    // background
+    currentImageName = [[NSUserDefaults standardUserDefaults]objectForKey:@"background"];
+    currentImageName = currentImageName ? currentImageName : @"background.jpg";
+    UIImage *blurBackgroundImg = [self blurryImage:[UIImage imageNamed: currentImageName] withBlurLevel:2];
+    
+    if(backgroundView) {
+        [backgroundView setImage:blurBackgroundImg];
+    } else {
+        backgroundView = [[UIImageView alloc] initWithImage:blurBackgroundImg];
+        [backgroundView setFrame:CGRectMake(0, 0 , self.view.frame.size.width, self.view.frame.size.height)];
+        [self.view insertSubview:backgroundView atIndex:BACKGROUND_LAYER_INDEX];
+        //[self.view addSubview:backgroundView];
+    }
+}
+
+#pragma mark - set buttons view
+- (void) setButtonsView {
+    [self.buttonsVC.view setFrame:CGRectMake(-1, self.view.frame.size.height - 40 , 90, 30)];
+    
+}
+
 #pragma mark - PhotosCollectionViewControllerDelegate method
 
 - (void) photosCollectionViewController:(PhotosCollectionViewController *)sender background:(NSString *) background {
     currentImageName  = background;
     [[NSUserDefaults standardUserDefaults]setObject:currentImageName forKey:@"background"];
-    [self dismissViewControllerAnimated:true completion:nil];
+    [self setBackground];
+    [self dismissViewControllerAnimated:true completion:^{
+        [self setButtonsView];
+    }];
 }
 
 #pragma mark - ButtonsViewControllerDelegate method
@@ -352,23 +377,25 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
     CGRect screenBounds = [[UIScreen mainScreen] bounds];
     CGRect bounds = self.view.frame;
     //挪mainView
-    [UIView beginAnimations:@"MoveViews" context:nil];
-    [UIView setAnimationDuration:0.3];
+    //[UIView beginAnimations:@"MoveViews" context:nil];
+    //[UIView setAnimationDuration:0.3];
     [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
-    if (bounds.size.width - screenBounds.size.width >= cityListVCOffset) {
-        [self.view setFrame:CGRectMake(0- cityListVCOffset, bounds.origin.y, bounds.size.width, bounds.size.height)];
-    } else {
-        [self.view setFrame:CGRectMake(0- cityListVCOffset, bounds.origin.y, bounds.size.width+cityListVCOffset, bounds.size.height)];
-    }
-    //挪buttonView
-    [self.buttonsVC.view setFrame:CGRectMake(0, self.view.frame.size.height - 40 , 90, 30)];
-    [UIView commitAnimations];
-    
-    if (!self.cityListVC) {
-        self.cityListVC = [[CityListViewController alloc]initWithNibName:@"CityListViewController" bundle:nil];
-        [self.cityListVC.tableView setFrame:CGRectMake(bounds.size.width,0,150,bounds.size.height)];
-        [self.view addSubview:self.cityListVC.tableView];
-    }
+
+    //[UIView commitAnimations];
+    [UIView animateWithDuration:0.3 animations:^(){
+        if (bounds.size.width - screenBounds.size.width >= cityListVCOffset) {
+            [self.view setFrame:CGRectMake(0- cityListVCOffset, bounds.origin.y, bounds.size.width, bounds.size.height)];
+        } else {
+            [self.view setFrame:CGRectMake(0- cityListVCOffset, bounds.origin.y, bounds.size.width+cityListVCOffset, bounds.size.height)];
+        }
+    } completion:^(BOOL finished){
+        if (!self.cityListVC) {
+            self.cityListVC = [[CityListViewController alloc]initWithNibName:@"CityListViewController" bundle:nil];
+            [self.cityListVC.tableView setFrame:CGRectMake(bounds.size.width,0,150,bounds.size.height)];
+            [self.view addSubview:self.cityListVC.tableView];
+        }
+        [self setButtonsView];
+    }];
     
 }
 
@@ -377,14 +404,16 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
     if (!self.cityListVC) {
         return;
     }
-    [UIView beginAnimations:@"MoveViews" context:nil];
-    [UIView setAnimationDuration:0.1];
+    //[UIView beginAnimations:@"MoveViews" context:nil];
+    //[UIView setAnimationDuration:0.1];
     [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
-    [self.view setFrame:CGRectMake(0, bounds.origin.y, bounds.size.width, bounds.size.height)];
+    [UIView animateWithDuration:0.1 animations:^{
+        [self.view setFrame:CGRectMake(0, bounds.origin.y, bounds.size.width, bounds.size.height)];
+    } completion:^(BOOL finished){
+        [self setButtonsView];
+    }];
+
     
-    //挪buttonView;
-    [self.buttonsVC.view setFrame:CGRectMake(0, self.view.frame.size.height - 40 , 90, 30)];
-    [UIView commitAnimations];
 }
 
 @end

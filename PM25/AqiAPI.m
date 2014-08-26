@@ -21,7 +21,9 @@
         self.desc = @"desc";
         self.update = @"right now";
         self.aqi = @"aqi";
+        self.station = @"";
     }
+    
     return self;
 }
 @end
@@ -38,7 +40,7 @@ NSInteger sort(id name1, id name2, void *context) {
     u1 = (NSString *)name1;
     u2 = (NSString *)name2;
     NSLog(@"%@,%@", u1,u2);
-    NSComparisonResult r =  [u1 compare:u2];
+    //NSComparisonResult r =  [u1 compare:u2];
     //NSLog(@"%@", u2);
     return [u1 localizedCompare:u2];
 }
@@ -83,8 +85,8 @@ NSInteger sort(id name1, id name2, void *context) {
 
 }
 
--(AqiData *)getChineseAqiDataForCity:(NSString *)city {
-    AqiData *aqiData = [[AqiData alloc]init];
+-(NSMutableArray *)getChineseAqiDataForCity:(NSString *)city {
+    NSMutableArray *aqiData = [[NSMutableArray alloc] init];
     if (![suppertedCities containsObject:city]) {
         NSLog(@"没有%@的数据", city);
         return nil;
@@ -94,6 +96,7 @@ NSInteger sort(id name1, id name2, void *context) {
     NSArray *aqiarray;
     NSArray *desarray;
     NSArray *updatearray;
+    NSArray *stationarray;
     NSString *url_str = [[NSString alloc]initWithFormat:@"%@?token=%@&city=%@", [apiUrls objectForKey:@"pm25"], APPKEY, city ];
     
     NSURL *url = [NSURL URLWithString: [url_str stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding]];
@@ -113,13 +116,19 @@ NSInteger sort(id name1, id name2, void *context) {
         aqiarray = [jsonData valueForKey:@"aqi"];
         desarray = [jsonData valueForKey:@"quality"];
         updatearray = [jsonData valueForKey:@"time_point"];
+        stationarray = [jsonData valueForKey:@"position_name"];
     }
-    aqiData.pm = pmarray ? [[NSString alloc]initWithFormat:@"%@",[pmarray lastObject]] : @"--";
-    aqiData.desc = desarray ? [desarray lastObject] : @"--";
-    aqiData.aqi = aqiarray ? [[NSString alloc]initWithFormat:@"%@",[aqiarray lastObject]] : @"--";
-    aqiData.update = updatearray ? [updatearray lastObject] : @"--";
-    aqiData.city = self.city;
-    NSLog(@"%@", [aqiData description]);
+    //int iMax = pmarray.count;
+    for (int i = 0; i < pmarray.count; i ++ ) {
+        AqiData *_aqiData = [[AqiData alloc]init];
+        _aqiData.pm = [NSString stringWithFormat:@"%@", [pmarray objectAtIndex:i]];
+        _aqiData.desc = [desarray objectAtIndex:i];
+        _aqiData.aqi = [NSString stringWithFormat:@"%@", [aqiarray objectAtIndex:i]];
+        _aqiData.update = [updatearray objectAtIndex:i];
+        _aqiData.city = self.city;
+        _aqiData.station = [stationarray objectAtIndex:i];
+        [aqiData addObject:_aqiData];
+    }
     return aqiData;
 }
 

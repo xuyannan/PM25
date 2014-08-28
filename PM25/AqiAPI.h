@@ -26,6 +26,7 @@
 -(AqiData *) getAqiDataForCity:(NSString *)city;
 -(AqiData *) getUsemAqiDataForCity:(NSString *)city;
 -(NSMutableArray *) getChineseAqiDataForCity:(NSString *)city;
+- (void) ajaxGetChineseApiDataForCity:(NSString *) city onSuccess:(void (^)(NSMutableArray *aqidata))onSuccess onError:(void (^)())onError;
 
 -(bool) isChineseDataSupportedForCity:(NSString *)city;
 

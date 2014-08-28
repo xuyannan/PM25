@@ -10,6 +10,7 @@
 #import "DDXMLDocument.h"
 
 #define APPKEY @"QfEJyi3oWKSBCnKrqp1v"
+//#define APPKEY @"5j1znBVAsnSf5xQyNQyq"
 
 @implementation AqiData
 -(NSString *) description {
@@ -85,6 +86,67 @@ NSInteger sort(id name1, id name2, void *context) {
 
 }
 
+
+- (void) ajaxGetChineseApiDataForCity:(NSString *) city onSuccess:(void (^)(NSMutableArray *aqidata))onSuccess onError:(void (^)())onError {
+    if (![suppertedCities containsObject:city]) {
+        NSLog(@"没有%@的数据", city);
+        //return nil;
+    }
+    NSLog(@"%@", city);
+    NSString *url_str = [[NSString alloc]initWithFormat:@"%@?token=%@&city=%@", [apiUrls objectForKey:@"pm25"], APPKEY, city ];
+    
+    NSURL *url = [NSURL URLWithString: [url_str stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding]];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:10];
+    [request setValue:@"text/json" forHTTPHeaderField:@"Content-Type"];
+    //NSHTTPURLResponse *response;
+    //NSError *error = nil;
+    [NSURLConnection sendAsynchronousRequest:request queue:[[NSOperationQueue alloc] init] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+        if (connectionError != nil) {
+            onError();
+        } else {
+            @try {
+                NSDictionary *jsonData = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+                if([jsonData isKindOfClass:[NSDictionary class]]) {
+                    NSLog(@"调用PM25.in出错: %@", [jsonData valueForKey:@"error"]);
+                    onError();
+                } else {
+                    NSMutableArray *aqiData = [[NSMutableArray alloc] init];
+                    NSArray *pmarray;
+                    NSArray *aqiarray;
+                    NSArray *desarray;
+                    NSArray *updatearray;
+                    NSArray *stationarray;
+                    pmarray = [jsonData valueForKey:@"pm2_5"];
+                    aqiarray = [jsonData valueForKey:@"aqi"];
+                    desarray = [jsonData valueForKey:@"quality"];
+                    updatearray = [jsonData valueForKey:@"time_point"];
+                    stationarray = [jsonData valueForKey:@"position_name"];
+                    for (int i = 0; i < pmarray.count; i ++ ) {
+                        AqiData *_aqiData = [[AqiData alloc]init];
+                        _aqiData.pm = [NSString stringWithFormat:@"%@", [pmarray objectAtIndex:i]];
+                        _aqiData.desc = [desarray objectAtIndex:i];
+                        _aqiData.aqi = [NSString stringWithFormat:@"%@", [aqiarray objectAtIndex:i]];
+                        _aqiData.update = [updatearray objectAtIndex:i];
+                        _aqiData.city = self.city;
+                        _aqiData.station = [stationarray objectAtIndex:i];
+                        [aqiData addObject:_aqiData];
+                    }
+                    onSuccess(aqiData);
+                }
+                
+            }
+            @catch (NSException *exception) {
+                //return nil;
+                onError();
+            }
+            @finally {
+                //return nil;
+            }
+        }
+    }];
+
+}
+
 -(NSMutableArray *)getChineseAqiDataForCity:(NSString *)city {
     NSMutableArray *aqiData = [[NSMutableArray alloc] init];
     if (![suppertedCities containsObject:city]) {
@@ -111,12 +173,25 @@ NSInteger sort(id name1, id name2, void *context) {
         //[alert show];
         return nil;
     } else {
-        NSDictionary *jsonData = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-        pmarray = [jsonData valueForKey:@"pm2_5"];
-        aqiarray = [jsonData valueForKey:@"aqi"];
-        desarray = [jsonData valueForKey:@"quality"];
-        updatearray = [jsonData valueForKey:@"time_point"];
-        stationarray = [jsonData valueForKey:@"position_name"];
+        @try {
+            NSDictionary *jsonData = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+            if ([jsonData valueForKey:@"error"] != nil) {
+                NSLog(@"PM25 请求出错: %@", [jsonData valueForKey:@"error"]);
+                return nil;
+            }
+            pmarray = [jsonData valueForKey:@"pm2_5"];
+            aqiarray = [jsonData valueForKey:@"aqi"];
+            desarray = [jsonData valueForKey:@"quality"];
+            updatearray = [jsonData valueForKey:@"time_point"];
+            stationarray = [jsonData valueForKey:@"position_name"];
+        }
+        @catch (NSException *exception) {
+            return nil;
+        }
+        @finally {
+            return nil;
+        }
+        
     }
     //int iMax = pmarray.count;
     for (int i = 0; i < pmarray.count; i ++ ) {

@@ -12,6 +12,8 @@
 		574176E219AC6B0F005FA292 /* sync@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 574176E019AC6B0F005FA292 /* sync@2x.png */; };
 		574176E519AC6B59005FA292 /* brush.png in Resources */ = {isa = PBXBuildFile; fileRef = 574176E319AC6B59005FA292 /* brush.png */; };
 		574176E619AC6B59005FA292 /* brush@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 574176E419AC6B59005FA292 /* brush@2x.png */; };
+		574176E919AD8972005FA292 /* ActivityIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 574176E819AD8972005FA292 /* ActivityIndicator.m */; };
+		574176EC19AD8F31005FA292 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 574176EB19AD8F31005FA292 /* Constants.m */; };
 		FD2825A316E9DD5100FC66BB /* PhotosCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD2825A216E9DD5100FC66BB /* PhotosCollectionViewController.m */; };
 		FD288E6816F307E10068A2F5 /* CityListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD288E6616F307E10068A2F5 /* CityListViewController.m */; };
 		FD288E6916F307E10068A2F5 /* CityListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FD288E6716F307E10068A2F5 /* CityListViewController.xib */; };
@@ -53,6 +55,10 @@
 		574176E019AC6B0F005FA292 /* sync@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "sync@2x.png"; path = "../../../Pictures/sync@2x.png"; sourceTree = "<group>"; };
 		574176E319AC6B59005FA292 /* brush.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = brush.png; path = ../../../Pictures/brush.png; sourceTree = "<group>"; };
 		574176E419AC6B59005FA292 /* brush@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "brush@2x.png"; path = "../../../Pictures/brush@2x.png"; sourceTree = "<group>"; };
+		574176E719AD8972005FA292 /* ActivityIndicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActivityIndicator.h; sourceTree = "<group>"; };
+		574176E819AD8972005FA292 /* ActivityIndicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActivityIndicator.m; sourceTree = "<group>"; };
+		574176EA19AD8F31005FA292 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
+		574176EB19AD8F31005FA292 /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Constants.m; sourceTree = "<group>"; };
 		580C39FE6277449DA3ED5EDB /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		E64C57EB79B243238277D272 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
 		FD2825A116E9DD5100FC66BB /* PhotosCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PhotosCollectionViewController.h; path = ../PhotosCollectionViewController.h; sourceTree = "<group>"; };
@@ -169,6 +175,10 @@
 				FD288E6616F307E10068A2F5 /* CityListViewController.m */,
 				FD288E6716F307E10068A2F5 /* CityListViewController.xib */,
 				FD420B2016D66E3800300B26 /* Supporting Files */,
+				574176E719AD8972005FA292 /* ActivityIndicator.h */,
+				574176E819AD8972005FA292 /* ActivityIndicator.m */,
+				574176EA19AD8F31005FA292 /* Constants.h */,
+				574176EB19AD8F31005FA292 /* Constants.m */,
 			);
 			path = PM25;
 			sourceTree = "<group>";
@@ -321,6 +331,8 @@
 				FD420B3616D66E3900300B26 /* PMViewController.m in Sources */,
 				FD2825A316E9DD5100FC66BB /* PhotosCollectionViewController.m in Sources */,
 				FDC4998116EDE21900F4CE84 /* AQIViewController.m in Sources */,
+				574176EC19AD8F31005FA292 /* Constants.m in Sources */,
+				574176E919AD8972005FA292 /* ActivityIndicator.m in Sources */,
 				FDC4998516EE24E600F4CE84 /* AqiAPI.m in Sources */,
 				FD46BD6D16EF1862000A256B /* ButtonsViewController.m in Sources */,
 				FD288E6816F307E10068A2F5 /* CityListViewController.m in Sources */,

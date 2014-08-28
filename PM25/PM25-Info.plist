@@ -38,9 +38,9 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>I have learned more on stack overflow than anything else</string>
+	<string>通过您的位置快速获取您所以城市的空气质量数据</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>The spirit of stack overflow is coders helping coders</string>
+	<string>通过您的位置快速获取您所以城市的空气质量数据</string>
 	<key>UIMainStoryboardFile</key>
 	<string>MainStoryboard</string>
 	<key>UIPrerenderedIcon</key>

@@ -14,6 +14,8 @@
 #import "ButtonsViewController.h"
 #import "CityListViewController.h"
 #import "AqiAPI.h"
+#import "ActivityIndicator.h"
+#import "Constants.h"
 
 #define CITY_LIST_KEY @"citylist"
 #define BACKGROUND_LAYER_INDEX 0
@@ -33,6 +35,7 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
     NSMutableArray *oldCityArray;
     
     AqiAPI *aqiAPI;
+    ActivityIndicator *indicator;
 }
 
 @property(nonatomic, strong) CLLocationManager *locationManager;
@@ -43,10 +46,12 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
 
 @end
 
+
+
 @implementation PMViewController
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self.locationManager requestAlwaysAuthorization];
+    [self.locationManager requestWhenInUseAuthorization];
     located = NO;
     cityListVCOffset = 150;
     aqiAPI = [[AqiAPI alloc]init];
@@ -54,16 +59,12 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
     CGRect bounds = [[UIScreen mainScreen] bounds];
     bounds = [self.view frame];
     
+    
     cityArray = [[NSUserDefaults standardUserDefaults] objectForKey:CITY_LIST_KEY];
     if (!cityArray) {
         cityArray = [[NSMutableArray alloc]init];
-        [cityArray addObject:@"北京"];
-        [cityArray addObject:@"广州"];
-        [cityArray addObject:@"上海"];
-        [cityArray addObject:@"成都"];
         [[NSUserDefaults standardUserDefaults] setObject:cityArray forKey:CITY_LIST_KEY];
     }
-    oldCityArray = [cityArray mutableCopy];
     if (!cityDictionary) {
         cityDictionary = [[NSMutableDictionary alloc]init];
     }
@@ -86,9 +87,11 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
         self.pageViewController.delegate = self;
         self.pageViewController.dataSource = self;
         [self.pageViewController.view setFrame: bounds];
-        AQIViewController *avc = [arrayOfAqiViewController objectAtIndex: self.currentPageIndex];
-        // pageview的关键一步，设置要显示的页
-        [self.pageViewController setViewControllers:@[avc] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
+        if ([arrayOfAqiViewController count] > 0) {
+            AQIViewController *avc = [arrayOfAqiViewController objectAtIndex: self.currentPageIndex];
+            // pageview的关键一步，设置要显示的页
+            [self.pageViewController setViewControllers:@[avc] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
+        }
     }
     [self.view insertSubview:self.pageViewController.view atIndex:PAGEVIEW_LAYER_INDEX];
 }
@@ -134,8 +137,6 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
     oldCityArray = [cityArray mutableCopy];
 }
 
-
-
 -(void)viewDidLoad {
     [super viewDidLoad];
     [self.locationManager startUpdatingLocation];
@@ -162,7 +163,6 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
     [self.view insertSubview:self.buttonsVC.view atIndex: BUTTONS_LAYER_INDEX];
     self.buttonsVC.delegate = self;
     [self setButtonsView];
-
 }
 
 -(void) viewDidAppear:(BOOL)animated {
@@ -170,7 +170,7 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
 }
 
 -(void)appWillEnterForegroundNotification {
-    [self refreshAll];
+    [self refreshCurrentCity];
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
@@ -178,30 +178,6 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
     [self.locationManager stopUpdatingLocation];
     //移除boserver
     [[NSNotificationCenter defaultCenter] removeObserver:self]; 
-}
-
--(void) updateAqiForCity: (NSString *) city atIndex: (int) index {
-    CGRect bounds = [[UIScreen mainScreen] bounds];
-    AQIViewController *avc = [cityDictionary objectForKey:city];
-        [avc.view setFrame:CGRectMake(0, index * bounds.size.height, bounds.size.width, bounds.size.height)];
-    [avc updateAqiData];
-}
-
-//更新所有AQIViewController
--(void) updateAqiViews {
-    int index = 0;
-    //当前城市放在首屏
-    if (currentCity) {
-        [self updateAqiForCity:currentCity atIndex:index];
-        index ++;
-    }
-    for (NSString *citykey in cityDictionary) {
-        if ([citykey isEqualToString:currentCity]) {
-            continue;
-        }
-        [self updateAqiForCity:citykey atIndex:index];
-        index ++;
-    }
 }
 
 -(void) getReadyForAqiViewControllers {
@@ -220,12 +196,14 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
     }
 }
 
-//更新所有城市数据
--(void) refreshAll {
-    for (NSString *citykey in cityDictionary) {
-        AQIViewController *avc = [cityDictionary objectForKey:citykey];
-        [avc updateAqiData];
+//更新某城市数据
+-(void) refreshCurrentCity {
+    AQIViewController *currentAQIVC = [arrayOfAqiViewController objectAtIndex:self.currentPageIndex];
+    for (AQIViewController *avc in arrayOfAqiViewController) {
+        NSLog(@"%@", avc.city);
     }
+    NSLog(@"%ld", self.currentPageIndex);
+    [currentAQIVC updateAqiData];
 }
 
 #pragma mark - CLLocationManagerDelegate method
@@ -235,46 +213,76 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
     
     NSLog(@"lat:%f - lon:%f", location.coordinate.latitude, location.coordinate.longitude);
     CLGeocoder *geoCoder = [[CLGeocoder alloc] init];
+    if (!indicator) {
+        indicator = [[ActivityIndicator alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+        indicator.title = NSLocalizedString(@"加载中，请稍候", nil); // @"加载中，请稍候...";
+    }
+    [indicator show];
     [geoCoder reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
         if (!located) {
             // 一次定位后，立即停止，防止多次定位
             [self.locationManager stopUpdatingLocation];
+            cityArray = [[NSUserDefaults standardUserDefaults] objectForKey:CITY_LIST_KEY];
             if (error) {
                 NSLog(@"Geocode failed with error: %@", error);
+                [indicator close];
+                NSString *message = [[NSString alloc]initWithFormat:@"无法定位您所在的城市，请在列表进行选择"];
+                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:message delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                [alert show];
+                if (cityArray == nil || cityArray.count == 0) {
+                    [self showCityList];
+                }
             } else {
                 CLPlacemark *placemark = [placemarks objectAtIndex:0];
                 currentCity = placemark.locality;
-            }
-            currentCity = currentCity ? currentCity : @"北京";
-            // 去掉"市"
-            NSString *fixedCityName;
-            NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"市$" options:NSRegularExpressionCaseInsensitive error:nil];
-            fixedCityName = [regex stringByReplacingMatchesInString:currentCity options:0 range:NSMakeRange(0, [currentCity length]) withTemplate:@""];
-            currentCity = fixedCityName;
-            
-            if ([aqiAPI isChineseDataSupportedForCity:currentCity]) {
-                if (![cityArray containsObject:currentCity]) {
-                    [cityArray addObject:currentCity];
-                    [[NSUserDefaults standardUserDefaults]setObject:cityArray forKey:CITY_LIST_KEY];
+                NSLog(@"localtiy:%@, region:%@, country: %@, name: %@", placemark.locality, placemark.region, placemark.country, placemark.name);
+                [indicator close];
+                //currentCity = currentCity ? currentCity : @"北京";
+                // 去掉"市"
+                NSString *fixedCityName;
+                NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"市.*$" options:NSRegularExpressionCaseInsensitive error:nil];
+                fixedCityName = [regex stringByReplacingMatchesInString:currentCity options:0 range:NSMakeRange(0, [currentCity length]) withTemplate:@""];
+                currentCity = fixedCityName;
+
+                if ([aqiAPI isChineseDataSupportedForCity:currentCity]) {
+                    if (![cityArray containsObject:currentCity]) {
+                        NSMutableArray *tmpArray = [cityArray mutableCopy];
+                        [tmpArray addObject:currentCity];
+                        cityArray = tmpArray;
+                        [[NSUserDefaults standardUserDefaults]setObject:cityArray forKey:CITY_LIST_KEY];
+                    }
+                    
+                    if (![cityDictionary objectForKey:currentCity]) {
+                        AQIViewController *aqiVC = [[AQIViewController alloc]initWithCity:currentCity];
+                        [cityDictionary setObject:aqiVC forKey:currentCity];
+                    }
+                } else {
+                    NSString *message = [[NSString alloc]initWithFormat:@"您所处的[%@]目前还没有空气质量数据。请在列表中添加您所关心的城市~", currentCity];
+                    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:message delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                    [alert show];
+                    [self showCityList];
                 }
-                
-                if (![cityDictionary objectForKey:currentCity]) {
-                    AQIViewController *aqiVC = [[AQIViewController alloc]initWithCity:currentCity];
-                    [cityDictionary setObject:aqiVC forKey:currentCity];
-                }
-            } else {
-                NSString *message = [[NSString alloc]initWithFormat:@"您所处的[%@]目前还没有空气质量数据。请向左滑动屏幕添加您所关心的城市~", currentCity];
-                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:message delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-                [alert show];
-                currentCity = [cityArray objectAtIndex:0];
+                [self getReadyForAqiViewControllers];
+                [self getReadyForPageView];
+                located = YES;
             }
-            [self getReadyForAqiViewControllers];
-            [self getReadyForPageView];
-            
-            located = YES;
         }
         
     }];
+}
+
+-(void) locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
+    cityArray = [[NSUserDefaults standardUserDefaults] objectForKey:CITY_LIST_KEY];
+    NSString *message = [[NSString alloc]initWithFormat:@"无法定位您的位置，请确认已您充许本APP使用您的地址"];
+    if (cityArray == nil || [cityArray count] == 0) {
+        message = [[NSString alloc]initWithFormat:@"无法定位您的位置，请确认已您充许本APP使用您的地址。您可以从列表中选择您所关注的城市。"];
+        [self showCityList];
+    }
+    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:message delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+    [alert show];
+    [self getReadyForAqiViewControllers];
+    [self getReadyForPageView];
+    located = false;
 }
 
 #pragma mark - blur image tool function
@@ -327,7 +335,8 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
 #pragma mark - ButtonsViewControllerDelegate method
 -(void)refreshAqiViews:(ButtonsViewController *)sender {
     NSLog(@"%@", @"refresh button pressed");
-    [self refreshAll];
+    [self refreshCurrentCity];
+    
 }
 
 -(void)configButtonPressed:(ButtonsViewController *)sender {
@@ -364,7 +373,6 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
     AQIViewController *avc = [arrayOfAqiViewController objectAtIndex:currentIndex];
     self.currentPageIndex = currentIndex;
     return avc;
-
 }
 
 #pragma mark - UIPageViewDatasource method
@@ -396,7 +404,8 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
         }
         [self setButtonsView];
     }];
-    
+    // 缓存当前城市列表
+    oldCityArray = [cityArray mutableCopy];
 }
 
 -(void) hideCityList {

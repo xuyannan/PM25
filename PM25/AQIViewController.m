@@ -11,11 +11,13 @@
 #import "AqiAPI.h"
 #import <CoreLocation/CoreLocation.h>
 #import <CoreLocation/CLLocationManager.h>
+#import "ActivityIndicator.h"
+#import "Constants.h"
 
 @interface AQIViewController ()  <UITableViewDataSource, UITableViewDelegate> {
     NSDictionary *citiesInPinyin;
     AqiAPI *aqiAPI;
-    
+    ActivityIndicator *indicator;
 }
 
 @property (nonatomic, strong) CLLocationManager *locationManager;
@@ -28,7 +30,6 @@
 - (NSString *)description {
     return [[NSString alloc]initWithFormat:@"An AQIViewController of city: %@", self.city ];
 }
-
 
 
 - (AQIViewController *) initWithCity:(NSString *)city {
@@ -45,32 +46,45 @@
     }
     aqiAPI = [[AqiAPI alloc]init ];
     aqiAPI.city = self.city;
+    if (!indicator) {
+        indicator = [[ActivityIndicator alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+        indicator.title = NSLocalizedString(@"加载中，请稍候", nil); // @"加载中，请稍候...";
+    }
+    [indicator show];
     
     dispatch_queue_t getAqiDataQueue = dispatch_queue_create("get AQI data", NULL);
     dispatch_async(getAqiDataQueue, ^{
-        NSMutableArray *dataOfChinese = [aqiAPI getChineseAqiDataForCity:self.city];
-        //dataOfChinese = nil;
-        if (dataOfChinese == nil || [dataOfChinese count] == 0) {
+        
+        [aqiAPI ajaxGetChineseApiDataForCity:self.city onSuccess:^(NSMutableArray *aqidata) {
+            NSMutableArray *dataOfChinese = aqidata;
+            if (dataOfChinese == nil || [dataOfChinese count] == 0) {
+                UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"提示" message:@"无法获取数据，请稍候再试" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                [indicator close];
+                [alertView show];
+            } else {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [indicator close];
+                    AqiData *avgData = [dataOfChinese lastObject];
+                    self.aqi.text = avgData.aqi;
+                    self.pm.text = avgData.pm;
+                    self.desc.text = avgData.desc;
+                    if (avgData.desc.length > 3) {
+                        [self.desc  setFont:[UIFont boldSystemFontOfSize:24]];
+                    }
+                    // 替换日期中的T和Z
+                    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"[TZ]" options:NSRegularExpressionCaseInsensitive error:nil];
+                    NSString *update = [regex stringByReplacingMatchesInString:avgData.update options:0 range:NSMakeRange(0, [avgData.update length]) withTemplate:@" "];
+                    self.update.text = update;
+                    self.aqiData = [dataOfChinese mutableCopy];
+                    [self.aqiData removeLastObject];
+                    [self.stationsDataTV reloadData];
+                });
+            }
+        } onError:^{
             UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"提示" message:@"无法获取数据，请稍候再试" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [indicator close];
             [alertView show];
-        } else {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                AqiData *avgData = [dataOfChinese lastObject];
-                self.aqi.text = avgData.aqi;
-                self.pm.text = avgData.pm;
-                self.desc.text = avgData.desc;
-                if (avgData.desc.length > 3) {
-                    [self.desc  setFont:[UIFont boldSystemFontOfSize:24]];
-                }
-                // 替换日期中的T和Z
-                NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"[TZ]" options:NSRegularExpressionCaseInsensitive error:nil];
-                NSString *update = [regex stringByReplacingMatchesInString:avgData.update options:0 range:NSMakeRange(0, [avgData.update length]) withTemplate:@" "];
-                self.update.text = update;
-                self.aqiData = [dataOfChinese mutableCopy];
-                [self.aqiData removeLastObject];
-                [self.stationsDataTV reloadData];
-            });
-        }
+        }];
     });
 
 }
@@ -127,6 +141,7 @@
     
     self.stationsDataTV.delegate = self;
     self.stationsDataTV.dataSource = self;
+
     [self updateAqiData];
 }
 -(IBAction) oneFingerSwipeDown:(UISwipeGestureRecognizer *) recognizer {

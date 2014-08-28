@@ -14,6 +14,8 @@
 		574176E619AC6B59005FA292 /* brush@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 574176E419AC6B59005FA292 /* brush@2x.png */; };
 		574176E919AD8972005FA292 /* ActivityIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 574176E819AD8972005FA292 /* ActivityIndicator.m */; };
 		574176EC19AD8F31005FA292 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 574176EB19AD8F31005FA292 /* Constants.m */; };
+		574176F319AF2D43005FA292 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 574176F119AF2D43005FA292 /* Icon.png */; };
+		574176F419AF2D43005FA292 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 574176F219AF2D43005FA292 /* Icon@2x.png */; };
 		FD2825A316E9DD5100FC66BB /* PhotosCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD2825A216E9DD5100FC66BB /* PhotosCollectionViewController.m */; };
 		FD288E6816F307E10068A2F5 /* CityListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD288E6616F307E10068A2F5 /* CityListViewController.m */; };
 		FD288E6916F307E10068A2F5 /* CityListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FD288E6716F307E10068A2F5 /* CityListViewController.xib */; };
@@ -31,8 +33,6 @@
 		FD420B3616D66E3900300B26 /* PMViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD420B3516D66E3900300B26 /* PMViewController.m */; };
 		FD46BD6D16EF1862000A256B /* ButtonsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD46BD6B16EF1862000A256B /* ButtonsViewController.m */; };
 		FD46BD6E16EF1862000A256B /* ButtonsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FD46BD6C16EF1862000A256B /* ButtonsViewController.xib */; };
-		FD46BD7416F03751000A256B /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = FD46BD7316F03751000A256B /* icon.png */; };
-		FD46BD7616F03760000A256B /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FD46BD7516F03760000A256B /* icon@2x.png */; };
 		FDC4996716ED5F3F00F4CE84 /* background2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = FDC4996516ED5F3F00F4CE84 /* background2.jpg */; };
 		FDC4996816ED5F3F00F4CE84 /* background2@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = FDC4996616ED5F3F00F4CE84 /* background2@2x.jpg */; };
 		FDC4996B16ED60F300F4CE84 /* background3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = FDC4996916ED60F300F4CE84 /* background3.jpg */; };
@@ -59,6 +59,8 @@
 		574176E819AD8972005FA292 /* ActivityIndicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActivityIndicator.m; sourceTree = "<group>"; };
 		574176EA19AD8F31005FA292 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		574176EB19AD8F31005FA292 /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Constants.m; sourceTree = "<group>"; };
+		574176F119AF2D43005FA292 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = ../../../Downloads/icon/ios7/Icon.png; sourceTree = "<group>"; };
+		574176F219AF2D43005FA292 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "../../../Downloads/icon/ios7/Icon@2x.png"; sourceTree = "<group>"; };
 		580C39FE6277449DA3ED5EDB /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		E64C57EB79B243238277D272 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
 		FD2825A116E9DD5100FC66BB /* PhotosCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PhotosCollectionViewController.h; path = ../PhotosCollectionViewController.h; sourceTree = "<group>"; };
@@ -86,8 +88,6 @@
 		FD46BD6A16EF1862000A256B /* ButtonsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ButtonsViewController.h; sourceTree = "<group>"; };
 		FD46BD6B16EF1862000A256B /* ButtonsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ButtonsViewController.m; sourceTree = "<group>"; };
 		FD46BD6C16EF1862000A256B /* ButtonsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ButtonsViewController.xib; sourceTree = "<group>"; };
-		FD46BD7316F03751000A256B /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon.png; path = ../icon.png; sourceTree = "<group>"; };
-		FD46BD7516F03760000A256B /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon@2x.png"; path = "../icon@2x.png"; sourceTree = "<group>"; };
 		FDC4996516ED5F3F00F4CE84 /* background2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = background2.jpg; sourceTree = "<group>"; };
 		FDC4996616ED5F3F00F4CE84 /* background2@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "background2@2x.jpg"; sourceTree = "<group>"; };
 		FDC4996916ED60F300F4CE84 /* background3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = background3.jpg; sourceTree = "<group>"; };
@@ -186,14 +186,14 @@
 		FD420B2016D66E3800300B26 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				574176F119AF2D43005FA292 /* Icon.png */,
+				574176F219AF2D43005FA292 /* Icon@2x.png */,
 				574176E319AC6B59005FA292 /* brush.png */,
 				574176E419AC6B59005FA292 /* brush@2x.png */,
 				574176DF19AC6B0F005FA292 /* sync.png */,
 				574176E019AC6B0F005FA292 /* sync@2x.png */,
 				FDDF980416F84BD9001BB249 /* table_bg.png */,
 				FDDF980516F84BD9001BB249 /* table_bg@2X.png */,
-				FD46BD7516F03760000A256B /* icon@2x.png */,
-				FD46BD7316F03751000A256B /* icon.png */,
 				FDC4997516EDD2FC00F4CE84 /* sunset.jpg */,
 				FDC4997616EDD2FC00F4CE84 /* sunset@2x.jpg */,
 				FDC4997116EDD01700F4CE84 /* checkmark.png */,
@@ -273,6 +273,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				574176F319AF2D43005FA292 /* Icon.png in Resources */,
 				574176E519AC6B59005FA292 /* brush.png in Resources */,
 				FD420B2416D66E3800300B26 /* InfoPlist.strings in Resources */,
 				FD420B2C16D66E3800300B26 /* Default.png in Resources */,
@@ -281,6 +282,7 @@
 				FD420B3316D66E3900300B26 /* MainStoryboard.storyboard in Resources */,
 				574176E619AC6B59005FA292 /* brush@2x.png in Resources */,
 				FDEBF60216E98FA100D29534 /* background.jpg in Resources */,
+				574176F419AF2D43005FA292 /* Icon@2x.png in Resources */,
 				FDEBF60516E98FD500D29534 /* background@2x.jpg in Resources */,
 				574176E219AC6B0F005FA292 /* sync@2x.png in Resources */,
 				FDC4996716ED5F3F00F4CE84 /* background2.jpg in Resources */,
@@ -293,8 +295,6 @@
 				FDC4997816EDD2FC00F4CE84 /* sunset@2x.jpg in Resources */,
 				FDC4998216EDE21900F4CE84 /* AQIViewController.xib in Resources */,
 				FD46BD6E16EF1862000A256B /* ButtonsViewController.xib in Resources */,
-				FD46BD7416F03751000A256B /* icon.png in Resources */,
-				FD46BD7616F03760000A256B /* icon@2x.png in Resources */,
 				FD288E6916F307E10068A2F5 /* CityListViewController.xib in Resources */,
 				FDDF980616F84BD9001BB249 /* table_bg.png in Resources */,
 				574176E119AC6B0F005FA292 /* sync.png in Resources */,

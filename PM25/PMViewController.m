@@ -44,6 +44,8 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
 @property(strong,nonatomic) PhotosCollectionViewController *photosCollectionVC;
 @property(strong,nonatomic) CityListViewController *cityListVC;
 
+@property (assign,nonatomic) NSInteger willTurnToPageIndex;
+
 @end
 
 
@@ -83,7 +85,7 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
         bounds = self.view.bounds;
         self.pageViewController = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll
                                                                   navigationOrientation:UIPageViewControllerNavigationOrientationVertical
-                                                                                options:[NSDictionary dictionaryWithObject:[NSNumber numberWithFloat:50.0f] forKey:UIPageViewControllerOptionInterPageSpacingKey]];
+                                                                                options:[NSDictionary dictionaryWithObject:[NSNumber numberWithFloat:20.0f] forKey:UIPageViewControllerOptionInterPageSpacingKey]];
         self.pageViewController.delegate = self;
         self.pageViewController.dataSource = self;
         [self.pageViewController.view setFrame: bounds];
@@ -235,7 +237,7 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
             } else {
                 CLPlacemark *placemark = [placemarks objectAtIndex:0];
                 currentCity = placemark.locality;
-                NSLog(@"localtiy:%@, region:%@, country: %@, name: %@", placemark.locality, placemark.region, placemark.country, placemark.name);
+                NSLog(@"localtiy:%@,  country: %@, name: %@", placemark.locality, placemark.country, placemark.name);
                 [indicator close];
                 //currentCity = currentCity ? currentCity : @"北京";
                 // 去掉"市"
@@ -352,33 +354,49 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
 -(UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController {
     AQIViewController *currentAvc = (AQIViewController *) viewController;
     NSInteger currentIndex = [arrayOfAqiViewController indexOfObject:currentAvc];
-    self.currentPageIndex = currentIndex;
     if (currentIndex == 0) {
+        self.currentPageIndex = 0;
         return nil;
     }
     AQIViewController *avc = [arrayOfAqiViewController objectAtIndex:currentIndex - 1];
-    self.currentPageIndex -= 1;
     return avc;
 }
 
 -(UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController {
     AQIViewController *currentAvc = (AQIViewController *) viewController;
-    
     NSInteger currentIndex = [arrayOfAqiViewController indexOfObject:currentAvc];
-    
     if (currentIndex == [arrayOfAqiViewController count] - 1) {
         return nil;
     }
     currentIndex ++;
     AQIViewController *avc = [arrayOfAqiViewController objectAtIndex:currentIndex];
-    self.currentPageIndex = currentIndex;
     return avc;
+}
+
+- (void)pageViewController:(UIPageViewController *)pageViewController didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray *)previousViewControllers transitionCompleted:(BOOL)completed {
+    if (completed) {
+        AQIViewController *vc = (AQIViewController *)[previousViewControllers lastObject];
+        NSInteger index = [arrayOfAqiViewController indexOfObject:vc];
+        NSLog(@"已转向，之前是: %@, index: %ld", vc.city, index);
+        if (index > self.willTurnToPageIndex) {
+            self.currentPageIndex = index - 1;
+        } else {
+            self.currentPageIndex = index + 1;
+        }
+    }
+}
+
+-(void)pageViewController:(UIPageViewController *)pageViewController willTransitionToViewControllers:(NSArray *)pendingViewControllers {
+    AQIViewController *vc = (AQIViewController *)[pendingViewControllers objectAtIndex:0];
+    self.willTurnToPageIndex = [arrayOfAqiViewController indexOfObject:vc];
+    NSLog(@"即将转向:%@, index: %ld", vc.city, [arrayOfAqiViewController indexOfObject:vc]);
 }
 
 #pragma mark - UIPageViewDatasource method
 -(NSInteger)presentationCountForPageViewController:(UIPageViewController *)pageViewController {
     return [arrayOfAqiViewController count];
 }
+
 
 #pragma  mark - control CityListViewController
 -(void) showCityList {

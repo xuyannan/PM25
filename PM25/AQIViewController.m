@@ -22,7 +22,7 @@
 
 @property (nonatomic, strong) CLLocationManager *locationManager;
 @property (nonatomic, strong) NSMutableArray *aqiData;
-@property (nonatomic)bool isLoaded;
+@property (nonatomic) bool isLoaded;
 @end
 
 @implementation AQIViewController

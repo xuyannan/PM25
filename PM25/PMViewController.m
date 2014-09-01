@@ -53,7 +53,7 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
 @implementation PMViewController
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self.locationManager requestWhenInUseAuthorization];
+    //[self.locationManager requestWhenInUseAuthorization];
     located = NO;
     cityListVCOffset = 150;
     aqiAPI = [[AqiAPI alloc]init];
@@ -108,9 +108,9 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
 -(void) swipeRight {
     NSLog(@"swipe right");
     [self hideCityList];
+    oldCityArray = [cityArray mutableCopy];
+    cityArray = oldCityArray;
     NSMutableArray *newCityArray = [[NSUserDefaults standardUserDefaults] objectForKey:CITY_LIST_KEY];
-    //NSLog(@"%@", [newCityArray componentsJoinedByString:@","]);
-    //NSLog(@"%@", [oldCityArray componentsJoinedByString:@","]);
     for (NSString *city in newCityArray) {
         // 加入了新的城市
         if (![oldCityArray containsObject:city]) {
@@ -121,22 +121,30 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
             
             [cityDictionary setObject:aqiVC forKey:city];
             [arrayOfAqiViewController addObject:aqiVC];
+            [cityArray addObject:city];
             //count ++;
         }
     }
+    
     for (NSString *city in oldCityArray) {
         // 删除的城市
         if (![newCityArray containsObject:city]) {
             AQIViewController *aqiVC = [cityDictionary objectForKey:city];
             [arrayOfAqiViewController removeObject:aqiVC];
+            [cityArray removeObject:city];
         }
     }
-    
     self.currentPageIndex = 0;
+    /*
+    NSLog(@"%@", [cityArray description]);
+    for (NSString *city in cityArray) {
+        NSLog(@"%@", city);
+    }
+    NSLog(@"当前有%ld个城市,当前第%ld个城市", [cityArray count], self.currentPageIndex);*/
     AQIViewController *avc = [arrayOfAqiViewController objectAtIndex: self.currentPageIndex];
     [self.pageViewController setViewControllers:@[avc] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
     
-    oldCityArray = [cityArray mutableCopy];
+    //oldCityArray = [cityArray mutableCopy];
 }
 
 -(void)viewDidLoad {

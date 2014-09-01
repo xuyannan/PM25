@@ -10,9 +10,11 @@
 #import "AqiAPI.h"
 
 @interface CityListViewController () {
-    NSArray *cities;
+    NSMutableArray *cities;
     NSMutableArray *selectedCities;
     NSArray *usemDataSupportedCities;
+    NSMutableArray *citiesCache;
+    AqiAPI *aqiApi;
 }
 
 @end
@@ -31,13 +33,13 @@
 }
 
 -(void) viewWillAppear:(BOOL)animated {
-    
     [super viewWillAppear:animated];
-    AqiAPI *aqiApi = [[AqiAPI alloc]init];
-    cities = [aqiApi supportedCities];
+    aqiApi = [[AqiAPI alloc]init];
+    cities = [[aqiApi supportedCities] mutableCopy];
+    citiesCache = [cities mutableCopy];
     selectedCities = [[[NSUserDefaults standardUserDefaults] objectForKey:CITY_LIST_KEY] mutableCopy];
     usemDataSupportedCities = [aqiApi usemDataSupportedCities];
-    //[self.tableView reloadData];
+    [self.tableView reloadData];
 }
 
 -(void)viewDidAppear:(BOOL)animated {
@@ -50,6 +52,8 @@
     [super viewDidLoad];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    
+    self.searchBar.delegate = self;
 }
 
 - (void)didReceiveMemoryWarning
@@ -94,7 +98,8 @@
         cell.accessoryType = UITableViewCellAccessoryNone;
     }
     if ([usemDataSupportedCities containsObject:city]) {
-        cell.detailTextLabel.text = @"支持美使馆数据";
+        //cell.detailTextLabel.text = @"支持美使馆数据";
+        cell.detailTextLabel.text = @"";
     } else {
         cell.detailTextLabel.text = @"";
     }
@@ -163,6 +168,33 @@
         NSLog(@"%@", [selectedCities componentsJoinedByString:@","]);
         [[NSUserDefaults standardUserDefaults] setObject:selectedCities forKey:CITY_LIST_KEY];
     }
+}
+
+#pragma mark - UISearchBarDelegate
+-(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
+    citiesCache = [[aqiApi supportedCities]mutableCopy];
+    if([searchText isEqualToString:@""] || searchText==nil){
+        cities = citiesCache;
+        [self.tableView reloadData];
+        return;
+    }
+    
+    [cities removeAllObjects];
+    for (NSString *city in citiesCache) {
+        NSRange r = [city rangeOfString:searchText];
+        if(r.location != NSNotFound) {
+            if(r.location== 0)//that is we are checking only the start of the names.
+            {
+                [cities addObject:city];
+            }
+        }
+    }
+    [self.tableView reloadData];
+}
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
+    [searchBar resignFirstResponder];
+    cities = [[aqiApi supportedCities] mutableCopy];
+    [self.tableView reloadData];
 }
 
 @end

@@ -8,7 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CityListViewController : UITableViewController <UITableViewDataSource, UITableViewDelegate>
+@interface CityListViewController : UITableViewController <UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate>
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
+@property (strong, nonatomic) IBOutlet UISearchBar *searchBar;
 
 @end

@@ -55,7 +55,7 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
     [super viewWillAppear:animated];
     //[self.locationManager requestWhenInUseAuthorization];
     located = NO;
-    cityListVCOffset = 150;
+    cityListVCOffset = 200;
     aqiAPI = [[AqiAPI alloc]init];
     
     CGRect bounds = [[UIScreen mainScreen] bounds];
@@ -110,7 +110,7 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
     [self hideCityList];
     oldCityArray = [cityArray mutableCopy];
     cityArray = oldCityArray;
-    NSMutableArray *newCityArray = [[NSUserDefaults standardUserDefaults] objectForKey:CITY_LIST_KEY];
+    NSMutableArray *newCityArray = [[[NSUserDefaults standardUserDefaults] objectForKey:CITY_LIST_KEY] mutableCopy];
     for (NSString *city in newCityArray) {
         // 加入了新的城市
         if (![oldCityArray containsObject:city]) {
@@ -125,26 +125,23 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
             //count ++;
         }
     }
-    
+    NSMutableArray *tmpAvcArray = [arrayOfAqiViewController mutableCopy];
+    NSMutableArray *tmpCityArray = [cityArray mutableCopy];
     for (NSString *city in oldCityArray) {
         // 删除的城市
         if (![newCityArray containsObject:city]) {
             AQIViewController *aqiVC = [cityDictionary objectForKey:city];
-            [arrayOfAqiViewController removeObject:aqiVC];
-            [cityArray removeObject:city];
+            
+            [tmpAvcArray removeObject:aqiVC];
+            [tmpCityArray removeObject:city];
         }
     }
+    arrayOfAqiViewController = tmpAvcArray;
+    cityArray = tmpCityArray;
+    
     self.currentPageIndex = 0;
-    /*
-    NSLog(@"%@", [cityArray description]);
-    for (NSString *city in cityArray) {
-        NSLog(@"%@", city);
-    }
-    NSLog(@"当前有%ld个城市,当前第%ld个城市", [cityArray count], self.currentPageIndex);*/
     AQIViewController *avc = [arrayOfAqiViewController objectAtIndex: self.currentPageIndex];
     [self.pageViewController setViewControllers:@[avc] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
-    
-    //oldCityArray = [cityArray mutableCopy];
 }
 
 -(void)viewDidLoad {
@@ -425,7 +422,7 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
     } completion:^(BOOL finished){
         if (!self.cityListVC) {
             self.cityListVC = [[CityListViewController alloc]initWithNibName:@"CityListViewController" bundle:nil];
-            [self.cityListVC.tableView setFrame:CGRectMake(bounds.size.width,0,150,bounds.size.height)];
+            [self.cityListVC.tableView setFrame:CGRectMake(bounds.size.width,0,200,bounds.size.height)];
             [self.view addSubview:self.cityListVC.tableView];
         }
         [self setButtonsView];

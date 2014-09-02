@@ -18,6 +18,7 @@
     NSDictionary *citiesInPinyin;
     AqiAPI *aqiAPI;
     ActivityIndicator *indicator;
+    NSString *shareContent;
 }
 
 @property (nonatomic, strong) CLLocationManager *locationManager;
@@ -73,11 +74,12 @@
                     }
                     // 替换日期中的T和Z
                     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"[TZ]" options:NSRegularExpressionCaseInsensitive error:nil];
-                    NSString *update = [regex stringByReplacingMatchesInString:avgData.update options:0 range:NSMakeRange(0, [avgData.update length]) withTemplate:@" "];
+                    NSString *update = [regex stringByReplacingMatchesInString:avgData.update options:0 range:NSMakeRange(0, [avgData.update length]) withTemplate:@""];
                     self.update.text = update;
                     self.aqiData = [dataOfChinese mutableCopy];
                     [self.aqiData removeLastObject];
                     [self.stationsDataTV reloadData];
+                    shareContent = [NSString stringWithFormat:@"%@ 空气质量：%@，污染指数：%@，PM2.5浓度：%@。更新于 %@。分享自 %@", self.city, avgData.desc, avgData.aqi, avgData.pm, update, WEIAIR_WEIBO];
                 });
             }
         } onError:^{
@@ -211,6 +213,13 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return 30;
+}
+
+-(NSString *)getShareContent {
+    if (shareContent == nil || [shareContent length] == 0) {
+        return WEIAIR_WEIBO;
+    }
+    return shareContent;
 }
 
 @end

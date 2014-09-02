@@ -7,6 +7,7 @@
 //
 
 #import "PMAppDelegate.h"
+#import "UMSocial.h"
 
 @implementation PMAppDelegate
 
@@ -17,7 +18,7 @@
     self.viewController = [[PMViewController alloc]init];
     self.window.rootViewController = self.viewController;
     [self.window makeKeyAndVisible];*/
-    NSLog(@"%@", @"hello");
+    [UMSocialData setAppKey:@"54055e17fd98c505d800834f"];
     return YES;
 }
 							

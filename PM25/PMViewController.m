@@ -11,19 +11,20 @@
 #import <CoreLocation/CLLocationManager.h>
 #import "PhotosCollectionViewController.h"
 #import "AQIViewController.h"
-#import "ButtonsViewController.h"
+#import "ToolsViewController.h"
 #import "CityListViewController.h"
 #import "AqiAPI.h"
 #import "ActivityIndicator.h"
 #import "Constants.h"
 #import "PhotoUtil.h"
+#import "UMSocial.h"
 
 #define CITY_LIST_KEY @"citylist"
 #define BACKGROUND_LAYER_INDEX 0
 #define PAGEVIEW_LAYER_INDEX 1
 #define BUTTONS_LAYER_INDEX 2
 
-@interface PMViewController () <CLLocationManagerDelegate, PhotosCollectionViewControllerDelegate, UIActionSheetDelegate ,ButtonsViewControllerDelegate,UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate> {
+@interface PMViewController () <CLLocationManagerDelegate, PhotosCollectionViewControllerDelegate, UIActionSheetDelegate ,ToolsViewControllerDelegate,UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate> {
     NSString *currentCity;
     NSMutableDictionary *cityDictionary;
     NSMutableArray *cityArray;
@@ -40,7 +41,7 @@
 
 @property(nonatomic, strong) CLLocationManager *locationManager;
 //@property(nonatomic, strong) UIScrollView *scrollView;
-@property(nonatomic, strong) ButtonsViewController *buttonsVC;
+@property(nonatomic, strong) ToolsViewController *buttonsVC;
 @property(strong,nonatomic) PhotosCollectionViewController *photosCollectionVC;
 @property(strong,nonatomic) CityListViewController *cityListVC;
 
@@ -48,7 +49,6 @@
 @property (strong, nonatomic) UIImagePickerController *imagePicker;
 
 @end
-
 
 
 @implementation PMViewController
@@ -167,7 +167,7 @@
     [self.view addGestureRecognizer:swipeRightRecognizer];
     [self setBackground];
     
-    self.buttonsVC = [[ButtonsViewController alloc]initWithNibName:@"ButtonsViewController" bundle:nil];
+    self.buttonsVC = [[ToolsViewController alloc]initWithNibName:@"ToolsViewController" bundle:nil];
     [self.view insertSubview:self.buttonsVC.view atIndex: BUTTONS_LAYER_INDEX];
     self.buttonsVC.delegate = self;
     [self setButtonsView];
@@ -333,7 +333,7 @@
 
 #pragma mark - set buttons view
 - (void) setButtonsView {
-    [self.buttonsVC.view setFrame:CGRectMake(-1, self.view.frame.size.height - 40 , 90, 30)];
+    [self.buttonsVC.view setFrame:CGRectMake(-1, self.view.frame.size.height - 40 , 160, 30)];
     
 }
 
@@ -349,13 +349,13 @@
 }
 
 #pragma mark - ButtonsViewControllerDelegate method
--(void)refreshAqiViews:(ButtonsViewController *)sender {
+-(void)refreshAqiViews:(ToolsViewController *)sender {
     NSLog(@"%@", @"refresh button pressed");
     [self refreshCurrentCity];
     
 }
 
--(void)configButtonPressed:(ButtonsViewController *)sender {
+-(void)configButtonPressed:(ToolsViewController *)sender {
     NSLog(@"%@", @"config button pressed");
     /*
     if (!self.photosCollectionVC) {
@@ -364,6 +364,16 @@
     }
     [self presentViewController:self.photosCollectionVC animated:true completion:^{}];*/
     [self showActionSheet];
+}
+
+-(void) shareButtonPressed:(ToolsViewController *)sender {
+    AQIViewController *avc = [arrayOfAqiViewController objectAtIndex: self.currentPageIndex];
+    [UMSocialSnsService presentSnsIconSheetView:self
+                                         appKey:nil
+                                      shareText:[avc getShareContent]
+                                     shareImage:nil //[UIImage imageNamed:@"icon.png"]
+                                shareToSnsNames:[NSArray arrayWithObjects:UMShareToSina,UMShareToTencent,UMShareToRenren,nil]
+                                       delegate:nil];
 }
 
 #pragma mark - UIPageViewController method

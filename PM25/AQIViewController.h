@@ -28,6 +28,7 @@
 //@property (weak, nonatomic) IBOutlet UILabel *usemUpdate;
 
 -(void) updateAqiData;
+-(NSString *) getShareContent;
 -(AQIViewController *) initWithCity:(NSString *) city;
 -(NSString *)description;
 @end

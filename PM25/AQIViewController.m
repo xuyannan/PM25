@@ -183,8 +183,8 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     int lineHeight = 20;
-    UITextView *stationNameVC = [[UITextView alloc]initWithFrame:CGRectMake(0, 0, 100, lineHeight)];
-    UITextView *dataVC = [[UITextView alloc]initWithFrame:CGRectMake(stationNameVC.frame.size.width, 0, 100, lineHeight)];
+    UITextView *stationNameVC = [[UITextView alloc]initWithFrame:CGRectMake(0, 0, 150, lineHeight)];
+    UITextView *dataVC = [[UITextView alloc]initWithFrame:CGRectMake(stationNameVC.frame.size.width, 0, 150, lineHeight)];
     [self customTextView:stationNameVC];
     [self customTextView:dataVC];
     

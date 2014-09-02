@@ -16,14 +16,14 @@
 #import "AqiAPI.h"
 #import "ActivityIndicator.h"
 #import "Constants.h"
+#import "PhotoUtil.h"
 
 #define CITY_LIST_KEY @"citylist"
 #define BACKGROUND_LAYER_INDEX 0
 #define PAGEVIEW_LAYER_INDEX 1
 #define BUTTONS_LAYER_INDEX 2
 
-@interface PMViewController () <CLLocationManagerDelegate, PhotosCollectionViewControllerDelegate, ButtonsViewControllerDelegate,
-UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerDataSource> {
+@interface PMViewController () <CLLocationManagerDelegate, PhotosCollectionViewControllerDelegate, UIActionSheetDelegate ,ButtonsViewControllerDelegate,UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate> {
     NSString *currentCity;
     NSMutableDictionary *cityDictionary;
     NSMutableArray *cityArray;
@@ -45,6 +45,7 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
 @property(strong,nonatomic) CityListViewController *cityListVC;
 
 @property (assign,nonatomic) NSInteger willTurnToPageIndex;
+@property (strong, nonatomic) UIImagePickerController *imagePicker;
 
 @end
 
@@ -170,6 +171,7 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
     [self.view insertSubview:self.buttonsVC.view atIndex: BUTTONS_LAYER_INDEX];
     self.buttonsVC.delegate = self;
     [self setButtonsView];
+    
 }
 
 -(void) viewDidAppear:(BOOL)animated {
@@ -292,6 +294,12 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
     located = false;
 }
 
+#pragma mark - showActionSheet
+- (void)showActionSheet {
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"修改背景图" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"从相册中选一张", @"用相机拍一张", @"换回默认背景", nil];
+    [actionSheet showInView:self.view];
+}
+
 #pragma mark - blur image tool function
 - (UIImage *)blurryImage:(UIImage *)image withBlurLevel:(CGFloat)blur {
     CIImage *inputImage = [CIImage imageWithCGImage:image.CGImage];
@@ -307,10 +315,10 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
 
 #pragma mark - set background image
 - (void) setBackground {
-    // background
     currentImageName = [[NSUserDefaults standardUserDefaults]objectForKey:@"background"];
     currentImageName = currentImageName ? currentImageName : @"background.jpg";
-    UIImage *blurBackgroundImg = [self blurryImage:[UIImage imageNamed: currentImageName] withBlurLevel:2];
+    UIImage *tmpImage = [PhotoUtil loadImage:currentImageName];
+    UIImage *blurBackgroundImg = [self blurryImage:tmpImage withBlurLevel:2];
     
     if(backgroundView) {
         [backgroundView setImage:blurBackgroundImg];
@@ -320,6 +328,7 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
         [self.view insertSubview:backgroundView atIndex:BACKGROUND_LAYER_INDEX];
         //[self.view addSubview:backgroundView];
     }
+    //[indicator close];
 }
 
 #pragma mark - set buttons view
@@ -348,11 +357,13 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
 
 -(void)configButtonPressed:(ButtonsViewController *)sender {
     NSLog(@"%@", @"config button pressed");
+    /*
     if (!self.photosCollectionVC) {
         self.photosCollectionVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Photos"];
         self.photosCollectionVC.delegate = self;
     }
-    [self presentViewController:self.photosCollectionVC animated:true completion:^{}];
+    [self presentViewController:self.photosCollectionVC animated:true completion:^{}];*/
+    [self showActionSheet];
 }
 
 #pragma mark - UIPageViewController method
@@ -444,8 +455,53 @@ UIGestureRecognizerDelegate, UIPageViewControllerDelegate, UIPageViewControllerD
     } completion:^(BOOL finished){
         [self setButtonsView];
     }];
+}
 
+#pragma mark - UIActionSheetDelegate method
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
     
+    if ( buttonIndex == 0 || buttonIndex == 1) {
+        if (!_imagePicker) {
+            _imagePicker = [[UIImagePickerController alloc] init];
+            _imagePicker.delegate = self;
+            _imagePicker.allowsEditing = NO;
+        }
+    }
+    
+    if (buttonIndex == 0) {
+        if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
+            _imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+            [self presentViewController:_imagePicker animated:YES completion:nil];
+            
+        }
+    } else if (buttonIndex == 1) {
+        if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+            _imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+            [self presentViewController:_imagePicker animated:YES completion:nil];
+        }
+    } else if (buttonIndex == 2) {
+        [[NSUserDefaults standardUserDefaults]setObject:@"background.jpg" forKey:@"background"];
+        [self setBackground];
+    }
+}
+
+#pragma mark - UIImagePickerControllerDelegate method
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+    UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+    [self dismissViewControllerAnimated:YES completion:nil];
+    // background
+    indicator = [[ActivityIndicator alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+    indicator.title = NSLocalizedString(@"图片处理中，请稍候", nil);
+    [indicator show];
+    [PhotoUtil savePhoto:image completion:^(NSString *filename){
+        [[NSUserDefaults standardUserDefaults]setObject:filename forKey:@"background"];
+        [self setBackground];
+        [indicator close];
+    } error:nil];
+
+    if (picker.sourceType == UIImagePickerControllerSourceTypeCamera) {
+        [PhotoUtil savePhotoToAlbum:image albumName:@"微空气"];
+    }
 }
 
 @end

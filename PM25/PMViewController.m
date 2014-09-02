@@ -372,7 +372,7 @@
                                          appKey:nil
                                       shareText:[avc getShareContent]
                                      shareImage:nil //[UIImage imageNamed:@"icon.png"]
-                                shareToSnsNames:[NSArray arrayWithObjects:UMShareToSina,UMShareToTencent,UMShareToRenren,nil]
+                                shareToSnsNames:[NSArray arrayWithObjects:UMShareToSina, UMShareToSms, UMShareToTencent, UMShareToRenren, nil]
                                        delegate:nil];
 }
 

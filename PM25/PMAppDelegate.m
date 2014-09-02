@@ -8,6 +8,7 @@
 
 #import "PMAppDelegate.h"
 #import "UMSocial.h"
+#import "UMSocialWechatHandler.h"
 
 @implementation PMAppDelegate
 
@@ -19,6 +20,7 @@
     self.window.rootViewController = self.viewController;
     [self.window makeKeyAndVisible];*/
     [UMSocialData setAppKey:@"54055e17fd98c505d800834f"];
+    //[UMSocialWechatHandler setWXAppId:@"wxd930ea5d5a258f4f" appSecret:@"db426a9829e4b49a0dcac7b4162da6b6" url:@"http://www.umeng.com/social"];
     return YES;
 }
 							

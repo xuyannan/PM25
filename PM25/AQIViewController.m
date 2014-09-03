@@ -74,7 +74,7 @@
                     }
                     // 替换日期中的T和Z
                     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"[TZ]" options:NSRegularExpressionCaseInsensitive error:nil];
-                    NSString *update = [regex stringByReplacingMatchesInString:avgData.update options:0 range:NSMakeRange(0, [avgData.update length]) withTemplate:@""];
+                    NSString *update = [regex stringByReplacingMatchesInString:avgData.update options:0 range:NSMakeRange(0, [avgData.update length]) withTemplate:@" "];
                     self.update.text = update;
                     self.aqiData = [dataOfChinese mutableCopy];
                     [self.aqiData removeLastObject];
@@ -139,6 +139,10 @@
             UILabel *label = (UILabel *)view;
             label.textColor = [UIColor colorWithRed:(255/255.f) green:(255/255.f) blue:(255/255.f) alpha:1];
         }
+    }
+    // 适配3.5寸屏
+    if (SCREEN_HEIGHT == 480) {
+        [self.stationsDataTV setFrame:CGRectMake(stationsDataTV.frame.origin.x, stationsDataTV.frame.origin.y, stationsDataTV.frame.size.width, stationsDataTV.frame.size.height - 80)];
     }
     
     self.stationsDataTV.delegate = self;

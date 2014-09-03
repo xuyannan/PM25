@@ -168,8 +168,8 @@
 }
 
 #pragma mark - custom cell's subview
-- (void) customTextView: (UITextView *) textView {
-    textView.textContainerInset = UIEdgeInsetsMake(0, 0, 0, 15);
+- (void) customTextView: (UILabel *) textView {
+    //textView.textContainerInset = UIEdgeInsetsMake(0, 0, 0, 15);
     [textView setFont:[UIFont systemFontOfSize:16]];
     [textView setTextColor: [UIColor colorWithWhite:1 alpha:1]];
     textView.backgroundColor = [UIColor clearColor];
@@ -185,15 +185,15 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     int lineHeight = 20;
-    UITextView *stationNameVC = [[UITextView alloc]initWithFrame:CGRectMake(0, 0, 150, lineHeight)];
-    UITextView *dataVC = [[UITextView alloc]initWithFrame:CGRectMake(stationNameVC.frame.size.width, 0, 150, lineHeight)];
-    [self customTextView:stationNameVC];
-    [self customTextView:dataVC];
+    UILabel *stationNameLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 150, lineHeight)];
+    UILabel *dataLabel = [[UILabel alloc]initWithFrame:CGRectMake(stationNameLabel.frame.size.width, 0, 150, lineHeight)];
+    [self customTextView:stationNameLabel];
+    [self customTextView:dataLabel];
     
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
-        [cell addSubview:stationNameVC];
-        [cell addSubview:dataVC];
+        [cell addSubview:stationNameLabel];
+        [cell addSubview:dataLabel];
     } else {
     }
     
@@ -202,8 +202,8 @@
     UIView *selectionColor = [[UIView alloc] init];
     selectionColor.backgroundColor = [UIColor clearColor];
     
-    stationNameVC.text = data.station;
-    dataVC.text =  [NSString stringWithFormat:@"%@ / %@", data.aqi, data.pm];
+    stationNameLabel.text = data.station;
+    dataLabel.text =  [NSString stringWithFormat:@"%@ / %@", data.aqi, data.pm];
     cell.selectedBackgroundView = selectionColor;
     cell.textLabel.textColor = [UIColor colorWithWhite:1 alpha:1];
     return cell;

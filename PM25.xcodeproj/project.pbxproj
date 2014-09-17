@@ -12,12 +12,6 @@
 		574176EC19AD8F31005FA292 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 574176EB19AD8F31005FA292 /* Constants.m */; };
 		574176F319AF2D43005FA292 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 574176F119AF2D43005FA292 /* Icon.png */; };
 		574176F419AF2D43005FA292 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 574176F219AF2D43005FA292 /* Icon@2x.png */; };
-		5758537A19B48EAF00C4218A /* sync@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5758537819B48EAF00C4218A /* sync@2x.png */; };
-		5758537B19B48EAF00C4218A /* sync.png in Resources */ = {isa = PBXBuildFile; fileRef = 5758537919B48EAF00C4218A /* sync.png */; };
-		5758537E19B48F7300C4218A /* brush.png in Resources */ = {isa = PBXBuildFile; fileRef = 5758537C19B48F7300C4218A /* brush.png */; };
-		5758537F19B48F7300C4218A /* brush@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5758537D19B48F7300C4218A /* brush@2x.png */; };
-		5758538219B4A8B300C4218A /* share@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5758538019B4A8B300C4218A /* share@2x.png */; };
-		5758538319B4A8B300C4218A /* share.png in Resources */ = {isa = PBXBuildFile; fileRef = 5758538119B4A8B300C4218A /* share.png */; };
 		5758538619B56A0C00C4218A /* PhotoUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 5758538519B56A0C00C4218A /* PhotoUtil.m */; };
 		5758538819B56B8B00C4218A /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5758538719B56B8B00C4218A /* AssetsLibrary.framework */; };
 		5758538D19B56D7900C4218A /* ALAssetsLibrary+CustomPhotoAlbum.m in Sources */ = {isa = PBXBuildFile; fileRef = 5758538C19B56D7900C4218A /* ALAssetsLibrary+CustomPhotoAlbum.m */; };
@@ -37,6 +31,13 @@
 		575853EE19B5A02100C4218A /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 575853E019B5A02100C4218A /* libWeChatSDK.a */; };
 		575853F719B5A94700C4218A /* ToolsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 575853F519B5A94700C4218A /* ToolsViewController.m */; };
 		575853F819B5A94700C4218A /* ToolsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 575853F619B5A94700C4218A /* ToolsViewController.xib */; };
+		57B2122A19B8633A002AB632 /* icon120.png in Resources */ = {isa = PBXBuildFile; fileRef = 57B2122919B8633A002AB632 /* icon120.png */; };
+		57B2123119B86549002AB632 /* brush.png in Resources */ = {isa = PBXBuildFile; fileRef = 57B2122B19B86549002AB632 /* brush.png */; };
+		57B2123219B86549002AB632 /* brush@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 57B2122C19B86549002AB632 /* brush@2x.png */; };
+		57B2123319B86549002AB632 /* share.png in Resources */ = {isa = PBXBuildFile; fileRef = 57B2122D19B86549002AB632 /* share.png */; };
+		57B2123419B86549002AB632 /* share@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 57B2122E19B86549002AB632 /* share@2x.png */; };
+		57B2123519B86549002AB632 /* sync.png in Resources */ = {isa = PBXBuildFile; fileRef = 57B2122F19B86549002AB632 /* sync.png */; };
+		57B2123619B86549002AB632 /* sync@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 57B2123019B86549002AB632 /* sync@2x.png */; };
 		FD2825A316E9DD5100FC66BB /* PhotosCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD2825A216E9DD5100FC66BB /* PhotosCollectionViewController.m */; };
 		FD288E6816F307E10068A2F5 /* CityListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD288E6616F307E10068A2F5 /* CityListViewController.m */; };
 		FD288E6916F307E10068A2F5 /* CityListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FD288E6716F307E10068A2F5 /* CityListViewController.xib */; };
@@ -68,12 +69,6 @@
 		574176EB19AD8F31005FA292 /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Constants.m; sourceTree = "<group>"; };
 		574176F119AF2D43005FA292 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = ../../../Downloads/icon/ios7/Icon.png; sourceTree = "<group>"; };
 		574176F219AF2D43005FA292 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "../../../Downloads/icon/ios7/Icon@2x.png"; sourceTree = "<group>"; };
-		5758537819B48EAF00C4218A /* sync@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "sync@2x.png"; path = "../../../Desktop/sync@2x.png"; sourceTree = "<group>"; };
-		5758537919B48EAF00C4218A /* sync.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = sync.png; path = ../../../Desktop/sync.png; sourceTree = "<group>"; };
-		5758537C19B48F7300C4218A /* brush.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = brush.png; path = ../../../Desktop/brush.png; sourceTree = "<group>"; };
-		5758537D19B48F7300C4218A /* brush@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "brush@2x.png"; path = "../../../Desktop/brush@2x.png"; sourceTree = "<group>"; };
-		5758538019B4A8B300C4218A /* share@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "share@2x.png"; path = "../../../Desktop/share@2x.png"; sourceTree = "<group>"; };
-		5758538119B4A8B300C4218A /* share.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = share.png; path = ../../../Desktop/share.png; sourceTree = "<group>"; };
 		5758538419B56A0C00C4218A /* PhotoUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoUtil.h; sourceTree = "<group>"; };
 		5758538519B56A0C00C4218A /* PhotoUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoUtil.m; sourceTree = "<group>"; };
 		5758538719B56B8B00C4218A /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
@@ -109,6 +104,21 @@
 		575853F419B5A94700C4218A /* ToolsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ToolsViewController.h; sourceTree = "<group>"; };
 		575853F519B5A94700C4218A /* ToolsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ToolsViewController.m; sourceTree = "<group>"; };
 		575853F619B5A94700C4218A /* ToolsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ToolsViewController.xib; sourceTree = "<group>"; };
+		57B2122919B8633A002AB632 /* icon120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon120.png; sourceTree = "<group>"; };
+		57B2122B19B86549002AB632 /* brush.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = brush.png; sourceTree = "<group>"; };
+		57B2122C19B86549002AB632 /* brush@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "brush@2x.png"; sourceTree = "<group>"; };
+		57B2122D19B86549002AB632 /* share.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = share.png; sourceTree = "<group>"; };
+		57B2122E19B86549002AB632 /* share@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "share@2x.png"; sourceTree = "<group>"; };
+		57B2122F19B86549002AB632 /* sync.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sync.png; sourceTree = "<group>"; };
+		57B2123019B86549002AB632 /* sync@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sync@2x.png"; sourceTree = "<group>"; };
+		57EADA5F19C81C3D00C0636B /* libPods-FMDB.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-FMDB.a"; path = "Pods/build/Debug-iphoneos/libPods-FMDB.a"; sourceTree = "<group>"; };
+		57EADA6019C81C3D00C0636B /* libPods-JSONKit.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-JSONKit.a"; path = "Pods/build/Debug-iphoneos/libPods-JSONKit.a"; sourceTree = "<group>"; };
+		57EADA6119C81C3D00C0636B /* libPods-KissXML.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-KissXML.a"; path = "Pods/build/Debug-iphoneos/libPods-KissXML.a"; sourceTree = "<group>"; };
+		57EADA6219C81C3D00C0636B /* libPods-NSLogger.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-NSLogger.a"; path = "Pods/build/Debug-iphoneos/libPods-NSLogger.a"; sourceTree = "<group>"; };
+		57EADA6719C81D1100C0636B /* libPods-FMDB.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-FMDB.a"; path = "Pods/build/Debug-iphoneos/libPods-FMDB.a"; sourceTree = "<group>"; };
+		57EADA6819C81D1100C0636B /* libPods-JSONKit.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-JSONKit.a"; path = "Pods/build/Debug-iphoneos/libPods-JSONKit.a"; sourceTree = "<group>"; };
+		57EADA6919C81D1100C0636B /* libPods-KissXML.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-KissXML.a"; path = "Pods/build/Debug-iphoneos/libPods-KissXML.a"; sourceTree = "<group>"; };
+		57EADA6A19C81D1100C0636B /* libPods-NSLogger.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-NSLogger.a"; path = "Pods/build/Debug-iphoneos/libPods-NSLogger.a"; sourceTree = "<group>"; };
 		580C39FE6277449DA3ED5EDB /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		E64C57EB79B243238277D272 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
 		FD2825A116E9DD5100FC66BB /* PhotosCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PhotosCollectionViewController.h; path = ../PhotosCollectionViewController.h; sourceTree = "<group>"; };
@@ -294,6 +304,14 @@
 		FD420B1816D66E3800300B26 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				57EADA6719C81D1100C0636B /* libPods-FMDB.a */,
+				57EADA6819C81D1100C0636B /* libPods-JSONKit.a */,
+				57EADA6919C81D1100C0636B /* libPods-KissXML.a */,
+				57EADA6A19C81D1100C0636B /* libPods-NSLogger.a */,
+				57EADA5F19C81C3D00C0636B /* libPods-FMDB.a */,
+				57EADA6019C81C3D00C0636B /* libPods-JSONKit.a */,
+				57EADA6119C81C3D00C0636B /* libPods-KissXML.a */,
+				57EADA6219C81C3D00C0636B /* libPods-NSLogger.a */,
 				5758538719B56B8B00C4218A /* AssetsLibrary.framework */,
 				FD420B1916D66E3800300B26 /* UIKit.framework */,
 				FD420B1B16D66E3800300B26 /* Foundation.framework */,
@@ -338,12 +356,13 @@
 		FD420B2016D66E3800300B26 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				5758538019B4A8B300C4218A /* share@2x.png */,
-				5758538119B4A8B300C4218A /* share.png */,
-				5758537C19B48F7300C4218A /* brush.png */,
-				5758537D19B48F7300C4218A /* brush@2x.png */,
-				5758537819B48EAF00C4218A /* sync@2x.png */,
-				5758537919B48EAF00C4218A /* sync.png */,
+				57B2122B19B86549002AB632 /* brush.png */,
+				57B2122C19B86549002AB632 /* brush@2x.png */,
+				57B2122D19B86549002AB632 /* share.png */,
+				57B2122E19B86549002AB632 /* share@2x.png */,
+				57B2122F19B86549002AB632 /* sync.png */,
+				57B2123019B86549002AB632 /* sync@2x.png */,
+				57B2122919B8633A002AB632 /* icon120.png */,
 				574176F119AF2D43005FA292 /* Icon.png */,
 				574176F219AF2D43005FA292 /* Icon@2x.png */,
 				FDDF980416F84BD9001BB249 /* table_bg.png */,
@@ -421,34 +440,35 @@
 			buildActionMask = 2147483647;
 			files = (
 				575853E219B5A02100C4218A /* UMSocialLocalizable.strings in Resources */,
+				57B2123319B86549002AB632 /* share.png in Resources */,
 				574176F319AF2D43005FA292 /* Icon.png in Resources */,
-				5758537A19B48EAF00C4218A /* sync@2x.png in Resources */,
 				FD420B2416D66E3800300B26 /* InfoPlist.strings in Resources */,
-				5758538319B4A8B300C4218A /* share.png in Resources */,
 				575853EB19B5A02100C4218A /* UMSShareListController.xib in Resources */,
+				57B2123619B86549002AB632 /* sync@2x.png in Resources */,
 				575853EC19B5A02100C4218A /* UMSocialSDKResourcesNew.bundle in Resources */,
-				5758537B19B48EAF00C4218A /* sync.png in Resources */,
 				FD420B2C16D66E3800300B26 /* Default.png in Resources */,
 				FD420B2E16D66E3900300B26 /* Default@2x.png in Resources */,
+				57B2123519B86549002AB632 /* sync.png in Resources */,
 				575853E619B5A02100C4218A /* UMSCommentInputControlleriPad.xib in Resources */,
 				575853E419B5A02100C4218A /* UMSCommentDetailController.xib in Resources */,
 				FD420B3016D66E3900300B26 /* Default-568h@2x.png in Resources */,
 				FD420B3316D66E3900300B26 /* MainStoryboard.storyboard in Resources */,
+				57B2123119B86549002AB632 /* brush.png in Resources */,
 				575853E919B5A02100C4218A /* UMSLoginViewController.xib in Resources */,
 				FDEBF60216E98FA100D29534 /* background.jpg in Resources */,
 				574176F419AF2D43005FA292 /* Icon@2x.png in Resources */,
 				FDEBF60516E98FD500D29534 /* background@2x.jpg in Resources */,
-				5758538219B4A8B300C4218A /* share@2x.png in Resources */,
 				FDC4998216EDE21900F4CE84 /* AQIViewController.xib in Resources */,
 				5758539119B56F6000C4218A /* Localizable.strings in Resources */,
-				5758537E19B48F7300C4218A /* brush.png in Resources */,
 				575853E519B5A02100C4218A /* UMSCommentInputController.xib in Resources */,
+				57B2123419B86549002AB632 /* share@2x.png in Resources */,
 				575853EA19B5A02100C4218A /* UMSnsAccountViewController.xib in Resources */,
 				575853F819B5A94700C4218A /* ToolsViewController.xib in Resources */,
-				5758537F19B48F7300C4218A /* brush@2x.png in Resources */,
+				57B2122A19B8633A002AB632 /* icon120.png in Resources */,
 				FD288E6916F307E10068A2F5 /* CityListViewController.xib in Resources */,
 				575853E819B5A02100C4218A /* UMShareEditViewControlleriPad.xib in Resources */,
 				FDDF980616F84BD9001BB249 /* table_bg.png in Resources */,
+				57B2123219B86549002AB632 /* brush@2x.png in Resources */,
 				575853E719B5A02100C4218A /* UMShareEditViewController.xib in Resources */,
 				FDDF980716F84BD9001BB249 /* table_bg@2X.png in Resources */,
 			);
@@ -586,7 +606,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E64C57EB79B243238277D272 /* Pods.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: xu yannan (HU5DSDR8V7)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PM25/PM25-Prefix.pch";
@@ -595,7 +615,9 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Libraries/UmengShare/UMSocial_Sdk_4.1",
 					"$(PROJECT_DIR)/Libraries/UmengShare/UMSocial_Sdk_Extra_Frameworks/Wechat",
+					"$(PROJECT_DIR)/Pods/build/Debug-iphoneos",
 				);
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lsqlite3",
@@ -606,7 +628,7 @@
 					"-lxml2",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "b0c9dced-e77e-4952-ac80-a8146dc9cedc";
 				USER_HEADER_SEARCH_PATHS = /user/include/libxml2;
 				WRAPPER_EXTENSION = app;
 			};
@@ -616,7 +638,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E64C57EB79B243238277D272 /* Pods.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: xu yannan (HU5DSDR8V7)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PM25/PM25-Prefix.pch";
@@ -625,7 +647,9 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Libraries/UmengShare/UMSocial_Sdk_4.1",
 					"$(PROJECT_DIR)/Libraries/UmengShare/UMSocial_Sdk_Extra_Frameworks/Wechat",
+					"$(PROJECT_DIR)/Pods/build/Debug-iphoneos",
 				);
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lsqlite3",
@@ -636,7 +660,7 @@
 					"-lxml2",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "b0c9dced-e77e-4952-ac80-a8146dc9cedc";
 				USER_HEADER_SEARCH_PATHS = /user/include/libxml2;
 				WRAPPER_EXTENSION = app;
 			};

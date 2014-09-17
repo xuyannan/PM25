@@ -283,7 +283,7 @@ NSInteger sort(id name1, id name2, void *context) {
     return aqiData;
 }
 
-- (AqiData *)getAqiDataForCity:(NSString *)city {
+- (NSMutableArray *)getAqiDataForCity:(NSString *)city {
     return [self getChineseAqiDataForCity:city];
     //return [self getUsemAqiDataForCity:city];
 }

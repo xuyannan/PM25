@@ -54,7 +54,7 @@
 @implementation PMViewController
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    //[self.locationManager requestWhenInUseAuthorization];
+    [self.locationManager requestWhenInUseAuthorization];
     located = NO;
     cityListVCOffset = 200;
     aqiAPI = [[AqiAPI alloc]init];
@@ -73,7 +73,9 @@
     }
     for (NSString *city in cityArray) {
         AQIViewController *aqiVC = [[AQIViewController alloc]initWithCity: city];
-        [cityDictionary setObject:aqiVC forKey:city];
+        if (aqiVC != nil) {
+            [cityDictionary setObject:aqiVC forKey:city];
+        }
     }
 
     // 监听程序由background切换到foreground
@@ -90,13 +92,19 @@
         self.pageViewController.delegate = self;
         self.pageViewController.dataSource = self;
         [self.pageViewController.view setFrame: bounds];
-        if ([arrayOfAqiViewController count] > 0) {
-            AQIViewController *avc = [arrayOfAqiViewController objectAtIndex: self.currentPageIndex];
-            // pageview的关键一步，设置要显示的页
-            [self.pageViewController setViewControllers:@[avc] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
-        }
     }
     [self.view insertSubview:self.pageViewController.view atIndex:PAGEVIEW_LAYER_INDEX];
+    [self refreshPageView];
+}
+
+- (void) refreshPageView {
+    if ([arrayOfAqiViewController count] > 0) {
+        AQIViewController *avc = [arrayOfAqiViewController objectAtIndex: self.currentPageIndex];
+        // pageview的关键一步，设置要显示的页
+        [self.pageViewController setViewControllers:@[avc] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
+    } else {
+        NSLog(@"%@", @"没有任何城市");
+    }
 }
 
 
@@ -108,10 +116,23 @@
 
 -(void) swipeRight {
     NSLog(@"swipe right");
+    NSMutableArray *newCityArray = [[[NSUserDefaults standardUserDefaults] objectForKey:CITY_LIST_KEY] mutableCopy];
+    for (NSString *city in newCityArray) {
+        NSLog(@"%@", city);
+    }
+    if (newCityArray == nil  || [newCityArray count] == 0) {
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"至少选一个城市" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+        [alert show];
+        return;
+    }
     [self hideCityList];
     oldCityArray = [cityArray mutableCopy];
     cityArray = oldCityArray;
-    NSMutableArray *newCityArray = [[[NSUserDefaults standardUserDefaults] objectForKey:CITY_LIST_KEY] mutableCopy];
+    
+    if (arrayOfAqiViewController == nil) {
+        arrayOfAqiViewController = [[NSMutableArray alloc] init];
+    }
+    
     for (NSString *city in newCityArray) {
         // 加入了新的城市
         if (![oldCityArray containsObject:city]) {
@@ -147,7 +168,6 @@
 
 -(void)viewDidLoad {
     [super viewDidLoad];
-    [self.locationManager startUpdatingLocation];
     self.aqiViewController = [[AQIViewController alloc]initWithNibName:@"AQIViewController" bundle:nil];
     
     self.locationManager = [[CLLocationManager alloc] init];
@@ -156,6 +176,10 @@
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     self.locationManager.distanceFilter = 100;
     [self.locationManager startUpdatingLocation];
+    
+    cityArray = [[NSUserDefaults standardUserDefaults] objectForKey:CITY_LIST_KEY];
+    [self getReadyForPageView];
+    [self getReadyForAqiViewControllers];
     
     // guesture
     UISwipeGestureRecognizer *swipeLeftRecognizer = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeLeft)];
@@ -189,20 +213,54 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self]; 
 }
 
+- (bool) isCityInArray:(NSString *) city {
+    for (AQIViewController *avc in arrayOfAqiViewController) {
+        if (avc.city == city) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
+
 -(void) getReadyForAqiViewControllers {
     //当前城市放在第一个
     if (!arrayOfAqiViewController) {
         arrayOfAqiViewController = [[NSMutableArray alloc] init];
     }
-    if (currentCity) {
-        [arrayOfAqiViewController addObject: [cityDictionary objectForKey: currentCity]];
+    
+    if (!cityDictionary) {
+        cityDictionary = [[NSMutableDictionary alloc] init];
     }
-    for (NSString *citykey in cityDictionary) {
-        if ([citykey isEqualToString:currentCity]) {
-            continue;
+    
+    if (cityArray != nil && [cityArray count] > 0) {
+        for (NSString *city in cityArray) {
+            if ([cityDictionary objectForKey:city] != nil) {
+                if(![self isCityInArray: city]) {
+                    [arrayOfAqiViewController addObject:[cityDictionary objectForKey:city]];
+                }
+            } else {
+                AQIViewController *aqiVC = [[AQIViewController alloc] initWithCity:city];
+                [cityDictionary setObject:aqiVC forKey:city];
+                if(![self isCityInArray: city]) {
+                    [arrayOfAqiViewController addObject:aqiVC];
+                }
+            }
         }
-        [arrayOfAqiViewController addObject: [cityDictionary objectForKey: citykey]];
     }
+    
+    //定位到了当前城市
+    if (currentCity) {
+        if([cityDictionary objectForKey: currentCity] != nil) {
+        } else {
+            AQIViewController *aqiVC = [[AQIViewController alloc] initWithCity:currentCity];
+            [cityDictionary setObject:aqiVC forKey:currentCity];
+        }
+        if(![self isCityInArray: currentCity]) {
+            [arrayOfAqiViewController addObject:[cityDictionary objectForKey:currentCity]];
+        }
+    }
+    [self refreshPageView];
 }
 
 //更新某城市数据
@@ -211,7 +269,6 @@
     for (AQIViewController *avc in arrayOfAqiViewController) {
         NSLog(@"%@", avc.city);
     }
-    NSLog(@"%ld", self.currentPageIndex);
     [currentAQIVC updateAqiData];
 }
 
@@ -229,17 +286,24 @@
     [indicator show];
     [geoCoder reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
         if (!located) {
+            [self getReadyForPageView];
             // 一次定位后，立即停止，防止多次定位
             [self.locationManager stopUpdatingLocation];
             cityArray = [[NSUserDefaults standardUserDefaults] objectForKey:CITY_LIST_KEY];
             if (error) {
                 NSLog(@"Geocode failed with error: %@", error);
                 [indicator close];
-                NSString *message = [[NSString alloc]initWithFormat:@"无法定位您所在的城市，请在列表进行选择"];
-                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:message delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-                [alert show];
                 if (cityArray == nil || cityArray.count == 0) {
+                    NSString *message = [[NSString alloc]initWithFormat:@"无法定位您目前所在的城市，请在列表进行选择"];
+                    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:message delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                    [alert show];
                     [self showCityList];
+                } else {
+                    NSString *message = [[NSString alloc]initWithFormat:@"无法定位您目前所在的城市"];
+                    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:message delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                    [alert show];
+                    //[self getReadyForAqiViewControllers];
+                    //[self getReadyForPageView];
                 }
             } else {
                 CLPlacemark *placemark = [placemarks objectAtIndex:0];
@@ -252,28 +316,32 @@
                 NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"市.*$" options:NSRegularExpressionCaseInsensitive error:nil];
                 fixedCityName = [regex stringByReplacingMatchesInString:currentCity options:0 range:NSMakeRange(0, [currentCity length]) withTemplate:@""];
                 currentCity = fixedCityName;
+                
+                //currentCity = @"London";
 
                 if ([aqiAPI isChineseDataSupportedForCity:currentCity]) {
                     if (![cityArray containsObject:currentCity]) {
                         NSMutableArray *tmpArray = [cityArray mutableCopy];
-                        [tmpArray addObject:currentCity];
+                        [tmpArray insertObject:currentCity atIndex:0];
                         cityArray = tmpArray;
                         [[NSUserDefaults standardUserDefaults]setObject:cityArray forKey:CITY_LIST_KEY];
                     }
                     
-                    if (![cityDictionary objectForKey:currentCity]) {
+                    if ([cityDictionary objectForKey:currentCity]) {
                         AQIViewController *aqiVC = [[AQIViewController alloc]initWithCity:currentCity];
                         [cityDictionary setObject:aqiVC forKey:currentCity];
                     }
+                    
+                    [self getReadyForAqiViewControllers];
+                    [self refreshPageView];
+                    located = YES;
                 } else {
-                    NSString *message = [[NSString alloc]initWithFormat:@"您所处的[%@]目前还没有空气质量数据。请在列表中添加您所关心的城市~", currentCity];
+                    NSString *message = [[NSString alloc]initWithFormat:@"您所处的[%@]目前还没有空气质量数据。请在列表中添加您所关心的城市", currentCity];
                     UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:message delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
                     [alert show];
                     [self showCityList];
+                    currentCity = nil;
                 }
-                [self getReadyForAqiViewControllers];
-                [self getReadyForPageView];
-                located = YES;
             }
         }
         
@@ -403,7 +471,7 @@
     if (completed) {
         AQIViewController *vc = (AQIViewController *)[previousViewControllers lastObject];
         NSInteger index = [arrayOfAqiViewController indexOfObject:vc];
-        NSLog(@"已转向，之前是: %@, index: %ld", vc.city, index);
+        //NSLog(@"已转向，之前是: %@, index: %ld", vc.city, index);
         if (index > self.willTurnToPageIndex) {
             self.currentPageIndex = index - 1;
         } else {
@@ -415,7 +483,7 @@
 -(void)pageViewController:(UIPageViewController *)pageViewController willTransitionToViewControllers:(NSArray *)pendingViewControllers {
     AQIViewController *vc = (AQIViewController *)[pendingViewControllers objectAtIndex:0];
     self.willTurnToPageIndex = [arrayOfAqiViewController indexOfObject:vc];
-    NSLog(@"即将转向:%@, index: %ld", vc.city, [arrayOfAqiViewController indexOfObject:vc]);
+    //NSLog(@"即将转向:%@, index: %ld", vc.city, (long)[arrayOfAqiViewController indexOfObject:vc]);
 }
 
 #pragma mark - UIPageViewDatasource method

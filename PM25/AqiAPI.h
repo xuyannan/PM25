@@ -23,7 +23,7 @@
 @interface AqiAPI : NSObject
 @property (strong, nonatomic) NSString *city;
 -(AqiAPI *) initWithCity:(NSString *)city;
--(AqiData *) getAqiDataForCity:(NSString *)city;
+-(NSMutableArray *) getAqiDataForCity:(NSString *)city;
 -(AqiData *) getUsemAqiDataForCity:(NSString *)city;
 -(NSMutableArray *) getChineseAqiDataForCity:(NSString *)city;
 - (void) ajaxGetChineseApiDataForCity:(NSString *) city onSuccess:(void (^)(NSMutableArray *aqidata))onSuccess onError:(void (^)())onError;

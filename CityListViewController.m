@@ -40,6 +40,11 @@
     selectedCities = [[[NSUserDefaults standardUserDefaults] objectForKey:CITY_LIST_KEY] mutableCopy];
     usemDataSupportedCities = [aqiApi usemDataSupportedCities];
     [self.tableView reloadData];
+    self.tableView.dataSource = self;
+    self.tableView.delegate = self;
+    
+    self.searchBar.delegate = self;
+    
 }
 
 -(void)viewDidAppear:(BOOL)animated {
@@ -50,10 +55,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.tableView.dataSource = self;
-    self.tableView.delegate = self;
     
-    self.searchBar.delegate = self;
 }
 
 - (void)didReceiveMemoryWarning

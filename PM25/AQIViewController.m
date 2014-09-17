@@ -34,6 +34,9 @@
 
 
 - (AQIViewController *) initWithCity:(NSString *)city {
+    if (city == nil) {
+        return nil;
+    }
     if (self = [super init]) {
         _city = city;
     }
